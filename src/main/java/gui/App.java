@@ -9,10 +9,11 @@ import model.Court;
 import model.RacketController;
 
 public class App extends Application {
-    @Override
+    @Override // definit une fonction de la class héréditaire
     public void start(Stage primaryStage) {
-        var root = new Pane();
-        var gameScene = new Scene(root);
+        var root = new Pane(); // ecran
+
+        var gameScene = new Scene(root); // scene qui apparait dans l'écran
         class Player implements RacketController {
             State state = State.IDLE;
 
@@ -40,6 +41,7 @@ public class App extends Application {
             }
         });
         gameScene.setOnKeyReleased(ev -> {
+            // touche existante dans le jeu
             switch (ev.getCode()) {
                 case CONTROL:
                     if (playerA.state == RacketController.State.GOING_UP) playerA.state = RacketController.State.IDLE;
@@ -54,7 +56,7 @@ public class App extends Application {
                     if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
                     break;
             }
-        });
+        }); 
         var court = new Court(playerA, playerB, 1000, 600);
         var gameView = new GameView(court, root, 1.0);
         primaryStage.setScene(gameScene);
