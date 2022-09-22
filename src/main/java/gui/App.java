@@ -13,16 +13,23 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         var root = new Pane();
         var gameScene = new Scene(root);
+
+        // Implementation of the RacketController interface on ../model/RacketController.java
         class Player implements RacketController {
+            // Default state of the palyer's racket is IDLE
             State state = State.IDLE;
 
+            // We define the State getter for the player.
             @Override
             public State getState() {
                 return state;
             }
         }
+
         var playerA = new Player();
         var playerB = new Player();
+
+        // We bind the pressing of the keys to the mouvement of the rackets
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case CONTROL:
@@ -39,6 +46,8 @@ public class App extends Application {
                     break;
             }
         });
+
+        // We bind the release of the keys to the IDLE state
         gameScene.setOnKeyReleased(ev -> {
             switch (ev.getCode()) {
                 case CONTROL:
@@ -55,6 +64,7 @@ public class App extends Application {
                     break;
             }
         });
+        
         var court = new Court(playerA, playerB, 1000, 600);
         var gameView = new GameView(court, root, 1.0);
         primaryStage.setScene(gameScene);

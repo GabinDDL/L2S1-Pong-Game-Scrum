@@ -71,6 +71,7 @@ public class GameView {
                 }
                 court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
+                // Updates graphical part of the element
                 racketA.setY(court.getRacketA() * scale);
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
