@@ -64,12 +64,7 @@ public class App extends Application {
                     if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
                     break;
             }
-<<<<<<< HEAD
         }); 
-=======
-        });
-        
->>>>>>> f4ca2378500734fc5cc076e6f68c68459bc928a8
         var court = new Court(playerA, playerB, 1000, 600);
         var gameView = new GameView(court, root, 1.0);
         primaryStage.setScene(gameScene);
