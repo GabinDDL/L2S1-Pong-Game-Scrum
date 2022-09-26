@@ -23,12 +23,13 @@ public class App extends Application {
         }
         var playerA = new Player();
         var playerB = new Player();
+        // Quand on appuie sur la touche
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
-                case CONTROL:
+                case SHIFT:
                     playerA.state = RacketController.State.GOING_UP;
                     break;
-                case ALT:
+                case CONTROL:
                     playerA.state = RacketController.State.GOING_DOWN;
                     break;
                 case UP:
@@ -39,12 +40,13 @@ public class App extends Application {
                     break;
             }
         });
+        // Quand on lache la touche
         gameScene.setOnKeyReleased(ev -> {
             switch (ev.getCode()) {
-                case CONTROL:
+                case SHIFT:
                     if (playerA.state == RacketController.State.GOING_UP) playerA.state = RacketController.State.IDLE;
                     break;
-                case ALT:
+                case CONTROL:
                     if (playerA.state == RacketController.State.GOING_DOWN) playerA.state = RacketController.State.IDLE;
                     break;
                 case UP:
