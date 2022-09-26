@@ -13,9 +13,12 @@ public class Court {
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m
 
+    private Score scores;
+
     public Court(RacketController playerA, RacketController playerB, double width, double height) {
         this.playerA = playerA;
         this.playerB = playerB;
+        scores = new Score(); //initialisation des scores
         this.width = width;
         this.height = height;
         reset();
@@ -47,6 +50,10 @@ public class Court {
 
     public double getBallY() {
         return ballY;
+    }
+
+    public Score getScores() {
+        return scores;
     }
 
     public void update(double deltaT) {
@@ -95,9 +102,11 @@ public class Court {
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             ballSpeedX = -ballSpeedX;
             nextBallX = ballX + deltaT * ballSpeedX;
-        } else if (nextBallX < 0) {
+        } else if (nextBallX < 0) { // si la balle sort à gauche
+            scores.bGagne();; // le joueur A perd : met à jour le score du joueur B
             return true;
-        } else if (nextBallX > width) {
+        } else if (nextBallX > width) { // si la balle sort à droite
+            scores.aGagne();; // le joueur B perd : met à jour le score du joueur A 
             return true;
         }
         ballX = nextBallX;

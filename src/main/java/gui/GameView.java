@@ -7,6 +7,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.Court;
 
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+
 public class GameView {
     // class parameters
     private final Court court;
@@ -23,6 +26,42 @@ public class GameView {
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
      * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
      */
+    
+    public void changerImageobjet(String objet,String type, String nomDeLImage, Color couleur) {
+        // le type est soit "image" soit "couleur"
+        Image img = new Image("file:.\\Images\\" + nomDeLImage); //creer une image à partir du fichier.
+        if (type == "image") {
+            switch (objet) {
+                case "racketA":
+                    racketA.setFill(new ImagePattern(img)); //attribut comme remplissage de la raquette, le pattern de l'image.
+                    break;
+                case "racketB":
+                    racketB.setFill(new ImagePattern(img));
+                    break;
+                case "ball":
+                    ball.setFill(new ImagePattern(img));//pour la ball
+                    break;
+            }
+        }
+        else {
+            switch (objet) {
+                case "racketA":
+                    racketA.setFill(couleur); //attribut comme remplissage de la raquette, la couleur.
+                    break;
+                case "racketB":
+                    racketB.setFill(couleur);
+                    break;
+                case "ball":
+                    ball.setFill(couleur);//paur la ball
+                    break;
+            }
+        }
+    }
+
+    public void changerImageFond (String nomDeLImage){
+        gameRoot.setStyle("-fx-background-image: url('file:./Images/" + nomDeLImage +"'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
+    }
+
     public GameView(Court court, Pane root, double scale) {
         this.court = court;
         this.gameRoot = root;
@@ -31,10 +70,13 @@ public class GameView {
         root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
         root.setMinHeight(court.getHeight() * scale);
 
+        this.changerImageFond("terrain.jpg"); //edit le fond d'ecran
+
         racketA = new Rectangle();
         racketA.setHeight(court.getRacketSize() * scale);
         racketA.setWidth(racketThickness);
-        racketA.setFill(Color.BLACK);
+        
+        this.changerImageobjet("racketA", "couleur", "", Color.RED); //change la couleur de la racketA
 
         racketA.setX(xMargin - racketThickness);
         racketA.setY(court.getRacketA() * scale);
@@ -42,19 +84,22 @@ public class GameView {
         racketB = new Rectangle();
         racketB.setHeight(court.getRacketSize() * scale);
         racketB.setWidth(racketThickness);
-        racketB.setFill(Color.BLACK);
+        this.changerImageobjet("racketB", "couleur", "", Color.BLUE); //change la couleur de la racketB
 
         racketB.setX(court.getWidth() * scale + xMargin);
         racketB.setY(court.getRacketB() * scale);
 
+        court.getScores().initialisationAffichage(Color.WHITE, court.getWidth()); //initialise l'affichage des scores
+
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
-        ball.setFill(Color.BLACK);
+        
+        this.changerImageobjet("ball", "image", "balle.jpg", Color.BLUE); //change la couleur de ball
 
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
 
-        gameRoot.getChildren().addAll(racketA, racketB, ball);
+        gameRoot.getChildren().addAll(racketA, racketB, ball, court.getScores().getTextscoreA(), court.getScores().getTextscoreB());
 
 
     }
@@ -76,6 +121,7 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
+                court.getScores().miseAJour();//met à jour la valeur du score du joueur A et du joueur B
             }
         }.start();
     }
