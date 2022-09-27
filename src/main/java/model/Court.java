@@ -101,22 +101,22 @@ public class Court {
 
             case GOING_UP:
                 if (player == playerA){
-                    newDirection.unitaryAdd(new Vector2(0.5, -0.866));
+                    newDirection.addAngle(-0.26);
                     if (newDirection.getXdir() <= 0) newDirection = ballSpeedDirection;
                 }
                 else{
-                    ballSpeedDirection.unitaryAdd(new Vector2(-0.5, -0.866));
-                    if (newDirection.getXdir() <= 0) newDirection = ballSpeedDirection;
+                    newDirection.addAngle(0.26);
+                    if (newDirection.getXdir() >= 0) newDirection = ballSpeedDirection;
                 }
                 break;
 
             case GOING_DOWN:
                 if (player == playerA){
-                    newDirection.unitaryAdd(new Vector2(0.5, 0.866));
-                    if (newDirection.getXdir() >= 0) newDirection = ballSpeedDirection;
+                    newDirection.addAngle(0.26);
+                    if (newDirection.getXdir() <= 0) newDirection = ballSpeedDirection;
                 }
                 else{
-                    ballSpeedDirection.unitaryAdd(new Vector2(-0.5, 0.866));
+                    newDirection.addAngle(-0.26);
                     if (newDirection.getXdir() >= 0) newDirection = ballSpeedDirection;
                 }
                     break;

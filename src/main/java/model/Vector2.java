@@ -54,13 +54,13 @@ public class Vector2 {
         this.scalarMultiplication(1/this.norm());
     }
 
-    public void unitaryAdd(Vector2 vector){
+    public void addAngle(double angle){
         double n = this.norm();
-        vector.normalise();
-        this.normalise();
-        this.add(vector);
-        this.normalise();
-        this.scalarMultiplication(n);
+        angle += Math.atan2(this.Ydir,this.Xdir);
+        System.out.println(angle);
+        this.Xdir = n * Math.cos(angle);
+        this.Ydir = n * Math.sin(angle);
+
     }
 
     public void updateVector(Vector2 speed, double deltaT){
