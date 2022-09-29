@@ -32,10 +32,10 @@ public class App extends Application {
         // We bind the pressing of the keys to the mouvement of the rackets
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
-                case CONTROL:
+                case SHIFT:
                     playerA.state = RacketController.State.GOING_UP;
                     break;
-                case ALT:
+                case CONTROL:
                     playerA.state = RacketController.State.GOING_DOWN;
                     break;
                 case UP:
@@ -51,10 +51,10 @@ public class App extends Application {
         gameScene.setOnKeyReleased(ev -> {
             // touche existante dans le jeu
             switch (ev.getCode()) {
-                case CONTROL:
+                case SHIFT:
                     if (playerA.state == RacketController.State.GOING_UP) playerA.state = RacketController.State.IDLE;
                     break;
-                case ALT:
+                case CONTROL:
                     if (playerA.state == RacketController.State.GOING_DOWN) playerA.state = RacketController.State.IDLE;
                     break;
                 case UP:
