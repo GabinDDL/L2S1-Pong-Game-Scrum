@@ -29,7 +29,7 @@ public class GameView {
     
     public void changerImageobjet(String objet,String type, String nomDeLImage, Color couleur) {
         // le type est soit "image" soit "couleur"
-        Image img = new Image("file:.\\Images\\" + nomDeLImage); //creer une image à partir du fichier.
+        Image img = new Image("file:./Images/" + nomDeLImage); //creer une image à partir du fichier.
         if (type == "image") {
             switch (objet) {
                 case "racketA":
@@ -70,7 +70,7 @@ public class GameView {
         root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
         root.setMinHeight(court.getHeight() * scale);
 
-        //this.changerImageFond("terrain.jpg"); //edit le fond d'ecran
+        this.changerImageFond("terrain.jpg"); //edit le fond d'ecran
 
         racketA = new Rectangle();
         racketA.setHeight(court.getRacketSize() * scale);
@@ -94,7 +94,7 @@ public class GameView {
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
         
-        this.changerImageobjet("ball", "couleur", "balle.jpg", Color.PINK); //change la couleur de ball
+        this.changerImageobjet("ball", "image", "balle.jpg", Color.PINK); //change la couleur de ball
 
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
