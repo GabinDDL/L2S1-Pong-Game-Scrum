@@ -89,7 +89,7 @@ public class GameView {
         racketB.setX(court.getWidth() * scale + xMargin);
         racketB.setY(court.getRacketB() * scale);
 
-        court.getScores().initialisationAffichage(Color.WHITE, court.getWidth()); //initialise l'affichage des scores
+        court.getScores().initialisationAffichage(Color.BLACK, court.getWidth()); //initialise l'affichage des scores
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
