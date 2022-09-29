@@ -57,7 +57,6 @@ public class Vector2 {
     public void addAngle(double angle){
         double n = this.norm();
         angle += Math.atan2(this.Ydir,this.Xdir);
-        System.out.println(angle);
         this.Xdir = n * Math.cos(angle);
         this.Ydir = n * Math.sin(angle);
 
