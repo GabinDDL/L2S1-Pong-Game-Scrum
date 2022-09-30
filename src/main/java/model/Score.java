@@ -4,51 +4,35 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class Score {
-    private int scoreA;
-    private int scoreB;
-    private Text TextscoreA;
-    private Text TextscoreB;
+    private int score;
+    private Text Textscore;
+    private int x; //coordonnées x d'affichage du score
+    private int y; //coordonnées y d'affichage du score
 
-    public Score () {
-        scoreA=0;
-        scoreB=0;
-
-        TextscoreA = new Text("0");
-        TextscoreB = new Text("0");
+    public Score (int x, int y) {
+        score=0;
+        Textscore = new Text("0");
+        this.x = x;
+        this.y = y;
     }
 
     public void initialisationAffichage (Color couleur, double width) {
-        TextscoreA.setTranslateX(300); //coordonné x de l'affichage du score A
-        TextscoreA.setTranslateY(50); //coordonné y de l'affichage du score A
-        TextscoreA.setScaleX(10.0); //largeur de l'affichage du score A
-        TextscoreA.setScaleY(10.0); //hateur de l'affichage du score A
-        TextscoreA.setFill(couleur); //Couleur de l'affichage du score A
-
-        TextscoreB.setTranslateX(width-200); //coordonné x de l'affichage du score B
-        TextscoreB.setTranslateY(50); //coordonné y de l'affichage du score B
-        TextscoreB.setScaleX(10.0); //largeur de l'affichage du score B
-        TextscoreB.setScaleY(10.0); //hateur de l'affichage du score B
-        TextscoreB.setFill(couleur); //couleur de l'affichage du score B
+        Textscore.setTranslateX(this.x); //coordonné x de l'affichage du score A
+        Textscore.setTranslateY(this.y); //coordonné y de l'affichage du score A
+        Textscore.setScaleX(10.0); //largeur de l'affichage du score A
+        Textscore.setScaleY(10.0); //hateur de l'affichage du score A
+        Textscore.setFill(couleur); //Couleur de l'affichage du score A
     }
 
-    public void aGagne () {
-        scoreA +=1;
-    }
-
-    public void bGagne () {
-        scoreB +=1;
+    public void Gagne () {
+        score +=1;
     }
 
     public void miseAJour () {
-        TextscoreA.setText("" + scoreA);
-        TextscoreB.setText("" + scoreB);
+        Textscore.setText("" + score);
     }
     
-    public Text getTextscoreA() {
-        return TextscoreA;
-    }
-
-    public Text getTextscoreB() {
-        return TextscoreB;
+    public Text getTextscore() {
+        return Textscore;
     }
 }

@@ -89,7 +89,8 @@ public class GameView {
         racketB.setX(court.getWidth() * scale + xMargin);
         racketB.setY(court.getRacketB() * scale);
 
-        court.getScores().initialisationAffichage(Color.WHITE, court.getWidth()); //initialise l'affichage des scores
+        court.getScoreA().initialisationAffichage(Color.WHITE, court.getWidth()); //initialise l'affichage du score de racketA
+        court.getScoreB().initialisationAffichage(Color.WHITE, court.getWidth()); //initialise l'affichage du score de racketB
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
@@ -99,7 +100,7 @@ public class GameView {
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
 
-        gameRoot.getChildren().addAll(racketA, racketB, ball, court.getScores().getTextscoreA(), court.getScores().getTextscoreB());
+        gameRoot.getChildren().addAll(racketA, racketB, ball, court.getScoreA().getTextscore(), court.getScoreB().getTextscore());
 
 
     }
@@ -121,7 +122,8 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
-                court.getScores().miseAJour();//met à jour la valeur du score du joueur A et du joueur B
+                court.getScoreA().miseAJour();//met à jour affichage de la valeur du score de racketA 
+                court.getScoreB().miseAJour();//met à jour affichage de la valeur du score de racketB
             }
         }.start();
     }
