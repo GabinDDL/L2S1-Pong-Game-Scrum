@@ -10,16 +10,17 @@ public class Court {
     // instance state
     private double racketA; // m
     private double racketB; // m
+    private Score scoreA;
+    private Score scoreB;
     private double ballAbsoluteSpeed; // m
     private Vector2 ballPosition; // m
     private Vector2 ballSpeedDirection; // m
 
-    private Score scores;
-
     public Court(RacketController playerA, RacketController playerB, double width, double height) {
         this.playerA = playerA;
         this.playerB = playerB;
-        scores = new Score(); //initialisation des scores
+        scoreA = new Score(300,50); //initialisation score racketA
+        scoreB = new Score((int)width-200,50); //initialisation score racketB
         this.width = width;
         this.height = height;
         reset();
@@ -53,8 +54,12 @@ public class Court {
         return ballPosition.getYdir();
     }
 
-    public Score getScores() {
-        return scores;
+    public Score getScoreA() {
+        return scoreA;
+    }
+
+    public Score getScoreB() {
+        return scoreB;
     }
 
     public void update(double deltaT) {
@@ -155,10 +160,10 @@ public class Court {
                 nextBallPosition.getYdir() > racketB && nextBallPosition.getYdir() < racketB + racketSize) {
             computeRacketBouce(nextBallPosition, deltaT, playerB);
         } else if (nextBallPosition.getXdir()  < -50) { // si la balle sort à gauche
-            scores.bGagne();; // le joueur A perd : met à jour le score du joueur B
+            scoreB.win();; // le joueur A perd : met à jour le score du joueur B
             return true;
         } else if (nextBallPosition.getXdir()  > width +50) { // si la balle sort à droite
-            scores.aGagne();; // le joueur B perd : met à jour le score du joueur A 
+            scoreA.win();; // le joueur B perd : met à jour le score du joueur A 
             return true;
         }
 
