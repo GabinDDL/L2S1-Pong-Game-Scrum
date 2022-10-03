@@ -4,7 +4,7 @@ public class Court {
     // instance parameters
     private final RacketController playerA, playerB;
     private final double width, height; // m
-    private final double racketSpeed = 300.0; // m/s
+    private final double racketSpeed = 500.0; // m/s
     private final double racketSize = 100.0; // m
     private final double ballRadius = 10.0; // m
     // instance state
@@ -15,6 +15,7 @@ public class Court {
     private double ballAbsoluteSpeed; // m
     private Vector2 ballPosition; // m
     private Vector2 ballSpeedDirection; // m
+    private int countBounce=0;
 
     public Court(RacketController playerA, RacketController playerB, double width, double height) {
         this.playerA = playerA;
@@ -151,6 +152,11 @@ public class Court {
         if (nextBallPosition.getYdir() < 0 || nextBallPosition.getYdir() > height) {
             ballSpeedDirection.setDirection(ballSpeedDirection.getXdir(), -ballSpeedDirection.getYdir());
             nextBallPosition.updateVector(ballSpeedDirection, deltaT);
+            
+            countBounce++; // augmente à chaque fois que la balle touche un mur
+            if(countBounce < 49 && countBounce % 3 == 0) { // majoration + augmentation à modulo
+                ballSpeedDirection.scalarMultiplication(1.10);
+            }
         }
         // Check racket
         if (nextBallPosition.getXdir() < 0 && nextBallPosition.getXdir() > -10 &&
@@ -182,6 +188,8 @@ public class Court {
         this.racketB = height / 2;
         this.ballAbsoluteSpeed = 200; // norm of the speed vector
         this.ballPosition = new Vector2(width / 2, Math.random() * (2 * height / 3) + height / 6);
+
+        this.countBounce = 0; // bounce of the ball
 
         // Generation a random direction vector of norm this.ballAbsoluteSpeed
 
