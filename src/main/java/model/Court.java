@@ -149,7 +149,7 @@ public class Court {
             nextBallPosition.updateVector(ballSpeedDirection, deltaT);
             
             countBounce++; // augmente à chaque fois que la balle touche un mur
-            if(countBounce < 75 && countBounce % 3 == 0) { // majoration + augmentation à modulo
+            if(countBounce < 49 && countBounce % 3 == 0) { // majoration + augmentation à modulo
                 ballSpeedDirection.scalarMultiplication(1.10);
             }
         }
