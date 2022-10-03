@@ -160,10 +160,10 @@ public class Court {
                 nextBallPosition.getYdir() > racketB && nextBallPosition.getYdir() < racketB + racketSize) {
             computeRacketBouce(nextBallPosition, deltaT, playerB);
         } else if (nextBallPosition.getXdir()  < -50) { // si la balle sort à gauche
-            scoreB.Gagne();; // le joueur A perd : met à jour le score du joueur B
+            scoreB.win();; // le joueur A perd : met à jour le score du joueur B
             return true;
         } else if (nextBallPosition.getXdir()  > width +50) { // si la balle sort à droite
-            scoreA.Gagne();; // le joueur B perd : met à jour le score du joueur A 
+            scoreA.win();; // le joueur B perd : met à jour le score du joueur A 
             return true;
         }
 

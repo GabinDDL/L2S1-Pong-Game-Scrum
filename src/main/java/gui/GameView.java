@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 import model.Court;
 
 import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.imagePattern;
 
 public class GameView {
     // class parameters
@@ -27,39 +27,39 @@ public class GameView {
      * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
      */
     
-    public void changerImageobjet(String objet,String type, String nomDeLImage, Color couleur) {
-        // le type est soit "image" soit "couleur"
-        Image img = new Image("file:./Images/" + nomDeLImage); //creer une image à partir du fichier.
+    public void changeImageObject(String objet,String type, String imageTitle, Color color) {
+        // le type est soit "image" soit "color"
+        Image img = new Image("file:./Images/" + imageTitle); //creer une image à partir du fichier.
         if (type == "image") {
             switch (objet) {
                 case "racketA":
-                    racketA.setFill(new ImagePattern(img)); //attribut comme remplissage de la raquette, le pattern de l'image.
+                    racketA.setFill(new imagePattern(img)); //attribut comme remplissage de la raquette, le motif de l'image.
                     break;
                 case "racketB":
-                    racketB.setFill(new ImagePattern(img));
+                    racketB.setFill(new imagePattern(img));
                     break;
                 case "ball":
-                    ball.setFill(new ImagePattern(img));//pour la ball
+                    ball.setFill(new imagePattern(img));//pour la balle
                     break;
             }
         }
         else {
             switch (objet) {
                 case "racketA":
-                    racketA.setFill(couleur); //attribut comme remplissage de la raquette, la couleur.
+                    racketA.setFill(color); //attribut comme remplissage de la raquette, la couleurr.
                     break;
                 case "racketB":
-                    racketB.setFill(couleur);
+                    racketB.setFill(color);
                     break;
                 case "ball":
-                    ball.setFill(couleur);//paur la ball
+                    ball.setFill(color);//paur la ball
                     break;
             }
         }
     }
 
-    public void changerImageFond (String nomDeLImage){
-        gameRoot.setStyle("-fx-background-image: url('file:./Images/" + nomDeLImage +"'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
+    public void changeImageBackground (String imageTitle){
+        gameRoot.setStyle("-fx-background-image: url('file:./Images/" + imageTitle +"'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
     }
 
     public GameView(Court court, Pane root, double scale) {
@@ -70,13 +70,13 @@ public class GameView {
         root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
         root.setMinHeight(court.getHeight() * scale);
 
-        this.changerImageFond("terrain.jpg"); //edit le fond d'ecran
+        this.changeImageBackground("terrain.jpg"); //edit le fond d'ecran
 
         racketA = new Rectangle();
         racketA.setHeight(court.getRacketSize() * scale);
         racketA.setWidth(racketThickness);
         
-        this.changerImageobjet("racketA", "couleur", "", Color.RED); //change la couleur de la racketA
+        this.changeImageObject("racketA", "color", "", Color.RED); //change la couleur de racketA
 
         racketA.setX(xMargin - racketThickness);
         racketA.setY(court.getRacketA() * scale);
@@ -84,23 +84,23 @@ public class GameView {
         racketB = new Rectangle();
         racketB.setHeight(court.getRacketSize() * scale);
         racketB.setWidth(racketThickness);
-        this.changerImageobjet("racketB", "couleur", "", Color.BLUE); //change la couleur de la racketB
+        this.changeImageObject("racketB", "color", "", Color.BLUE); //change la couleur de racketB
 
         racketB.setX(court.getWidth() * scale + xMargin);
         racketB.setY(court.getRacketB() * scale);
 
-        court.getScoreA().initialisationAffichage(Color.WHITE, court.getWidth()); //initialise l'affichage du score de racketA
-        court.getScoreB().initialisationAffichage(Color.WHITE, court.getWidth()); //initialise l'affichage du score de racketB
+        court.getScoreA().initDisplay(Color.WHITE, court.getWidth()); //initialise l'affichage du score de racketA
+        court.getScoreB().initDisplay(Color.WHITE, court.getWidth()); //initialise l'affichage du score de racketB
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
         
-        this.changerImageobjet("ball", "image", "balle.jpg", Color.PINK); //change la couleur de ball
+        this.changeImageObject("ball", "image", "balle.jpg", Color.PINK); //change la color de ball
 
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
 
-        gameRoot.getChildren().addAll(racketA, racketB, ball, court.getScoreA().getTextscore(), court.getScoreB().getTextscore());
+        gameRoot.getChildren().addAll(racketA, racketB, ball, court.getScoreA().getTextScore(), court.getScoreB().getTextScore());
 
 
     }
@@ -122,8 +122,8 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
-                court.getScoreA().miseAJour();//met à jour affichage de la valeur du score de racketA 
-                court.getScoreB().miseAJour();//met à jour affichage de la valeur du score de racketB
+                court.getScoreA().updateDisplay();//met à jour affichage de la valeur du score de racketA 
+                court.getScoreB().updateDisplay();//met à jour affichage de la valeur du score de racketB
             }
         }.start();
     }
