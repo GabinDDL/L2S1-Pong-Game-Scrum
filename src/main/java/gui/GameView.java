@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 import model.Court;
 
 import javafx.scene.image.Image;
-import javafx.scene.paint.imagePattern;
+import javafx.scene.paint.ImagePattern;
 
 public class GameView {
     // class parameters
@@ -33,13 +33,13 @@ public class GameView {
         if (type == "image") {
             switch (objet) {
                 case "racketA":
-                    racketA.setFill(new imagePattern(img)); //attribut comme remplissage de la raquette, le motif de l'image.
+                    racketA.setFill(new ImagePattern(img)); //attribut comme remplissage de la raquette, le motif de l'image.
                     break;
                 case "racketB":
-                    racketB.setFill(new imagePattern(img));
+                    racketB.setFill(new ImagePattern(img));
                     break;
                 case "ball":
-                    ball.setFill(new imagePattern(img));//pour la balle
+                    ball.setFill(new ImagePattern(img));//pour la balle
                     break;
             }
         }
