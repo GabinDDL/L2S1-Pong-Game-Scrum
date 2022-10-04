@@ -63,6 +63,12 @@ public class Court {
         return scoreB;
     }
 
+    /**
+     * Updates the positions of the rackets
+     * and calls the ball update
+     * 
+     * @param deltaT time passed
+     */
     public void update(double deltaT) {
 
         switch (playerA.getState()) {
@@ -97,37 +103,40 @@ public class Court {
             reset();
     }
 
-    private void computeRacketBouce(Vector2 nextBallPosition, double deltaT, RacketController player) {
-        /*
-         * Computes the next position of the ball once it hits the racket.
-         * It adds an angle bonus of pi/6 or -pi/6 to the direction of the ball
-         * if the racket is either GOING_UP(pi/6) of GOING_DOWN(-pi/6)
-         */
+    /**
+     * Computes the next position of the ball once it hits the racket.
+     * It adds an angle bonus of pi/12 or -pi/12 to the direction of the ball
+     * if the racket is either GOING_UP(pi/12) of GOING_DOWN(-pi/12)
+     * 
+     * @param nextBallPosition Future position of the ball
+     * @param deltaT Time passed
+     * @param racket Player that collides with the ball
+     */
+    private void computeRacketBouce(Vector2 nextBallPosition, double deltaT, RacketController racket) {
 
         ballSpeedDirection.setDirection(-ballSpeedDirection.getXdir(), ballSpeedDirection.getYdir());
         Vector2 newDirection = new Vector2(ballSpeedDirection);
 
 
-        switch (player.getState()) {
-
+        switch (racket.getState()) {
             case GOING_UP:
-                if (player == playerA){
-                    newDirection.addAngle(-0.26);
+                if (racket == playerA){
+                    newDirection.addAngle(23* Math.PI/12);
                     if (newDirection.getXdir() <= 0) newDirection = ballSpeedDirection;
                 }
                 else{
-                    newDirection.addAngle(0.26);
+                    newDirection.addAngle(Math.PI/12);
                     if (newDirection.getXdir() >= 0) newDirection = ballSpeedDirection;
                 }
                 break;
 
             case GOING_DOWN:
-                if (player == playerA){
-                    newDirection.addAngle(0.26);
+                if (racket == playerA){
+                    newDirection.addAngle(Math.PI/12);
                     if (newDirection.getXdir() <= 0) newDirection = ballSpeedDirection;
                 }
                 else{
-                    newDirection.addAngle(-0.26);
+                    newDirection.addAngle(23* Math.PI/12);
                     if (newDirection.getXdir() >= 0) newDirection = ballSpeedDirection;
                 }
                     break;
@@ -135,23 +144,26 @@ public class Court {
                 break;
         }
 
-        ballSpeedDirection.coppyVector(newDirection);
-        nextBallPosition.updateVector(ballSpeedDirection, deltaT);
+        ballSpeedDirection.setDirection(newDirection);
+        nextBallPosition.updateDistanceVector(ballSpeedDirection, deltaT);
 
     }
 
     /**
+     * Updates the position and velocity of the ball
+     * 
      * @return true if a player lost
      */
     private boolean updateBall(double deltaT) {
         // first, compute possible next position if nothing stands in the way
         Vector2 nextBallPosition = new Vector2(ballPosition);
-        nextBallPosition.updateVector(ballSpeedDirection, deltaT);
+        nextBallPosition.updateDistanceVector(ballSpeedDirection, deltaT);
+        
         // next, see if the ball would meet some obstacle
         // Check height
         if (nextBallPosition.getYdir() < 0 || nextBallPosition.getYdir() > height) {
             ballSpeedDirection.setDirection(ballSpeedDirection.getXdir(), -ballSpeedDirection.getYdir());
-            nextBallPosition.updateVector(ballSpeedDirection, deltaT);
+            nextBallPosition.updateDistanceVector(ballSpeedDirection, deltaT);
             
             countBounce++; // augmente à chaque fois que la balle touche un mur
             if(countBounce < 49 && countBounce % 3 == 0) { // majoration + augmentation à modulo
@@ -159,22 +171,28 @@ public class Court {
             }
         }
         // Check racket
-        if (nextBallPosition.getXdir() < 0 && nextBallPosition.getXdir() > -10 &&
-                nextBallPosition.getYdir() > racketA && nextBallPosition.getYdir() < racketA + racketSize) {
+        if ((nextBallPosition.getXdir() < 0 && nextBallPosition.getXdir() >= -10 &&
+                nextBallPosition.getYdir() > racketA -5 && nextBallPosition.getYdir() < racketA + racketSize + 5) ||
+                (ballPosition.getXdir() > 0 && nextBallPosition.getXdir() < 0 &&
+                ballPosition.getYdir() < racketA - 5 && nextBallPosition.getYdir() < racketA + racketSize + 5)) {
             computeRacketBouce(nextBallPosition, deltaT, playerA);
-        } else if (nextBallPosition.getXdir() > width && nextBallPosition.getXdir() < width + 10 &&
-                nextBallPosition.getYdir() > racketB && nextBallPosition.getYdir() < racketB + racketSize) {
+
+        } else if ((nextBallPosition.getXdir() > width && nextBallPosition.getXdir() <= width + 10 &&
+                nextBallPosition.getYdir() > racketB - 5 && nextBallPosition.getYdir() < racketB + racketSize + 5) ||
+                (ballPosition.getXdir() < width && nextBallPosition.getXdir() > width &&
+                ballPosition.getYdir() < racketB - 5 && nextBallPosition.getYdir() < racketB + racketSize + 5)) {
             computeRacketBouce(nextBallPosition, deltaT, playerB);
-        } else if (nextBallPosition.getXdir()  < -50) { // si la balle sort à gauche
+
+        } else if (nextBallPosition.getXdir()  < -70 && ballPosition.getXdir() < -50 ) { // si la balle sort à gauche
             scoreB.win();; // le joueur A perd : met à jour le score du joueur B
             return true;
-        } else if (nextBallPosition.getXdir()  > width +50) { // si la balle sort à droite
+        } else if (nextBallPosition.getXdir()  > width + 70 && ballPosition.getXdir() > width + 50) { // si la balle sort à droite
             scoreA.win();; // le joueur B perd : met à jour le score du joueur A 
             return true;
         }
 
         // Update position to the correct new position
-        ballPosition.coppyVector(nextBallPosition);
+        ballPosition.setDirection(nextBallPosition);
 
         return false;
     }
@@ -182,21 +200,24 @@ public class Court {
     public double getBallRadius() {
         return ballRadius;
     }
-
+   
+    /**
+     * It resets the game to its initial state
+     */
     void reset() {
         this.racketA = height / 2;
         this.racketB = height / 2;
         this.ballAbsoluteSpeed = 200; // norm of the speed vector
-        this.ballPosition = new Vector2(width / 2, Math.random() * (2 * height / 3) + height / 6);
+        this.ballPosition = new Vector2(width / 2,  Math.random() * (2 * height / 3) + height / 6);
 
         this.countBounce = 0; // bounce of the ball
 
         // Generation a random direction vector of norm this.ballAbsoluteSpeed
 
         double angle = 2 * Math.random() - 1; // Angle between -1 and 1 rad to void slow starts
-        if (Math.random() > 0.5) angle += 3.14; // Random side selector
+        if (Math.random() > 0.5) angle += Math.PI; // Random side selector
 
-        this.ballSpeedDirection = new Vector2(Math.cos(angle), Math.sin(angle));
+        this.ballSpeedDirection = new Vector2( Math.cos(angle), Math.sin(angle));
         this.ballSpeedDirection.scalarMultiplication(ballAbsoluteSpeed);
 
     }

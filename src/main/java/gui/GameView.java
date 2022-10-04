@@ -20,12 +20,6 @@ public class GameView {
     // children of the game main node
     private final Rectangle racketA, racketB;
     private final Circle ball;
-
-    /**
-     * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
-     * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
-     * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
-     */
     
     public void changeImageObject(String objet,String type, String imageTitle, Color color) {
         // le type est soit "image" soit "color"
@@ -52,7 +46,7 @@ public class GameView {
                     racketB.setFill(color);
                     break;
                 case "ball":
-                    ball.setFill(color);//paur la ball
+                    ball.setFill(color);//pour la ball
                     break;
             }
         }
@@ -61,6 +55,12 @@ public class GameView {
     public void changeImageBackground (String imageTitle){
         gameRoot.setStyle("-fx-background-image: url('file:./Images/" + imageTitle +"'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
     }
+
+    /**
+     * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
+     * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
+     * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
+     */    
 
     public GameView(Court court, Pane root, double scale) {
         this.court = court;
@@ -117,13 +117,14 @@ public class GameView {
                 }
                 court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
-                // Updates graphical part of the element
+                // Updates graphical part of the elements
                 racketA.setY(court.getRacketA() * scale);
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
                 court.getScoreA().updateDisplay();//met à jour affichage de la valeur du score de racketA 
                 court.getScoreB().updateDisplay();//met à jour affichage de la valeur du score de racketB
+
             }
         }.start();
     }
