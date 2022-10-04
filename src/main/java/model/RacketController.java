@@ -9,6 +9,7 @@ public interface RacketController {
      * And to modify said state you do:
      * " <NameOfTheState> = RacketController.State.<newState> "
      */
+    
     enum State { GOING_UP, IDLE, GOING_DOWN }
 
 
