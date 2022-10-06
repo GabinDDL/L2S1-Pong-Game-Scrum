@@ -1,6 +1,9 @@
 package model;
 
-public class Court {
+import model.interfaces.InterfaceCourt;
+import model.interfaces.RacketController;
+
+public class Court implements InterfaceCourt {
     // instance parameters
     private final RacketController playerA, playerB;
     private final double width, height; // m
@@ -174,13 +177,13 @@ public class Court {
         if ((nextBallPosition.getXdir() < 0 && nextBallPosition.getXdir() >= -10 &&
                 nextBallPosition.getYdir() > racketA -5 && nextBallPosition.getYdir() < racketA + racketSize + 5) ||
                 (ballPosition.getXdir() > 0 && nextBallPosition.getXdir() < 0 &&
-                ballPosition.getYdir() < racketA - 5 && nextBallPosition.getYdir() < racketA + racketSize + 5)) {
+                ballPosition.getYdir() < racketA - 5 && nextBallPosition.getYdir() > racketA + racketSize + 5)) {
             computeRacketBouce(nextBallPosition, deltaT, playerA);
 
         } else if ((nextBallPosition.getXdir() > width && nextBallPosition.getXdir() <= width + 10 &&
                 nextBallPosition.getYdir() > racketB - 5 && nextBallPosition.getYdir() < racketB + racketSize + 5) ||
                 (ballPosition.getXdir() < width && nextBallPosition.getXdir() > width &&
-                ballPosition.getYdir() < racketB - 5 && nextBallPosition.getYdir() < racketB + racketSize + 5)) {
+                ballPosition.getYdir() < racketB - 5 && nextBallPosition.getYdir() > racketB + racketSize + 5)) {
             computeRacketBouce(nextBallPosition, deltaT, playerB);
 
         } else if (nextBallPosition.getXdir()  < -70 && ballPosition.getXdir() < -50 ) { // si la balle sort à gauche
@@ -204,7 +207,7 @@ public class Court {
     /**
      * It resets the game to its initial state
      */
-    void reset() {
+    public void reset() {
         this.racketA = height / 2;
         this.racketB = height / 2;
         this.ballAbsoluteSpeed = 200; // norm of the speed vector

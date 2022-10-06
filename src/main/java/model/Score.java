@@ -2,9 +2,11 @@ package model;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import model.interfaces.InterfaceScore;
 
-public class Score {
+public class Score implements InterfaceScore {
     private int score;
+    
     private Text textScore;
     private int x; //coordonnées x d'affichage du score
     private int y; //coordonnées y d'affichage du score
@@ -14,6 +16,22 @@ public class Score {
         textScore = new Text("0");
         this.x = x;
         this.y = y;
+    }
+        
+    /**
+     * Returns the Score's associated integer value
+     * @return score
+     */
+    public int getScoreValue() {
+        return score;
+    }
+
+    /**
+     * Sets the Score's associated integer value to the given parameter
+     * @param score
+     */
+    public void setScoreValue(int score) {
+        this.score = score;
     }
 
     public void initDisplay (Color color, double width) {

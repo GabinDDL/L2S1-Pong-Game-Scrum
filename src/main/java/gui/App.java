@@ -1,12 +1,12 @@
 package gui;
 
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
-import model.RacketController;
+import model.Player;
+import model.interfaces.RacketController;
 
 public class App extends Application {
     @Override // definit une fonction de la class héréditaire
@@ -14,18 +14,7 @@ public class App extends Application {
         var root = new Pane(); // ecran
 
         var gameScene = new Scene(root); // scene qui apparait dans l'écran
-        // Implementation of the RacketController interface on ../model/RacketController.java
-        class Player implements RacketController {
-            // Default state of the palyer's racket is IDLE
-            State state = State.IDLE;
-
-            // We define the State getter for the player.
-            @Override
-            public State getState() {
-                return state;
-            }
-        }
-
+        
         var playerA = new Player();
         var playerB = new Player();
 
@@ -33,16 +22,18 @@ public class App extends Application {
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case SHIFT:
-                    playerA.state = RacketController.State.GOING_UP;
+                    playerA.setState(RacketController.State.GOING_UP);
                     break;
                 case CONTROL:
-                    playerA.state = RacketController.State.GOING_DOWN;
+                    playerA.setState(RacketController.State.GOING_DOWN);
                     break;
                 case UP:
-                    playerB.state = RacketController.State.GOING_UP;
+                    playerB.setState(RacketController.State.GOING_UP);
                     break;
                 case DOWN:
-                    playerB.state = RacketController.State.GOING_DOWN;
+                    playerB.setState(RacketController.State.GOING_DOWN);
+                    break;
+                default:
                     break;
             }
         });
@@ -52,16 +43,22 @@ public class App extends Application {
             // touche existante dans le jeu
             switch (ev.getCode()) {
                 case SHIFT:
-                    if (playerA.state == RacketController.State.GOING_UP) playerA.state = RacketController.State.IDLE;
+                    if (playerA.getState() == RacketController.State.GOING_UP)
+                        playerA.setState(RacketController.State.IDLE);
                     break;
                 case CONTROL:
-                    if (playerA.state == RacketController.State.GOING_DOWN) playerA.state = RacketController.State.IDLE;
+                    if (playerA.getState() == RacketController.State.GOING_DOWN)
+                        playerA.setState(RacketController.State.IDLE);
                     break;
                 case UP:
-                    if (playerB.state == RacketController.State.GOING_UP) playerB.state = RacketController.State.IDLE;
+                    if (playerB.getState() == RacketController.State.GOING_UP)
+                        playerB.setState(RacketController.State.IDLE);
                     break;
                 case DOWN:
-                    if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
+                    if (playerB.getState() == RacketController.State.GOING_DOWN)
+                        playerB.setState(RacketController.State.IDLE);
+                    break;
+                default:
                     break;
             }
         }); 
