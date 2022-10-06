@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.Court;
-
+import model.SceneDisplayController;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 
@@ -16,6 +16,7 @@ public class GameView {
     private final Pane gameRoot; // main node of the game
     private final double scale;
     private final double xMargin = 50.0, racketThickness = 10.0; // pixels
+    private SceneDisplayController sceneDisplayModifier;
 
     // children of the game main node
     private final Rectangle racketA, racketB;
@@ -62,10 +63,11 @@ public class GameView {
      * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
      */    
 
-    public GameView(Court court, Pane root, double scale) {
+    public GameView(Court court, Pane root, double scale, SceneDisplayController sceneDisplayModifier) {
         this.court = court;
         this.gameRoot = root;
         this.scale = scale;
+        this.sceneDisplayModifier = sceneDisplayModifier;
 
         root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
         root.setMinHeight(court.getHeight() * scale);
@@ -111,20 +113,25 @@ public class GameView {
 
             @Override
             public void handle(long now) {
+
                 if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
                     return;
                 }
-                court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
-                last = now;
-                // Updates graphical part of the elements
-                racketA.setY(court.getRacketA() * scale);
-                racketB.setY(court.getRacketB() * scale);
-                ball.setCenterX(court.getBallX() * scale + xMargin);
-                ball.setCenterY(court.getBallY() * scale);
-                court.getScoreA().updateDisplay();//met à jour affichage de la valeur du score de racketA 
-                court.getScoreB().updateDisplay();//met à jour affichage de la valeur du score de racketB
 
+                if (sceneDisplayModifier.isInGame()) {
+
+                    court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
+                    
+                    // Updates graphical part of the elements
+                    racketA.setY(court.getRacketA() * scale);
+                    racketB.setY(court.getRacketB() * scale);
+                    ball.setCenterX(court.getBallX() * scale + xMargin);
+                    ball.setCenterY(court.getBallY() * scale);
+                    court.getScoreA().updateDisplay();//met à jour affichage de la valeur du score de racketA 
+                    court.getScoreB().updateDisplay();//met à jour affichage de la valeur du score de racketB
+                }
+                last = now;
             }
         }.start();
     }

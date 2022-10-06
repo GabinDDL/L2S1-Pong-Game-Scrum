@@ -5,18 +5,48 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
+
 import model.Player;
 import model.interfaces.RacketController;
+import model.SceneDisplayController;
+
 
 public class App extends Application {
+
     @Override // definit une fonction de la class héréditaire
     public void start(Stage primaryStage) {
         var root = new Pane(); // ecran
 
         var gameScene = new Scene(root); // scene qui apparait dans l'écran
-        
+
+        /**
+         * Class controling what's being displayed on the screen
+         */
+        class SceneDisplayModifier implements SceneDisplayController {
+            
+            // Scene that beings displaying
+            SceneDisplay actualView = SceneDisplay.GAME;
+            
+            @Override
+            public boolean isInGame() {return actualView == SceneDisplay.GAME;}
+            public void setScene(SceneDisplay sD) {actualView = sD;}
+            public void pauseUnpause() {
+                switch(actualView) {
+                    case GAME:
+                        setScene(SceneDisplay.PAUSE);
+                        break;
+                    case PAUSE:
+                        setScene(SceneDisplay.GAME);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         var playerA = new Player();
         var playerB = new Player();
+        var sceneDisplayModifier = new SceneDisplayModifier();
 
         // We bind the pressing of the keys to the mouvement of the rackets
         gameScene.setOnKeyPressed(ev -> {
@@ -32,6 +62,9 @@ public class App extends Application {
                     break;
                 case DOWN:
                     playerB.setState(RacketController.State.GOING_DOWN);
+                    break;
+                case ESCAPE:
+                    sceneDisplayModifier.pauseUnpause();
                     break;
                 default:
                     break;
@@ -64,7 +97,7 @@ public class App extends Application {
         }); 
         
         var court = new Court(playerA, playerB, 1000, 600);
-        var gameView = new GameView(court, root, 1.0);
+        var gameView = new GameView(court, root, 1.0, sceneDisplayModifier);
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();
