@@ -1,4 +1,4 @@
-package model;
+package model.interfaces;
 
 public interface RacketController {
     /*
@@ -14,5 +14,9 @@ public interface RacketController {
 
 
     // State getter (Overided on ../gui/App.java)
-    State getState();
+    /**
+     * Returns the Player's State
+     * @return
+     */
+    public State getState();
 }
