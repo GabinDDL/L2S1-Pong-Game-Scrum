@@ -1,13 +1,16 @@
 package gui;
 
-import java.io.IOException;
-import java.net.URL;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import model.Court;
+
+import model.Player;
+import model.interfaces.RacketController;
+import model.SceneDisplayController;
+
 
 import model.MediaHandler;
 
@@ -20,47 +23,91 @@ import model.MediaHandler;
  */
 public class App extends Application {
 
-    private static String linkProjectPage = "https://pongworld.teleporthq.app/";
+    @Override // definit une fonction de la class héréditaire
+    public void start(Stage primaryStage) {
+        var root = new Pane(); // ecran
 
-    private static int scoreLimit = 7;
+        var gameScene = new Scene(root); // scene qui apparait dans l'écran
 
-    // Buttons 1 to 4 are the options (switchs in this case) that can be enable.
-    public static boolean soundsButton = true;
-    public static boolean aleas = false;
-    public static boolean whichScore = true;
-    public static boolean infiniteGame = false;
+        /**
+         * Class controling what's being displayed on the screen
+         */
+        class SceneDisplayModifier implements SceneDisplayController {
+            
+            // Scene that beings displaying
+            SceneDisplay actualView = SceneDisplay.GAME;
+            
+            @Override
+            public boolean isInGame() {return actualView == SceneDisplay.GAME;}
+            public void setScene(SceneDisplay sD) {actualView = sD;}
+            public void pauseUnpause() {
+                switch(actualView) {
+                    case GAME:
+                        setScene(SceneDisplay.PAUSE);
+                        break;
+                    case PAUSE:
+                        setScene(SceneDisplay.GAME);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
-    // Load first .fxml file's URL to load the 'BorderPane' of HomePage
-    URL fxmlURL = MediaHandler.getFXMLURL("home.fxml");
-    FXMLLoader loader = new FXMLLoader(fxmlURL);
+        var playerA = new Player();
+        var playerB = new Player();
+        var sceneDisplayModifier = new SceneDisplayModifier();
 
-    public static boolean musicState = true;
+        // We bind the pressing of the keys to the mouvement of the rackets
+        gameScene.setOnKeyPressed(ev -> {
+            switch (ev.getCode()) {
+                case SHIFT:
+                    playerA.setState(RacketController.State.GOING_UP);
+                    break;
+                case CONTROL:
+                    playerA.setState(RacketController.State.GOING_DOWN);
+                    break;
+                case UP:
+                    playerB.setState(RacketController.State.GOING_UP);
+                    break;
+                case DOWN:
+                    playerB.setState(RacketController.State.GOING_DOWN);
+                    break;
+                case ESCAPE:
+                    sceneDisplayModifier.pauseUnpause();
+                    break;
+                default:
+                    break;
+            }
+        });
 
-    public static int getScoreLimit() {
-        return scoreLimit;
-    }
-
-    public static void setScoreLimit(int newScore) {
-        scoreLimit = newScore;
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-
-        // root is the pane containing all the game
-        // Transitions, addition of objects, etc are made in it
-        Pane root = new Pane();
-        root.setId("ABSOLUTE_ROOT");
-
-        // We place the 'BorderPane' of the HomePage as the first child in the root
-        root.getChildren().add(loader.load());
-
-        // gameScene is the scene appearing on the screen
-        Scene gameScene = new Scene(root); // scene qui apparaît dans l'écran
-
-        // Defines options of the Window
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("Pong World");
+        // We bind the release of the keys to the IDLE state
+        gameScene.setOnKeyReleased(ev -> {
+            // touche existante dans le jeu
+            switch (ev.getCode()) {
+                case SHIFT:
+                    if (playerA.getState() == RacketController.State.GOING_UP)
+                        playerA.setState(RacketController.State.IDLE);
+                    break;
+                case CONTROL:
+                    if (playerA.getState() == RacketController.State.GOING_DOWN)
+                        playerA.setState(RacketController.State.IDLE);
+                    break;
+                case UP:
+                    if (playerB.getState() == RacketController.State.GOING_UP)
+                        playerB.setState(RacketController.State.IDLE);
+                    break;
+                case DOWN:
+                    if (playerB.getState() == RacketController.State.GOING_DOWN)
+                        playerB.setState(RacketController.State.IDLE);
+                    break;
+                default:
+                    break;
+            }
+        }); 
+        
+        var court = new Court(playerA, playerB, 1000, 600);
+        var gameView = new GameView(court, root, 1.0, sceneDisplayModifier);
         primaryStage.setScene(gameScene);
         primaryStage.show();
     }

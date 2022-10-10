@@ -14,9 +14,9 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.Pane;
 
 import model.Court;
-import model.MediaHandler;
-import model.game_elements.Ball;
-import model.game_elements.Player;
+import model.SceneDisplayController;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
 
 public class GameView {
 
@@ -24,113 +24,95 @@ public class GameView {
     private final Court court;
     private final Pane gameRoot; // main node of the game
     private final double scale;
+    private final double xMargin = 50.0, racketThickness = 10.0; // pixels
     private SceneDisplayController sceneDisplayModifier;
 
-    private double xMargin = 50.0;
-    private double racketThickness = 10.0; // pixels
+    // children of the game main node
+    private final Rectangle racketA, racketB;
+    private final Circle ball;
+    
+    public void changeImageObject(String objet,String type, String imageTitle, Color color) {
+        // le type est soit "image" soit "color"
+        Image img = new Image("file:./Images/" + imageTitle); //creer une image à partir du fichier.
+        if (type == "image") {
+            switch (objet) {
+                case "racketA":
+                    racketA.setFill(new ImagePattern(img)); //attribut comme remplissage de la raquette, le motif de l'image.
+                    break;
+                case "racketB":
+                    racketB.setFill(new ImagePattern(img));
+                    break;
+                case "ball":
+                    ball.setFill(new ImagePattern(img));//pour la balle
+                    break;
+            }
+        }
+        else {
+            switch (objet) {
+                case "racketA":
+                    racketA.setFill(color); //attribut comme remplissage de la raquette, la couleurr.
+                    break;
+                case "racketB":
+                    racketB.setFill(color);
+                    break;
+                case "ball":
+                    ball.setFill(color);//pour la ball
+                    break;
+            }
+        }
+    }
 
-    private Sound sound = new Sound("GameMusicLoop.wav");
+    public void changeImageBackground (String imageTitle){
+        gameRoot.setStyle("-fx-background-image: url('file:./Images/" + imageTitle +"'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
+    }
 
-    // Constructor
     /**
-     * @param court "model" of this view (the court of the game and everything on
-     *              it)
-     * @param game  the root node in the JavaFX scene in which the game will be
-     *              displayed
-     * @param scale the scale between values in the model and the pixels
-     *              corresponding in the view
-     * @throws MalformedURLException the url of the path towards the file is
-     *                               corrupted
-     */
+     * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
+     * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
+     * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
+     */    
 
-    public void launchMusic() {
-        sound.loop(); // play sound background
-    }
-
-    public void stopMusicAndSounds() {
-        sound.stop(); // stop sound background
-        court.stopSounds();
-    }
-
-    public GameView(Court court, Pane game, double scale, SceneDisplayController sceneDisplayModifier)
-            throws MalformedURLException {
+    public GameView(Court court, Pane root, double scale, SceneDisplayController sceneDisplayModifier) {
         this.court = court;
-        this.gameRoot = game;
+        this.gameRoot = root;
         this.scale = scale;
         this.sceneDisplayModifier = sceneDisplayModifier;
 
-        game.setMinWidth(court.getWidth() * scale + 2 * xMargin);
-        game.setMinHeight(court.getHeight() * scale);
+        root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
+        root.setMinHeight(court.getHeight() * scale);
 
-        // If player did not desactivate music in HomePage or in options
-        if (App.musicState) {
-            launchMusic();
-        }
+        this.changeImageBackground("terrain.jpg"); //edit le fond d'ecran
 
-        for (UpdatableGui object : court.getListObjects()) {
-            if (object instanceof Player)
-                ((Player) object).initDisplayRacket(scale, xMargin, racketThickness);
-            else if (object instanceof Ball)
-                ((Ball) object).initDisplay(scale, xMargin);
+        racketA = new Rectangle();
+        racketA.setHeight(court.getRacketSize() * scale);
+        racketA.setWidth(racketThickness);
+        
+        this.changeImageObject("racketA", "color", "", Color.RED); //change la couleur de racketA
 
-        }
+        racketA.setX(xMargin - racketThickness);
+        racketA.setY(court.getRacketA() * scale);
 
-        for (Object object : court.getListObjects()) {
-            if (object instanceof Ball)
-                gameRoot.getChildren().add(((Ball) object).getCircle());
-            else if (object instanceof Player)
-                gameRoot.getChildren().add(((Player) object).getShape());
+        racketB = new Rectangle();
+        racketB.setHeight(court.getRacketSize() * scale);
+        racketB.setWidth(racketThickness);
+        this.changeImageObject("racketB", "color", "", Color.BLUE); //change la couleur de racketB
 
-        }
-    }
-    // Getters
+        racketB.setX(court.getWidth() * scale + xMargin);
+        racketB.setY(court.getRacketB() * scale);
 
-    public Pane getGameRoot() {
-        return gameRoot;
-    }
+        court.getScoreA().initDisplay(Color.WHITE, court.getWidth()); //initialise l'affichage du score de racketA
+        court.getScoreB().initDisplay(Color.WHITE, court.getWidth()); //initialise l'affichage du score de racketB
 
-    public double getxMargin() {
-        return xMargin;
-    }
+        ball = new Circle();
+        ball.setRadius(court.getBallRadius());
+        
+        this.changeImageObject("ball", "image", "balle.jpg", Color.PINK); //change la color de ball
 
-    // Setters
-    public void setRacketThickness(double thickness) {
-        racketThickness = thickness;
-    }
+        ball.setCenterX(court.getBallX() * scale + xMargin);
+        ball.setCenterY(court.getBallY() * scale);
 
-    public void setMarginX(double margin) {
-        xMargin = margin;
-    }
+        gameRoot.getChildren().addAll(racketA, racketB, ball, court.getScoreA().getTextScore(), court.getScoreB().getTextScore());
 
-    // Getters
-    public double getMarginX() {
-        return xMargin;
-    }
-
-    public double getScale() {
-        return scale;
-    }
-
-    // Methods
-
-    /**
-     * Change the background with an Image file
-     * 
-     * @param imageTitle
-     */
-    public void changeImageBackground(String imageTitle) {
-        // gameRoot.setStyle("-fx-background-image: url('file:" + DIR_IMAGES +
-        // imageTitle +
-        // "'); -fx-background-position: center center; -fx-background-repeat:no-repeat;
-        // -fx-background-size:100% 100%;");
-        InputStream in = MediaHandler.getImageInputStream(imageTitle);
-        Image img = new Image(in);
-        BackgroundImage bgImage = new BackgroundImage(img,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                null, null);
-        Background bg = new Background(bgImage);
-        gameRoot.setBackground(bg);
-    }
 
     /**
      * Updates graphical part of the elements on court
@@ -156,11 +138,17 @@ public class GameView {
                     return;
                 }
 
-                // If the game is not set on pause, then displays elements that need to be
-                // displayed and stops calculating next positions
                 if (sceneDisplayModifier.isInGame()) {
+
                     court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
-                    updateDisplays();
+                    
+                    // Updates graphical part of the elements
+                    racketA.setY(court.getRacketA() * scale);
+                    racketB.setY(court.getRacketB() * scale);
+                    ball.setCenterX(court.getBallX() * scale + xMargin);
+                    ball.setCenterY(court.getBallY() * scale);
+                    court.getScoreA().updateDisplay();//met à jour affichage de la valeur du score de racketA 
+                    court.getScoreB().updateDisplay();//met à jour affichage de la valeur du score de racketB
                 }
                 last = now;
             }

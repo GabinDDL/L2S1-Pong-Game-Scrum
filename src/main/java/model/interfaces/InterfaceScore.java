@@ -1,40 +1,31 @@
 package model.interfaces;
 
-import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
-/**
- * Interface for the score object.
- */
 public interface InterfaceScore {
 
-    // Getters
+    /**
+     * Initializes the Scores' position and color
+     * @param color
+     * @param width
+     */
+    public void initDisplay(Color color, double width);
 
     /**
-     * Returns the amount of points
-     * 
-     * @return int points
+     * Updates and increments the Score integer value by 1
      */
-    public int getPoints();
+    public void win();
 
     /**
-     * Returns the associated Label
-     * 
-     * @return Label
+     * Updates the Score's shown text
      */
-    public Label getLabel();
-
-    // Methods
-
+    public void updateDisplay();
+    
     /**
-     * Increments the amount of points by 1
-     * and updates the Label accordingly
+     * Returns the Text of the Score
+     * @return Text
      */
-    public void incrementScore();
-
-    /**
-     * Resets the amount of points to 0
-     * and updates the Label accordingly
-     */
-    public void resetScore();
-
+    public Text getTextScore();
+    
 }
