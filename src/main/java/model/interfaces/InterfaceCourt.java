@@ -2,6 +2,9 @@ package model.interfaces;
 
 import model.Score;
 
+import model.Objects.*;
+import java.util.List;
+
 /**
  * InterfaceCourt
  */
@@ -18,16 +21,6 @@ public interface InterfaceCourt {
     public double getHeight();
 
     /**
-     * @return the Court's Racket A
-     */
-    public double getRacketA();
-
-    /**
-     * @return the Court's Racket B
-     */
-    public double getRacketB();
-
-    /**
      * @return the Court's Score A
      */
     public Score getScoreA();
@@ -37,8 +30,11 @@ public interface InterfaceCourt {
      */
     public Score getScoreB();
 
+    public List<SolidObject> getListObjects();
+
     /**
      * Updates the Court
+     * 
      * @param deltaT
      */
     public void update(double deltaT);
@@ -47,5 +43,5 @@ public interface InterfaceCourt {
      * Resets the Court
      */
     public void reset();
-    
+
 }
