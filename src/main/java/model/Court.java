@@ -1,32 +1,34 @@
 package model;
 
+import model.Objects.*;
 import model.interfaces.InterfaceCourt;
 import model.interfaces.RacketController;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Court implements InterfaceCourt {
     // instance parameters
     private final RacketController playerA, playerB;
     private final double width, height; // m
-    private final double racketSpeed = 500.0; // m/s
-    private final double racketSize = 100.0; // m
-    private final double ballRadius = 10.0; // m
+
     // instance state
-    private double racketA; // m
-    private double racketB; // m
     private Score scoreA;
     private Score scoreB;
-    private double ballAbsoluteSpeed; // m
-    private Vector2 ballPosition; // m
-    private Vector2 ballSpeedDirection; // m
-    private int countBounce=0;
+    private Racket A;
+    private Racket B;
+    private Ball ball;
 
     public Court(RacketController playerA, RacketController playerB, double width, double height) {
-        this.playerA = playerA;
+        this.playerA = playerA; // Player A = new Player(new Score(300.50), playerA); //constructeur(Score,
+                                // RacketController)
         this.playerB = playerB;
-        scoreA = new Score(300,50); //initialisation score racketA
-        scoreB = new Score((int)width-200,50); //initialisation score racketB
+        scoreA = new Score(300, 50);
+        scoreB = new Score((int) width - 200, 50);
         this.width = width;
         this.height = height;
+        A = new Racket(0, 0, playerA, 500.0, 100.0);
+        B = new Racket(width, 0, playerB, 500.0, 100.0);
+        ball = new Ball(new Vector2(0, 0), 200.0, 10.0);
         reset();
     }
 
@@ -38,26 +40,6 @@ public class Court implements InterfaceCourt {
         return height;
     }
 
-    public double getRacketSize() {
-        return racketSize;
-    }
-
-    public double getRacketA() {
-        return racketA;
-    }
-
-    public double getRacketB() {
-        return racketB;
-    }
-
-    public double getBallX() {
-        return ballPosition.getXdir();
-    }
-
-    public double getBallY() {
-        return ballPosition.getYdir();
-    }
-
     public Score getScoreA() {
         return scoreA;
     }
@@ -66,42 +48,23 @@ public class Court implements InterfaceCourt {
         return scoreB;
     }
 
+    public List<SolidObject> getListObjects() {
+        List<SolidObject> list = new ArrayList<SolidObject>();
+        list.add(A);
+        list.add(B);
+        list.add(ball);
+        return list;
+    }
+
     /**
-     * Updates the positions of the rackets
-     * and calls the ball update
+     * Updates the positions of the objects
+     * Calls updateBall and if a player wins, reset the objects
      * 
      * @param deltaT time passed
      */
-    public void update(double deltaT) {
-
-        switch (playerA.getState()) {
-            case GOING_UP:
-                racketA -= racketSpeed * deltaT;
-                if (racketA < 0.0)
-                    racketA = 0.0;
-                break;
-            case IDLE:
-                break;
-            case GOING_DOWN:
-                racketA += racketSpeed * deltaT;
-                if (racketA + racketSize > height)
-                    racketA = height - racketSize;
-                break;
-        }
-        switch (playerB.getState()) {
-            case GOING_UP:
-                racketB -= racketSpeed * deltaT;
-                if (racketB < 0.0)
-                    racketB = 0.0;
-                break;
-            case IDLE:
-                break;
-            case GOING_DOWN:
-                racketB += racketSpeed * deltaT;
-                if (racketB + racketSize > height)
-                    racketB = height - racketSize;
-                break;
-        }
+    public void update(double deltaT) { // racket.update(List<Racket>) ?
+        A.update(deltaT, height, playerA);
+        B.update(deltaT, height, playerB);
         if (updateBall(deltaT))
             reset();
     }
@@ -112,44 +75,11 @@ public class Court implements InterfaceCourt {
      * if the racket is either GOING_UP(pi/12) of GOING_DOWN(-pi/12)
      * 
      * @param nextBallPosition Future position of the ball
-     * @param deltaT Time passed
-     * @param racket Player that collides with the ball
+     * @param deltaT           Time passed
+     * @param racket           Player that collides with the ball
      */
-    private void computeRacketBouce(Vector2 nextBallPosition, double deltaT, RacketController racket) {
-
-        ballSpeedDirection.setDirection(-ballSpeedDirection.getXdir(), ballSpeedDirection.getYdir());
-        Vector2 newDirection = new Vector2(ballSpeedDirection);
-
-
-        switch (racket.getState()) {
-            case GOING_UP:
-                if (racket == playerA){
-                    newDirection.addAngle(23* Math.PI/12);
-                    if (newDirection.getXdir() <= 0) newDirection = ballSpeedDirection;
-                }
-                else{
-                    newDirection.addAngle(Math.PI/12);
-                    if (newDirection.getXdir() >= 0) newDirection = ballSpeedDirection;
-                }
-                break;
-
-            case GOING_DOWN:
-                if (racket == playerA){
-                    newDirection.addAngle(Math.PI/12);
-                    if (newDirection.getXdir() <= 0) newDirection = ballSpeedDirection;
-                }
-                else{
-                    newDirection.addAngle(23* Math.PI/12);
-                    if (newDirection.getXdir() >= 0) newDirection = ballSpeedDirection;
-                }
-                    break;
-            default:
-                break;
-        }
-
-        ballSpeedDirection.setDirection(newDirection);
-        nextBallPosition.updateDistanceVector(ballSpeedDirection, deltaT);
-
+    private void computeRacketBounce(Vector2 nextPosition, double deltaT, RacketController racket) {
+        ball.computeRacketBounce(nextPosition, deltaT, racket, racket == A.getPlayer());
     }
 
     /**
@@ -158,70 +88,43 @@ public class Court implements InterfaceCourt {
      * @return true if a player lost
      */
     private boolean updateBall(double deltaT) {
-        // first, compute possible next position if nothing stands in the way
-        Vector2 nextBallPosition = new Vector2(ballPosition);
-        nextBallPosition.updateDistanceVector(ballSpeedDirection, deltaT);
-        
-        // next, see if the ball would meet some obstacle
-        // Check height
-        if (nextBallPosition.getYdir() < 0 || nextBallPosition.getYdir() > height) {
-            ballSpeedDirection.setDirection(ballSpeedDirection.getXdir(), -ballSpeedDirection.getYdir());
-            nextBallPosition.updateDistanceVector(ballSpeedDirection, deltaT);
-            
-            countBounce++; // augmente à chaque fois que la balle touche un mur
-            if(countBounce < 49 && countBounce % 3 == 0) { // majoration + augmentation à modulo
-                ballSpeedDirection.scalarMultiplication(1.10);
-            }
-        }
+        Vector2 nextPosition = ball.update(deltaT, height, width);
+
         // Check racket
-        if ((nextBallPosition.getXdir() < 0 && nextBallPosition.getXdir() >= -10 &&
-                nextBallPosition.getYdir() > racketA -5 && nextBallPosition.getYdir() < racketA + racketSize + 5) ||
-                (ballPosition.getXdir() > 0 && nextBallPosition.getXdir() < 0 &&
-                ballPosition.getYdir() < racketA - 5 && nextBallPosition.getYdir() > racketA + racketSize + 5)) {
-            computeRacketBouce(nextBallPosition, deltaT, playerA);
+        if (A.hitBall(true, ball.getCoord(), nextPosition, ball.getSize())) {
+            computeRacketBounce(nextPosition, deltaT, A.getPlayer());
+        } else if (B.hitBall(false, ball.getCoord(), nextPosition, ball.getSize())) {
+            computeRacketBounce(nextPosition, deltaT, B.getPlayer());
+        }
 
-        } else if ((nextBallPosition.getXdir() > width && nextBallPosition.getXdir() <= width + 10 &&
-                nextBallPosition.getYdir() > racketB - 5 && nextBallPosition.getYdir() < racketB + racketSize + 5) ||
-                (ballPosition.getXdir() < width && nextBallPosition.getXdir() > width &&
-                ballPosition.getYdir() < racketB - 5 && nextBallPosition.getYdir() > racketB + racketSize + 5)) {
-            computeRacketBouce(nextBallPosition, deltaT, playerB);
-
-        } else if (nextBallPosition.getXdir()  < -70 && ballPosition.getXdir() < -50 ) { // si la balle sort à gauche
-            scoreB.win();; // le joueur A perd : met à jour le score du joueur B
+        // Check if someone wins (if the ball exits the Court)
+        else if (nextPosition.getXdir() < -70 && ball.getCoordX() < -50) { // si la balle va sortir à gauche et est déjà
+                                                                           // hors jeu
+            scoreB.win();
+            ; // le joueur A perd : met à jour le score du joueur B
             return true;
-        } else if (nextBallPosition.getXdir()  > width + 70 && ballPosition.getXdir() > width + 50) { // si la balle sort à droite
-            scoreA.win();; // le joueur B perd : met à jour le score du joueur A 
+        } else if (nextPosition.getXdir() > width + 70 && ball.getCoordX() > width + 50) { // si la balle va sortir à
+                                                                                           // droite et est déjà hors
+                                                                                           // jeu
+            scoreA.win();
+            ; // le joueur B perd : met à jour le score du joueur A
             return true;
         }
 
-        // Update position to the correct new position
-        ballPosition.setDirection(nextBallPosition);
+        // Check other obstacles if needed
+
+        // Updates position to the correct new position
+        ball.setCoord(nextPosition);
 
         return false;
     }
 
-    public double getBallRadius() {
-        return ballRadius;
-    }
-   
     /**
      * It resets the game to its initial state
      */
     public void reset() {
-        this.racketA = height / 2;
-        this.racketB = height / 2;
-        this.ballAbsoluteSpeed = 200; // norm of the speed vector
-        this.ballPosition = new Vector2(width / 2,  Math.random() * (2 * height / 3) + height / 6);
-
-        this.countBounce = 0; // bounce of the ball
-
-        // Generation a random direction vector of norm this.ballAbsoluteSpeed
-
-        double angle = 2 * Math.random() - 1; // Angle between -1 and 1 rad to void slow starts
-        if (Math.random() > 0.5) angle += Math.PI; // Random side selector
-
-        this.ballSpeedDirection = new Vector2( Math.cos(angle), Math.sin(angle));
-        this.ballSpeedDirection.scalarMultiplication(ballAbsoluteSpeed);
-
+        A.reset(height);
+        B.reset(height);
+        ball.reset(width, height);
     }
 }
