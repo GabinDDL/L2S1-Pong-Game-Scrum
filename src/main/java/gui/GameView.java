@@ -3,7 +3,6 @@ package gui;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import model.Court;
 import model.SceneDisplayController;
 import model.Objects.*;
