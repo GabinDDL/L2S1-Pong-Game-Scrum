@@ -10,11 +10,21 @@ public class SolidObject implements InterfaceSolidObject {
     private Vector2 coord;
     private double speed; // m/s
     private double size;
+    private double acceleration;
+    private double deceleration;
+    private double initialSpeed;
+    private double majorSpeed;
 
     // constructeur
     SolidObject(Vector2 coord, double speed, double size) {
         this.coord = coord;
         this.speed = speed;
+        this.size = size;
+    }
+
+    SolidObject(Vector2 coord, double size) {
+        this.coord = coord;
+        this.speed = 0;
         this.size = size;
     }
 
@@ -27,7 +37,7 @@ public class SolidObject implements InterfaceSolidObject {
         coord.setDirection(Xdir, coord.getYdir());
     }
 
-    public void setCoordY(double Ydir) { // dansla classe racket seulement ?
+    public void setCoordY(double Ydir) {
         coord.setDirection(coord.getXdir(), Ydir);
     }
 
@@ -35,11 +45,11 @@ public class SolidObject implements InterfaceSolidObject {
         return coord;
     }
 
-    public double getCoordX() { // getXdir ?
+    public double getCoordX() {
         return coord.getXdir();
     }
 
-    public double getCoordY() { // getYdir ?
+    public double getCoordY() {
         return coord.getYdir();
     }
 
@@ -57,6 +67,38 @@ public class SolidObject implements InterfaceSolidObject {
 
     public double getSize() {
         return size;
+    }
+
+    public double getAcceleration() {
+        return acceleration;
+    }
+
+    public void setAcceleration(double acc) {
+        acceleration = acc;
+    }
+
+    public double getDeceleration() {
+        return deceleration;
+    }
+
+    public void setDeceleration(double dec) {
+        deceleration = dec;
+    }
+
+    public double getInitialSpeed() {
+        return initialSpeed;
+    }
+
+    public void setInitialSpeed(double iniSpeed) {
+        initialSpeed = iniSpeed;
+    }
+
+    public double getMajorSpeed() {
+        return majorSpeed;
+    }
+
+    public void setMajorSpeed(double majSpeed) {
+        majorSpeed = majSpeed;
     }
 
     // méthodes

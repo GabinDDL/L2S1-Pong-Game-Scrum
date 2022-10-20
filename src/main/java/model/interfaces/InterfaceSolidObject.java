@@ -24,6 +24,22 @@ public interface InterfaceSolidObject {
 
     double getSize();
 
+    double getAcceleration();
+
+    void setAcceleration(double acc);
+
+    double getDeceleration();
+
+    void setDeceleration(double dec);
+
+    double getInitialSpeed();
+
+    void setInitialSpeed(double iniSpeed);
+
+    double getMajorSpeed();
+
+    void setMajorSpeed(double majSpeed);
+
     void reset(double height);
 
     void reset(double width, double height);

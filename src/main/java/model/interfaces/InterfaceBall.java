@@ -1,8 +1,8 @@
 package model.interfaces;
 
-import javafx.scene.shape.Circle;
 import model.Vector2;
+import model.Objects.Racket;
 
 public interface InterfaceBall {
-    void computeRacketBounce(Vector2 nextPosition, double deltaT, RacketController racket, boolean playerA);
+    void computeRacketBounce(Vector2 nextPosition, double deltaT, Racket racket, boolean playerA);
 }

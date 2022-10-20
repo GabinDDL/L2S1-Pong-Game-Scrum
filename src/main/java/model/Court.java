@@ -78,8 +78,8 @@ public class Court implements InterfaceCourt {
      * @param deltaT           Time passed
      * @param racket           Player that collides with the ball
      */
-    private void computeRacketBounce(Vector2 nextPosition, double deltaT, RacketController racket) {
-        ball.computeRacketBounce(nextPosition, deltaT, racket, racket == A.getPlayer());
+    private void computeRacketBounce(Vector2 nextPosition, double deltaT, Racket racket) {
+        ball.computeRacketBounce(nextPosition, deltaT, racket, racket.getPlayer() == A.getPlayer());
     }
 
     /**
@@ -92,9 +92,9 @@ public class Court implements InterfaceCourt {
 
         // Check racket
         if (A.hitBall(true, ball.getCoord(), nextPosition, ball.getSize())) {
-            computeRacketBounce(nextPosition, deltaT, A.getPlayer());
+            computeRacketBounce(nextPosition, deltaT, A);
         } else if (B.hitBall(false, ball.getCoord(), nextPosition, ball.getSize())) {
-            computeRacketBounce(nextPosition, deltaT, B.getPlayer());
+            computeRacketBounce(nextPosition, deltaT, B);
         }
 
         // Check if someone wins (if the ball exits the Court)

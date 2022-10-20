@@ -17,6 +17,10 @@ public class Racket extends SolidObject implements InterfaceRacket {
         super(new Vector2(x, y), speed, size);
         racket = new Rectangle(100.0, 10.0);
         this.player = player;
+        this.setAcceleration(600);
+        this.setDeceleration(0.90);
+        this.setInitialSpeed(50);
+        this.setMajorSpeed(600);
     }
 
     // accesseurs
@@ -38,25 +42,52 @@ public class Racket extends SolidObject implements InterfaceRacket {
     @Override
     public void reset(double height) { // setCoord(height/2)
         setCoordY(height / 2);
+        setSpeed(0);
     }
 
     /**
-     * Updates the position of the racket
+     * Retourne la position de la raquette en prenant en compte les limites d'ecran
+     */
+    public double reactionWithLimits(double height, double nextPosition) {
+        if (nextPosition < 0) {
+            setSpeed(0);
+            return 0;
+        }
+        if (nextPosition + getSize() > height) {
+            setSpeed(0);
+            return height - getSize();
+        }
+        return nextPosition;
+    }
+
+    /**
+     * Updates the position and the speed of the racket
      */
     @Override
     public void update(double deltaT, double height, RacketController player) {
         switch (player.getState()) {
             case GOING_UP:
-                setCoordY(getCoordY() - getSpeed() * deltaT);
-                if (getCoordY() < 0.0)
-                    setCoordY(0.0);
+                if (getSpeed() > 0) // direction oppose
+                    setSpeed(getSpeed() * getDeceleration()); // decceleration
+                if (Math.abs(getSpeed()) < getMajorSpeed()) // acceleration
+                    setSpeed(getSpeed() - deltaT * getAcceleration());
+                setCoordY(reactionWithLimits(height, getCoordY() + getSpeed() * deltaT));
                 break;
             case IDLE:
+                if ((Math.abs(getSpeed()) < getInitialSpeed() || getCoordY() == 0 || getCoordY() == height + getSize())
+                        && getSpeed() != 0)
+                    setSpeed(0);
+                else { // glissade
+                    setSpeed(getSpeed() * getDeceleration());
+                    setCoordY(reactionWithLimits(height, getCoordY() + getSpeed() * deltaT));
+                }
                 break;
             case GOING_DOWN:
-                setCoordY(getCoordY() + getSpeed() * deltaT);
-                if (getCoordY() + getSize() > height)
-                    setCoordY(height - getSize());
+                if (getSpeed() < 0) // direction oppose
+                    setSpeed(getSpeed() * getDeceleration()); // deceleration
+                if (Math.abs(getSpeed()) < getMajorSpeed()) // acceleration
+                    setSpeed(getSpeed() + deltaT * getAcceleration());
+                setCoordY(reactionWithLimits(height, getCoordY() + getSpeed() * deltaT));
                 break;
         }
     }
