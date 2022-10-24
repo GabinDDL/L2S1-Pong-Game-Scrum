@@ -12,18 +12,13 @@ public class Court implements InterfaceCourt {
     private final double width, height; // m
 
     // instance state
-    private Score scoreA;
-    private Score scoreB;
     private Racket A;
     private Racket B;
     private Ball ball;
 
     public Court(RacketController playerA, RacketController playerB, double width, double height) {
-        this.playerA = playerA; // Player A = new Player(new Score(300.50), playerA); //constructeur(Score,
-                                // RacketController)
+        this.playerA = playerA;
         this.playerB = playerB;
-        scoreA = new Score(300, 50);
-        scoreB = new Score((int) width - 200, 50);
         this.width = width;
         this.height = height;
         A = new Racket(0, 0, playerA, 500.0, 100.0);
@@ -40,12 +35,12 @@ public class Court implements InterfaceCourt {
         return height;
     }
 
-    public Score getScoreA() {
-        return scoreA;
+    public Player getPlayerA() {
+        return (Player) playerA;
     }
 
-    public Score getScoreB() {
-        return scoreB;
+    public Player getPlayerB() {
+        return (Player) playerB;
     }
 
     public List<SolidObject> getListObjects() {
@@ -100,13 +95,13 @@ public class Court implements InterfaceCourt {
         // Check if someone wins (if the ball exits the Court)
         else if (nextPosition.getXdir() < -70 && ball.getCoordX() < -50) { // si la balle va sortir à gauche et est déjà
                                                                            // hors jeu
-            scoreB.win();
+            ((Player) playerB).getScore().incrementScore();
             ; // le joueur A perd : met à jour le score du joueur B
             return true;
         } else if (nextPosition.getXdir() > width + 70 && ball.getCoordX() > width + 50) { // si la balle va sortir à
                                                                                            // droite et est déjà hors
                                                                                            // jeu
-            scoreA.win();
+            ((Player) playerA).getScore().incrementScore();
             ; // le joueur B perd : met à jour le score du joueur A
             return true;
         }
