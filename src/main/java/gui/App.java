@@ -1,21 +1,35 @@
 package gui;
 
+import static constants.Constants.DIR_FXML;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Court;
 import model.Player;
-import model.interfaces.RacketController;
 import model.SceneDisplayController;
+import model.Score;
+import model.controllers.ControllerLabel;
+import model.interfaces.RacketController;
 
 public class App extends Application {
 
     @Override // definit une fonction de la class héréditaire
-    public void start(Stage primaryStage) {
-        var root = new Pane(); // ecran
+    public void start(Stage primaryStage) throws MalformedURLException, IOException {
 
-        var gameScene = new Scene(root); // scene qui apparait dans l'écran
+        // Load .fxml
+        URL url = new File(DIR_FXML + "initialScoreDisplay.fxml").toURI().toURL();
+        FXMLLoader loader = new FXMLLoader(url);
+        BorderPane borderPaneRoot = loader.load(); // Ecran
+
+        Scene gameScene = new Scene(borderPaneRoot); // scene qui apparait dans l'écran
 
         /**
          * Class controling what's being displayed on the screen
@@ -48,8 +62,17 @@ public class App extends Application {
             }
         }
 
-        var playerA = new Player();
-        var playerB = new Player();
+        // Associate Labels to Players
+        // Init player
+
+        ControllerLabel labels = loader.getController();
+        // System.out.println(labels.getLabelA());
+        Score scoreA = new Score(labels.getLabelA());
+        Player playerA = new Player(null, scoreA);
+
+        Score scoreB = new Score(labels.getLabelB());
+        Player playerB = new Player(null, scoreB);
+
         var sceneDisplayModifier = new SceneDisplayModifier();
 
         // We bind the pressing of the keys to the mouvement of the rackets
@@ -101,9 +124,13 @@ public class App extends Application {
         });
 
         var court = new Court(playerA, playerB, 1000, 600);
-        var gameView = new GameView(court, root, 1.0, sceneDisplayModifier);
+        var gameView = new GameView(court, borderPaneRoot, 1.0, sceneDisplayModifier);
+
+        primaryStage.setTitle("Pong World");
         primaryStage.setScene(gameScene);
         primaryStage.show();
+
         gameView.animate();
     }
+
 }

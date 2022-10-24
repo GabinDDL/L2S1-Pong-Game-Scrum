@@ -1,16 +1,22 @@
 package gui;
 
+import static constants.Constants.*;
+
+import java.net.MalformedURLException;
+
 import javafx.animation.AnimationTimer;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+
+import javafx.scene.layout.BorderPane;
 import model.Court;
 import model.SceneDisplayController;
-import model.Objects.*;
+import model.Objects.Ball;
+import model.Objects.Racket;
+import model.Objects.SolidObject;
 
 public class GameView {
     // class parameters
     private final Court court;
-    private final Pane gameRoot; // main node of the game
+    private final BorderPane gameRoot; // main node of the game
     private final double scale;
     private SceneDisplayController sceneDisplayModifier;
 
@@ -25,9 +31,11 @@ public class GameView {
      *              affiché
      * @param scale le facteur d'échelle entre les distances du modèle et le nombre
      *              de pixels correspondants dans la vue
+     * @throws MalformedURLException l'url du chemin vers le fichier est corrompu
      */
 
-    public GameView(Court court, Pane root, double scale, SceneDisplayController sceneDisplayModifier) {
+    public GameView(Court court, BorderPane root, double scale, SceneDisplayController sceneDisplayModifier)
+            throws MalformedURLException {
         this.court = court;
         this.gameRoot = root;
         this.scale = scale;
@@ -36,7 +44,7 @@ public class GameView {
         root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
         root.setMinHeight(court.getHeight() * scale);
 
-        this.changeImageBackground("terrain.jpg"); // edit wallpaper
+        // this.changeImageBackground("terrain.jpg"); // edit wallpaper
 
         for (SolidObject object : court.getListObjects()) {
             if (object instanceof Racket) {
@@ -46,11 +54,6 @@ public class GameView {
             }
         }
 
-        // initialisation affichage Scores
-        court.getScoreA().initDisplay(Color.WHITE, court.getWidth());
-        court.getScoreB().initDisplay(Color.WHITE, court.getWidth());
-
-        gameRoot.getChildren().addAll(court.getScoreA().getTextScore(), court.getScoreB().getTextScore());
         for (SolidObject object : court.getListObjects()) {
             if (object instanceof Ball) {
                 gameRoot.getChildren().add(((Ball) object).getCircle());
@@ -75,8 +78,8 @@ public class GameView {
      * @param imageTitle
      */
     public void changeImageBackground(String imageTitle) {
-        gameRoot.setStyle("-fx-background-image: url('file:./Images/" + imageTitle
-                + "'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
+        gameRoot.setStyle("-fx-background-image: url('file:" + DIR_IMAGES + imageTitle +
+                "'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
     }
 
     public void animate() {
@@ -101,8 +104,6 @@ public class GameView {
                             ((Ball) object).updateDisplay(scale, xMargin);
                         }
                     }
-                    court.getScoreA().updateDisplay();// met à jour affichage de la valeur du score de racketA
-                    court.getScoreB().updateDisplay();// met à jour affichage de la valeur du score de racketB
                 }
                 last = now;
             }

@@ -1,20 +1,22 @@
 package model;
 
-import model.interfaces.PlayerInterface;
+import model.Objects.Racket;
+import model.interfaces.InterfacePlayer;
 import model.interfaces.RacketController;
 
-public class Player implements RacketController, PlayerInterface {
-    // Default state of the palyer's racket is IDLE
+public class Player implements RacketController, InterfacePlayer {
+    // Default state of the player's racket is IDLE
     private State state = State.IDLE;
+    private Racket racket;
     private Score score;
 
-    // Player constructor if we want to associate the Player with his Score later
-    public Player(Score score) {
+    public Player(Racket racket, Score score) {
+        this.racket = racket;
         this.score = score;
     }
 
     public Player() {
-        this(null);
+        this(null, null);
     }
 
     // We define the State getter for the player.
@@ -25,21 +27,23 @@ public class Player implements RacketController, PlayerInterface {
 
     /**
      * Sets the Player's state with the given parameter
+     * 
      * @param state
      */
     public void setState(State state) {
         this.state = state;
     }
 
-    /* (non-Javadoc)
-     * @see model.PlayerInterface#getScore()
-     * Returns the Player's Score
-     */
-    @Override
     public Score getScore() {
         return score;
     }
 
+    public void setRacket(Racket racket) {
+        this.racket = racket;
+    }
+
+    public Racket getRacket() {
+        return racket;
+    }
 
 }
-

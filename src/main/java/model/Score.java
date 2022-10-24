@@ -1,56 +1,42 @@
 package model;
 
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+import javafx.scene.control.Label;
 import model.interfaces.InterfaceScore;
 
 public class Score implements InterfaceScore {
-    private int score;
-    
-    private Text textScore;
-    private int x; //coordonnées x d'affichage du score
-    private int y; //coordonnées y d'affichage du score
 
-    public Score (int x, int y) {
-        score=0;
-        textScore = new Text("0");
-        this.x = x;
-        this.y = y;
+    private int points;
+    private final Label label;
+
+    public Score(Label label) {
+        this(0, label);
     }
-        
-    /**
-     * Returns the Score's associated integer value
-     * @return score
-     */
-    public int getScoreValue() {
-        return score;
+
+    public Score(int points, Label label) {
+        this.points = points;
+        this.label = label;
+    }
+
+    public int getPoints() {
+        return points;
     }
 
     /**
-     * Sets the Score's associated integer value to the given parameter
-     * @param score
+     * Sets the Score's associated integer value to points
+     * 
+     * @param points
      */
-    public void setScoreValue(int score) {
-        this.score = score;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
-    public void initDisplay (Color color, double width) {
-        textScore.setTranslateX(this.x); //coordonné x de l'affichage du score A
-        textScore.setTranslateY(this.y); //coordonné y de l'affichage du score A
-        textScore.setScaleX(10.0); //largeur de l'affichage du score A
-        textScore.setScaleY(10.0); //hateur de l'affichage du score A
-        textScore.setFill(color); //Couleur de l'affichage du score A
+    public void incrementScore() {
+        points++;
+        label.setText(String.valueOf(points));
     }
 
-    public void win () {
-        score +=1;
+    public Label getLabel() {
+        return label;
     }
 
-    public void updateDisplay () {
-        textScore.setText("" + score);
-    }
-    
-    public Text getTextScore() {
-        return textScore;
-    }
 }
