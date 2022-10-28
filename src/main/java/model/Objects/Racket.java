@@ -1,5 +1,7 @@
 package model.Objects;
 
+import static constants.Constants.*;
+
 import javafx.scene.shape.Rectangle;
 import model.Vector2;
 import model.interfaces.InterfaceRacket;
@@ -145,7 +147,7 @@ public class Racket extends SolidObject implements InterfaceRacket {
     @Override
     public void changeImageObject(boolean image, String imageTitle, Color color) {
         // le type est soit "image" soit "color"
-        Image img = new Image("file:./Images/" + imageTitle); // crée une image à partir du fichier
+        Image img = new Image("file:./" + DIR_IMAGES + imageTitle); // crée une image à partir du fichier
         if (image) {
             racket.setFill(new ImagePattern(img));
         } else {
