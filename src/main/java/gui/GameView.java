@@ -9,6 +9,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.layout.BorderPane;
 import model.Court;
 import model.SceneDisplayController;
+import model.Sound;
+import model.Objects.*;
 import model.Objects.Ball;
 import model.Objects.Racket;
 import model.Objects.SolidObject;
@@ -22,6 +24,8 @@ public class GameView {
 
     private double xMargin = 50.0;
     private double racketThickness = 10.0; // pixels
+
+    private Sound s;
 
     // Constructeur
     /**
@@ -45,6 +49,9 @@ public class GameView {
         root.setMinHeight(court.getHeight() * scale);
 
         // this.changeImageBackground("terrain.jpg"); // edit wallpaper
+
+        s = new Sound("loopazon.wav");
+        s.loop(); //play sound background
 
         for (SolidObject object : court.getListObjects()) {
             if (object instanceof Racket) {

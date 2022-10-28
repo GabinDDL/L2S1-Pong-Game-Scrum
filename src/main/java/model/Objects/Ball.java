@@ -1,6 +1,9 @@
 package model.Objects;
 
+import static constants.Constants.*;
+
 import javafx.scene.shape.Circle;
+import model.Sound;
 import model.Vector2;
 import model.interfaces.InterfaceBall;
 import javafx.scene.image.Image;
@@ -10,6 +13,9 @@ import javafx.scene.paint.Color;
 public class Ball extends SolidObject implements InterfaceBall {
     private Vector2 speedDirection;
     private Circle ball;
+    private Sound soundBallRacket;
+    private Sound soundBallMur;
+    private Sound soundPerdu;
 
     // constructeur
     public Ball(Vector2 coord, double InitialSpeed, double size) {
@@ -19,6 +25,9 @@ public class Ball extends SolidObject implements InterfaceBall {
         ball.setRadius(super.getSize());
         this.setInitialSpeed(300);
         this.setMajorSpeed(800);
+        soundBallRacket = new Sound("Bruitage ball racket.wav"); //son touche une raquette
+        soundBallMur = new Sound("Bruitage ball mur.wav"); //son touche une raquette
+        soundPerdu = new Sound("Sound Perdu.wav"); //son défaite
     }
 
     // accesseurs
@@ -35,6 +44,7 @@ public class Ball extends SolidObject implements InterfaceBall {
      */
     @Override
     public void reset(double width, double height) {
+        soundPerdu.play();
         super.setCoord(new Vector2(width / 2, Math.random() * (2 * height / 3) + height / 6));
 
         // Generation a random direction vector of norm this.ballAbsoluteSpeed
@@ -103,6 +113,7 @@ public class Ball extends SolidObject implements InterfaceBall {
             default:
                 break;
         }
+        soundBallRacket.play(); // sound play
         speedDirection.setDirection(newDirection);
         nextPosition.updateDistanceVector(speedDirection, deltaT);
     }
@@ -124,7 +135,7 @@ public class Ball extends SolidObject implements InterfaceBall {
 
             speedDirection.setDirection(speedDirection.getXdir(), -speedDirection.getYdir());
             nextPosition.updateDistanceVector(speedDirection, deltaT);
-
+            soundBallMur.play(); // sound play
         }
         return nextPosition;
     }
@@ -137,7 +148,7 @@ public class Ball extends SolidObject implements InterfaceBall {
      * @param color      this.getColor() if change of image
      */
     public void changeImageObject(boolean image, String imageTitle, Color color) {
-        Image img = new Image("file:./Images/" + imageTitle); // crée une image à partir du fichier
+        Image img = new Image("file:./" + DIR_IMAGES + imageTitle); // crée une image à partir du fichier
         if (image) {
             ball.setFill(new ImagePattern(img));
         } else {
