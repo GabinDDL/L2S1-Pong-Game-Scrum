@@ -9,17 +9,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.AudioInputStream;
 
 public class Sound{
-
-	private String name; //nom du fichier
 	private Clip clip; //clip qui va être joué
 
     //constructeurs
 	public Sound(String name){
-		this.name = name;
-	}
-
-    //créer un son à joué
-	private void create () {
 		try{
             URL url = new File( DIR_AUDIO + name ).toURI().toURL();
 			AudioInputStream audio = AudioSystem.getAudioInputStream(url);
@@ -33,8 +26,7 @@ public class Sound{
 	
 	//Joue le son
 	public void play(){
-		this.create();
-		this.clip.start();
+		this.clip.loop(1);
 	}
 
     //Stop le son
@@ -44,7 +36,6 @@ public class Sound{
 
     //Joue un son en boucle
 	public void loop(){
-		this.create();
 		this.clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 }
