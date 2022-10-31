@@ -15,6 +15,7 @@ public class Court implements InterfaceCourt {
     private Racket A;
     private Racket B;
     private Ball ball;
+    private Sound soundPerdu;
 
     public Court(RacketController playerA, RacketController playerB, double width, double height) {
         this.playerA = playerA;
@@ -25,6 +26,7 @@ public class Court implements InterfaceCourt {
         B = new Racket(width, 0, playerB, 500.0, 100.0);
         ball = new Ball(new Vector2(0, 0), 200.0, 10.0);
         reset();
+        soundPerdu = new Sound("Sound Perdu.wav"); //son défaite
     }
 
     public double getWidth() {
@@ -96,12 +98,14 @@ public class Court implements InterfaceCourt {
         else if (nextPosition.getXdir() < -70 && ball.getCoordX() < -50) { // si la balle va sortir à gauche et est déjà
                                                                            // hors jeu
             ((Player) playerB).getScore().incrementScore();
+            soundPerdu.play();
             ; // le joueur A perd : met à jour le score du joueur B
             return true;
         } else if (nextPosition.getXdir() > width + 70 && ball.getCoordX() > width + 50) { // si la balle va sortir à
                                                                                            // droite et est déjà hors
                                                                                            // jeu
             ((Player) playerA).getScore().incrementScore();
+            soundPerdu.play();
             ; // le joueur B perd : met à jour le score du joueur A
             return true;
         }

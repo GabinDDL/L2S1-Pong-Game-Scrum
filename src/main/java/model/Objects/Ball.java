@@ -15,7 +15,6 @@ public class Ball extends SolidObject implements InterfaceBall {
     private Circle ball;
     private Sound soundBallRacket;
     private Sound soundBallMur;
-    private Sound soundPerdu;
 
     // constructeur
     public Ball(Vector2 coord, double InitialSpeed, double size) {
@@ -27,7 +26,6 @@ public class Ball extends SolidObject implements InterfaceBall {
         this.setMajorSpeed(800);
         soundBallRacket = new Sound("Bruitage ball racket.wav"); //son touche une raquette
         soundBallMur = new Sound("Bruitage ball mur.wav"); //son touche une raquette
-        soundPerdu = new Sound("Sound Perdu.wav"); //son défaite
     }
 
     // accesseurs
@@ -44,7 +42,6 @@ public class Ball extends SolidObject implements InterfaceBall {
      */
     @Override
     public void reset(double width, double height) {
-        soundPerdu.play();
         super.setCoord(new Vector2(width / 2, Math.random() * (2 * height / 3) + height / 6));
 
         // Generation a random direction vector of norm this.ballAbsoluteSpeed

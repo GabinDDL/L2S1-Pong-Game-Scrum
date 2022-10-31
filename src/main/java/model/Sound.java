@@ -10,10 +10,12 @@ import javax.sound.sampled.AudioInputStream;
 
 public class Sound{
 	private Clip clip; //clip qui va être joué
+	private boolean first; //First repond à la question : Est ce la première fois que le morceau est joué ?
 
     //constructeurs
 	public Sound(String name){
 		try{
+			first = true;
             URL url = new File( DIR_AUDIO + name ).toURI().toURL();
 			AudioInputStream audio = AudioSystem.getAudioInputStream(url);
 			this.clip= AudioSystem.getClip();
@@ -26,7 +28,12 @@ public class Sound{
 	
 	//Joue le son
 	public void play(){
-		this.clip.loop(1);
+		if (first){
+			this.clip.loop(0);
+			first = false;
+		}else {
+			this.clip.loop(1);
+		}
 	}
 
     //Stop le son
