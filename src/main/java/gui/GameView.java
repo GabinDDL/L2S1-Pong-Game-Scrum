@@ -10,7 +10,6 @@ import javafx.scene.layout.BorderPane;
 import model.Court;
 import model.SceneDisplayController;
 import model.Sound;
-import model.Objects.*;
 import model.Objects.Ball;
 import model.Objects.Racket;
 import model.Objects.SolidObject;
@@ -51,7 +50,7 @@ public class GameView {
         // this.changeImageBackground("terrain.jpg"); // edit wallpaper
 
         s = new Sound("loopazon.wav");
-        s.loop(); //play sound background
+        s.loop(); // play sound background
 
         for (SolidObject object : court.getListObjects()) {
             if (object instanceof Racket) {
