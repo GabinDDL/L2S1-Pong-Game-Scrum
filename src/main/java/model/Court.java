@@ -26,7 +26,7 @@ public class Court implements InterfaceCourt {
         B = new Racket(width, 0, playerB, 500.0, 100.0);
         ball = new Ball(new Vector2(0, 0), 200.0, 10.0);
         reset();
-        soundPerdu = new Sound("Sound Perdu.wav"); //son défaite
+        soundPerdu = new Sound("Sound Perdu.wav"); // son défaite
     }
 
     public double getWidth() {
@@ -62,7 +62,8 @@ public class Court implements InterfaceCourt {
     public void update(double deltaT) { // racket.update(List<Racket>) ?
         A.update(deltaT, height, playerA);
         B.update(deltaT, height, playerB);
-        if (updateBall(deltaT))
+        updateBall(deltaT);
+        if (isBallOutside())
             reset();
     }
 
@@ -82,9 +83,8 @@ public class Court implements InterfaceCourt {
     /**
      * Updates the position and velocity of the ball
      * 
-     * @return true if a player lost
      */
-    private boolean updateBall(double deltaT) {
+    private void updateBall(double deltaT) {
         Vector2 nextPosition = ball.update(deltaT, height, width);
 
         // Check racket
@@ -94,28 +94,33 @@ public class Court implements InterfaceCourt {
             computeRacketBounce(nextPosition, deltaT, B);
         }
 
-        // Check if someone wins (if the ball exits the Court)
-        else if (nextPosition.getXdir() < -70 && ball.getCoordX() < -50) { // si la balle va sortir à gauche et est déjà
-                                                                           // hors jeu
-            ((Player) playerB).getScore().incrementScore();
-            soundPerdu.play();
-            ; // le joueur A perd : met à jour le score du joueur B
-            return true;
-        } else if (nextPosition.getXdir() > width + 70 && ball.getCoordX() > width + 50) { // si la balle va sortir à
-                                                                                           // droite et est déjà hors
-                                                                                           // jeu
-            ((Player) playerA).getScore().incrementScore();
-            soundPerdu.play();
-            ; // le joueur B perd : met à jour le score du joueur A
-            return true;
-        }
-
         // Check other obstacles if needed
 
         // Updates position to the correct new position
         ball.setCoord(nextPosition);
+    }
+
+    /**
+     * @return true if a player lost
+     */
+    private boolean isBallOutside() {
+
+        // Check if someone wins (if the ball exits the Court)
+        if (ball.getCoordX() < -70) { // si la balle va sortir à gauche e
+            ((Player) playerB).getScore().incrementScore();
+            // le joueur A perd : met à jour le score du joueur B
+            soundPerdu.play();
+            return true;
+        } else if (ball.getCoordX() > width + 70) { // si la balle va sortir à droite
+            // le joueur B perd : met à jour le score du joueur A
+            ((Player) playerA).getScore().incrementScore();
+            soundPerdu.play();
+            return true;
+
+        }
 
         return false;
+
     }
 
     /**
