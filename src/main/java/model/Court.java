@@ -1,33 +1,62 @@
 package model;
 
-import model.Objects.*;
+import gui.interfaces.UpdatableGui;
+
+import model.game_elements.*;
 import model.interfaces.InterfaceCourt;
-import model.interfaces.RacketController;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Court implements InterfaceCourt {
+
     // instance parameters
-    private final RacketController playerA, playerB;
     private final double width, height; // m
 
-    // instance state
-    private Racket A;
-    private Racket B;
-    private Ball ball;
-    private Sound soundPerdu;
+    // Default racket parameters
+    private final double initialRacketHeight = 100.0;
+    private final double initialRacketWidth = 10.0;
 
-    public Court(RacketController playerA, RacketController playerB, double width, double height) {
-        this.playerA = playerA;
-        this.playerB = playerB;
+    // Default ball parameters
+    private final double initialBallSpeed = 300.0;
+    private final double initialBallRadius = 10.0;
+
+    // instance state
+    private final Player playerA, playerB;
+    private Ball ball;
+
+    private Sound soundPerdu;
+    private Sound soundBallRacket;
+    private Sound soundBallMur;
+
+    // Constructor
+
+    public Court(Player playerA, Player playerB, double width, double height) {
+
         this.width = width;
         this.height = height;
-        A = new Racket(0, 0, playerA, 500.0, 100.0);
-        B = new Racket(width, 0, playerB, 500.0, 100.0);
-        ball = new Ball(new Vector2(0, 0), 200.0, 10.0);
-        reset();
-        soundPerdu = new Sound("Sound Perdu.wav"); // son défaite
+
+        var racketA = new Racket(new Vector2(0, 0), 0, initialRacketWidth, initialRacketHeight);
+        playerA.setRacket(racketA);
+        this.playerA = playerA;
+
+        var racketB = new Racket(new Vector2(width, 0), 0, initialRacketWidth, initialRacketHeight);
+        playerB.setRacket(racketB);
+        this.playerB = playerB;
+
+        ball = new Ball(new Vector2(0, 0), initialBallSpeed, initialBallRadius);
+
+        for (PlayerModel p : getPlayersModel())
+            p.reset(height);
+
+        ball.reset(width, height);
+
+        soundPerdu = new Sound("Sound Perdu.wav"); // à chaque point marqué
+        soundBallRacket = new Sound("Bruitage ball racket.wav"); // impact avec une raquette
+        soundBallMur = new Sound("Bruitage ball mur.wav"); // impact avec un mur
     }
+
+    // Getters
 
     public double getWidth() {
         return width;
@@ -37,98 +66,75 @@ public class Court implements InterfaceCourt {
         return height;
     }
 
-    public Player getPlayerA() {
-        return (Player) playerA;
-    }
-
-    public Player getPlayerB() {
-        return (Player) playerB;
-    }
-
-    public List<SolidObject> getListObjects() {
-        List<SolidObject> list = new ArrayList<SolidObject>();
-        list.add(A);
-        list.add(B);
+    public List<UpdatableGui> getListObjects() {
+        List<UpdatableGui> list = new ArrayList<UpdatableGui>();
+        list.add(playerA);
+        list.add(playerB);
         list.add(ball);
         return list;
     }
 
+    public PlayerModel[] getPlayersModel() {
+        return new PlayerModel[] { playerA, playerB };
+    }
+
+    // Methods
+
     /**
      * Updates the positions of the objects
-     * Calls updateBall and if a player wins, reset the objects
+     * If a player wins, it resets the objects
      * 
      * @param deltaT time passed
      */
-    public void update(double deltaT) { // racket.update(List<Racket>) ?
-        A.update(deltaT, height, playerA);
-        B.update(deltaT, height, playerB);
-        updateBall(deltaT);
-        if (isBallOutside())
-            reset();
-    }
 
-    /**
-     * Computes the next position of the ball once it hits the racket.
-     * It adds an angle bonus of pi/12 or -pi/12 to the direction of the ball
-     * if the racket is either GOING_UP(pi/12) of GOING_DOWN(-pi/12)
-     * 
-     * @param nextBallPosition Future position of the ball
-     * @param deltaT           Time passed
-     * @param racket           Player that collides with the ball
-     */
-    private void computeRacketBounce(Vector2 nextPosition, double deltaT, Racket racket) {
-        ball.computeRacketBounce(nextPosition, deltaT, racket, racket.getPlayer() == A.getPlayer());
-    }
+    public void update(double deltaT) {
+        playerA.update(deltaT, height);
+        playerB.update(deltaT, height);
 
-    /**
-     * Updates the position and velocity of the ball
-     * 
-     */
-    private void updateBall(double deltaT) {
-        Vector2 nextPosition = ball.update(deltaT, height, width);
-
-        // Check racket
-        if (A.hitBall(true, ball.getCoord(), nextPosition, ball.getSize())) {
-            computeRacketBounce(nextPosition, deltaT, A);
-        } else if (B.hitBall(false, ball.getCoord(), nextPosition, ball.getSize())) {
-            computeRacketBounce(nextPosition, deltaT, B);
+        switch (ball.update(deltaT, height, getPlayersModel())) {
+            case RACKET_HIT:
+                soundBallRacket.play();
+                break;
+            case WALL_HIT:
+                soundBallMur.play();
+                break;
+            case NONE:
+                break;
         }
 
-        // Check other obstacles if needed
+        if (isBallOutside(deltaT))
+            reset();
 
-        // Updates position to the correct new position
-        ball.setCoord(nextPosition);
     }
 
     /**
      * @return true if a player lost
      */
-    private boolean isBallOutside() {
+    private boolean isBallOutside(double deltaT) {
 
         // Check if someone wins (if the ball exits the Court)
-        if (ball.getCoordX() < -70) { // si la balle va sortir à gauche e
-            ((Player) playerB).getScore().incrementScore();
+
+        // si la balle va sortir à gauche
+        if (ball.getCoordX() < -70) {
             // le joueur A perd : met à jour le score du joueur B
+            playerB.incrementScore();
             soundPerdu.play();
             return true;
-        } else if (ball.getCoordX() > width + 70) { // si la balle va sortir à droite
-            // le joueur B perd : met à jour le score du joueur A
-            ((Player) playerA).getScore().incrementScore();
-            soundPerdu.play();
-            return true;
-
         }
-
+        // si la balle va sortir à droite
+        else if (ball.getCoordX() > width + 70) {
+            // le joueur B perd : met à jour le score du joueur A
+            playerA.incrementScore();
+            soundPerdu.play();
+            return true;
+        }
         return false;
-
     }
 
     /**
-     * It resets the game to its initial state
+     * It resets the ball position
      */
     public void reset() {
-        A.reset(height);
-        B.reset(height);
         ball.reset(width, height);
     }
 }
