@@ -2,8 +2,16 @@ package gui;
 
 import static constants.Constants.DIR_FXML;
 
+import gui.game_elements.Score;
+
+import model.Court;
+import model.controllers.ControllerLabel;
+import model.game_elements.Player;
+import model.interfaces.InterfaceRacketController.State;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -12,12 +20,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.Court;
-import model.Player;
-import model.SceneDisplayController;
-import model.Score;
-import model.controllers.ControllerLabel;
-import model.interfaces.RacketController;
 
 public class App extends Application {
 
@@ -29,10 +31,10 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(url);
         BorderPane borderPaneRoot = loader.load(); // Ecran
 
-        Scene gameScene = new Scene(borderPaneRoot); // scene qui apparait dans l'écran
+        Scene gameScene = new Scene(borderPaneRoot); // scene qui apparaît dans l'écran
 
         /**
-         * Class controling what's being displayed on the screen
+         * Class controlling what's being displayed on the screen
          */
         class SceneDisplayModifier implements SceneDisplayController {
 
@@ -66,12 +68,14 @@ public class App extends Application {
         // Init player
 
         ControllerLabel labels = loader.getController();
-        // System.out.println(labels.getLabelA());
+
         Score scoreA = new Score(labels.getLabelA());
-        Player playerA = new Player(null, scoreA);
+        Player playerA = new Player();
+        playerA.setScore(scoreA);
 
         Score scoreB = new Score(labels.getLabelB());
-        Player playerB = new Player(null, scoreB);
+        Player playerB = new Player();
+        playerB.setScore(scoreB);
 
         var sceneDisplayModifier = new SceneDisplayModifier();
 
@@ -79,16 +83,16 @@ public class App extends Application {
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case SHIFT:
-                    playerA.setState(RacketController.State.GOING_UP);
+                    playerA.setState(State.GOING_UP);
                     break;
                 case CONTROL:
-                    playerA.setState(RacketController.State.GOING_DOWN);
+                    playerA.setState(State.GOING_DOWN);
                     break;
                 case UP:
-                    playerB.setState(RacketController.State.GOING_UP);
+                    playerB.setState(State.GOING_UP);
                     break;
                 case DOWN:
-                    playerB.setState(RacketController.State.GOING_DOWN);
+                    playerB.setState(State.GOING_DOWN);
                     break;
                 case ESCAPE:
                     sceneDisplayModifier.pauseUnpause();
@@ -103,20 +107,20 @@ public class App extends Application {
             // touche existante dans le jeu
             switch (ev.getCode()) {
                 case SHIFT:
-                    if (playerA.getState() == RacketController.State.GOING_UP)
-                        playerA.setState(RacketController.State.IDLE);
+                    if (playerA.getState() == State.GOING_UP)
+                        playerA.setState(State.IDLE);
                     break;
                 case CONTROL:
-                    if (playerA.getState() == RacketController.State.GOING_DOWN)
-                        playerA.setState(RacketController.State.IDLE);
+                    if (playerA.getState() == State.GOING_DOWN)
+                        playerA.setState(State.IDLE);
                     break;
                 case UP:
-                    if (playerB.getState() == RacketController.State.GOING_UP)
-                        playerB.setState(RacketController.State.IDLE);
+                    if (playerB.getState() == State.GOING_UP)
+                        playerB.setState(State.IDLE);
                     break;
                 case DOWN:
-                    if (playerB.getState() == RacketController.State.GOING_DOWN)
-                        playerB.setState(RacketController.State.IDLE);
+                    if (playerB.getState() == State.GOING_DOWN)
+                        playerB.setState(State.IDLE);
                     break;
                 default:
                     break;

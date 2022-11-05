@@ -1,12 +1,15 @@
-package model;
+package gui.game_elements;
+
+import model.interfaces.InterfaceScore;
 
 import javafx.scene.control.Label;
-import model.interfaces.InterfaceScore;
 
 public class Score implements InterfaceScore {
 
     private int points;
     private final Label label;
+
+    // Constructors
 
     public Score(Label label) {
         this(0, label);
@@ -17,9 +20,17 @@ public class Score implements InterfaceScore {
         this.label = label;
     }
 
+    // Getters
+
     public int getPoints() {
         return points;
     }
+
+    public Label getLabel() {
+        return label;
+    }
+
+    // Setter
 
     /**
      * Sets the Score's associated integer value to points
@@ -30,13 +41,11 @@ public class Score implements InterfaceScore {
         this.points = points;
     }
 
+    // Methods
+
     public void incrementScore() {
         points++;
         label.setText(String.valueOf(points));
-    }
-
-    public Label getLabel() {
-        return label;
     }
 
 }

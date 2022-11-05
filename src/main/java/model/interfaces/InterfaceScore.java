@@ -2,7 +2,12 @@ package model.interfaces;
 
 import javafx.scene.control.Label;
 
+/**
+ * Interface for the the score object.
+ */
 public interface InterfaceScore {
+
+    // Getters
 
     /**
      * Returns the number of points
@@ -12,16 +17,18 @@ public interface InterfaceScore {
     public int getPoints();
 
     /**
-     * Increments the number of points by 1
-     * and updates the Label
-     */
-    public void incrementScore();
-
-    /**
      * Returns the associated Label
      * 
      * @return Label
      */
     public Label getLabel();
+
+    // Methods
+
+    /**
+     * Increments the number of points by 1
+     * and updates the Label
+     */
+    public void incrementScore();
 
 }

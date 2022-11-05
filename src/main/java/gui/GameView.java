@@ -2,17 +2,17 @@ package gui;
 
 import static constants.Constants.*;
 
+import gui.interfaces.UpdatableGui;
+
+import model.Court;
+import model.Sound;
+import model.game_elements.Ball;
+import model.game_elements.Player;
+
 import java.net.MalformedURLException;
 
 import javafx.animation.AnimationTimer;
-
 import javafx.scene.layout.BorderPane;
-import model.Court;
-import model.SceneDisplayController;
-import model.Sound;
-import model.Objects.Ball;
-import model.Objects.Racket;
-import model.Objects.SolidObject;
 
 public class GameView {
     // class parameters
@@ -52,24 +52,24 @@ public class GameView {
         s = new Sound("loopazon.wav");
         s.loop(); // play sound background
 
-        for (SolidObject object : court.getListObjects()) {
-            if (object instanceof Racket) {
-                object.init(scale, xMargin, racketThickness);
-            } else if (object instanceof Ball) {
-                object.init(scale, xMargin);
-            }
+        for (UpdatableGui object : court.getListObjects()) {
+            if (object instanceof Player)
+                ((Player) object).initDisplayRacket(scale, xMargin, racketThickness);
+            else if (object instanceof Ball)
+                ((Ball) object).initDisplay(scale, xMargin);
+
         }
 
-        for (SolidObject object : court.getListObjects()) {
+        for (Object object : court.getListObjects()) {
             if (object instanceof Ball) {
                 gameRoot.getChildren().add(((Ball) object).getCircle());
-            } else if (object instanceof Racket) {
-                gameRoot.getChildren().add(((Racket) object).getRectangle());
+            } else if (object instanceof Player) {
+                gameRoot.getChildren().add(((Player) object).getShape());
             }
         }
     }
 
-    // accesseurs
+    // Setters
     public void setRacketThickness(double thickness) {
         racketThickness = thickness;
     }
@@ -77,6 +77,8 @@ public class GameView {
     public void setMarginX(double margin) {
         xMargin = margin;
     }
+
+    // Methods
 
     /**
      * Change the background with an Image file
@@ -86,6 +88,19 @@ public class GameView {
     public void changeImageBackground(String imageTitle) {
         gameRoot.setStyle("-fx-background-image: url('file:" + DIR_IMAGES + imageTitle +
                 "'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
+    }
+
+    /**
+     * Updates graphical part of the elements on court
+     */
+    public void updateDisplays() {
+        for (UpdatableGui object : court.getListObjects()) {
+            if (object instanceof Player) {
+                ((Player) object).updateDisplay(scale);
+            } else if (object instanceof Ball) {
+                ((Ball) object).updateDisplay(scale, xMargin, ((Ball) object).getSize());
+            }
+        }
     }
 
     public void animate() {
@@ -102,14 +117,7 @@ public class GameView {
 
                 if (sceneDisplayModifier.isInGame()) {
                     court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
-                    // Updates graphical part of the elements
-                    for (SolidObject object : court.getListObjects()) {
-                        if (object instanceof Racket) {
-                            ((Racket) object).updateDisplay(scale);
-                        } else if (object instanceof Ball) {
-                            ((Ball) object).updateDisplay(scale, xMargin);
-                        }
-                    }
+                    updateDisplays();
                 }
                 last = now;
             }

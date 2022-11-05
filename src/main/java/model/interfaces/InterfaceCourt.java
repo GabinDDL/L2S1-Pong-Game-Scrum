@@ -1,12 +1,15 @@
 package model.interfaces;
 
-import model.Objects.*;
+import gui.interfaces.UpdatableGui;
+
 import java.util.List;
 
 /**
  * InterfaceCourt
  */
 public interface InterfaceCourt {
+
+    // Getters
 
     /**
      * @return the Court's width
@@ -18,7 +21,12 @@ public interface InterfaceCourt {
      */
     public double getHeight();
 
-    public List<SolidObject> getListObjects();
+    /**
+     * @return list of all court's objects to update
+     */
+    public List<UpdatableGui> getListObjects();
+
+    // Methods
 
     /**
      * Updates the Court
