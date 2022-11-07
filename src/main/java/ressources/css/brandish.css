@@ -9,5 +9,5 @@
 .label {
   -fx-font-family: "Brandish";
   -fx-font-size: 100;
-  -fx-text-fill: rgba(255, 255, 255, 0.795);
+  -fx-text-fill: #ECECEC;
 }

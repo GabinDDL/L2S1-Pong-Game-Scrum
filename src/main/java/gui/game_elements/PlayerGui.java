@@ -65,14 +65,21 @@ public class PlayerGui implements InterfacePlayerGui {
 
     // Methods
 
+    // Overrides from InterfacePlayerGui
+
+    @Override
+    public void initDisplayRacket(double scale, double xMargin, double racketThickness) {
+        racket.initDisplay(scale, xMargin, racketThickness);
+    }
+
+    @Override
     public void incrementScore() {
         score.incrementScore();
     }
 
-    // Overrides from InterfacePlayerGui
     @Override
-    public void initDisplayRacket(double scale, double xMargin, double racketThickness) {
-        racket.initDisplay(scale, xMargin, racketThickness);
+    public void resetScore() {
+        score.resetScore();
     }
 
 }

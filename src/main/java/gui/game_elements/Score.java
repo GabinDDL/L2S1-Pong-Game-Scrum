@@ -30,7 +30,7 @@ public class Score implements InterfaceScore {
         return label;
     }
 
-    // Setter
+    // Setters
 
     /**
      * Sets the Score's associated integer value to points
@@ -39,13 +39,21 @@ public class Score implements InterfaceScore {
      */
     public void setPoints(int points) {
         this.points = points;
+        label.setText(String.valueOf(points));
     }
 
     // Methods
 
+    @Override
     public void incrementScore() {
         points++;
         label.setText(String.valueOf(points));
+    }
+
+    @Override
+    public void resetScore() {
+        points = 0;
+        label.setText("0");
     }
 
 }

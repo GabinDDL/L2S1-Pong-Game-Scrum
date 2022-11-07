@@ -106,7 +106,7 @@ public class RacketModel extends SolidObject implements InterfaceRacketModel {
      */
     @Override
     public void reset(double height) { // setCoord(height/2)
-        setCoordY(height / 2);
+        setCoordY((height - getRacketHeight()) / 2);
         setSpeed(0);
     }
 
