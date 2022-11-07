@@ -62,24 +62,28 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
             case GOING_UP:
                 if (player.isPlayerLeft()) {
                     newDirection.addAngle(23 * Math.PI / 12);
-                    if (newDirection.getXdir() <= 0)
+                    if (newDirection.getXdir() <= 0) {
                         newDirection = speedDirection;
+                    }
                 } else {
                     newDirection.addAngle(Math.PI / 12);
-                    if (newDirection.getXdir() >= 0)
-                        newDirection = speedDirection;
+                    if (newDirection.getXdir() >= 0) { // si la balle est dans la surface de jeu
+                        newDirection = speedDirection; 
+                    }
                 }
                 accelerationRacketBounce(newDirection, player);
                 break;
             case GOING_DOWN:
                 if (player.isPlayerLeft()) {
                     newDirection.addAngle(Math.PI / 12);
-                    if (newDirection.getXdir() <= 0)
+                    if (newDirection.getXdir() <= 0) {
                         newDirection = speedDirection;
+                    }
                 } else {
                     newDirection.addAngle(23 * Math.PI / 12);
-                    if (newDirection.getXdir() >= 0)
+                    if (newDirection.getXdir() >= 0) {
                         newDirection = speedDirection;
+                    }
                 }
                 accelerationRacketBounce(newDirection, player);
                 break;

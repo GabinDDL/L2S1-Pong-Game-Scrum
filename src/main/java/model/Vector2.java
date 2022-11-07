@@ -9,6 +9,7 @@ package model;
 public class Vector2 {
 
     private double xDir, yDir;
+    private double angleMax = Math.PI / 4;
 
     // Constructors
     public Vector2(double Xdir, double Ydir) {
@@ -133,14 +134,14 @@ public class Vector2 {
         angle += Math.atan2(this.yDir, this.xDir);
         angle = angle >= 2 * Math.PI ? angle - 2 * Math.PI : angle;
 
-        if (angle > Math.PI / 3 && angle <= Math.PI / 2)
-            angle = Math.PI / 3;
-        else if (angle > Math.PI / 2 && angle < 2 * Math.PI / 3)
-            angle = 2 * Math.PI / 3;
-        else if (angle > 4 * Math.PI / 3 && angle <= 3 * Math.PI / 2)
-            angle = 4 * Math.PI / 3;
-        else if (angle > 3 * Math.PI / 2 && angle <= 5 * Math.PI / 3)
-            angle = 5 * Math.PI / 3;
+        if (angle <= Math.PI / 2 && angle > Math.PI / 2 - angleMax)
+            angle = angleMax;
+        else if (angle > Math.PI / 2 && angle < Math.PI / 2 + angleMax)
+            angle = Math.PI / 2 + angleMax;
+        else if (angle <= 3 * Math.PI / 2 && angle > 3 * Math.PI / 2 - angleMax)
+            angle = 3 * Math.PI / 2 - angleMax;
+        else if (angle > 3 * Math.PI / 2 && angle < 3 * Math.PI / 2 + angleMax)
+            angle = 3 * Math.PI / 2 + angleMax;
 
         this.xDir = n * Math.cos(angle);
         this.yDir = n * Math.sin(angle);
