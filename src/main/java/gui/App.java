@@ -127,7 +127,10 @@ public class App extends Application {
             }
         });
 
-        var court = new Court(playerA, playerB, 1000, 600);
+        int pointsLimit = 7;
+
+        var court = new Court(playerA, playerB, 1000, 600, pointsLimit);
+
         var gameView = new GameView(court, borderPaneRoot, 1.0, sceneDisplayModifier);
 
         primaryStage.setTitle("Pong World");

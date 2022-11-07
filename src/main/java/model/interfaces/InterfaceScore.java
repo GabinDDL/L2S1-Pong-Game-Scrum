@@ -10,7 +10,7 @@ public interface InterfaceScore {
     // Getters
 
     /**
-     * Returns the number of points
+     * Returns the amount of points
      * 
      * @return int points
      */
@@ -26,9 +26,15 @@ public interface InterfaceScore {
     // Methods
 
     /**
-     * Increments the number of points by 1
-     * and updates the Label
+     * Increments the amount of points by 1
+     * and updates the Label accordingly
      */
     public void incrementScore();
+
+    /**
+     * Resets the amount of points to 0
+     * and updates the Label accordingly
+     */
+    public void resetScore();
 
 }

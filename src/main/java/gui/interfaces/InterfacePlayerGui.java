@@ -21,6 +21,8 @@ public interface InterfacePlayerGui extends UpdatableGui, ChangeableImage {
 
     void incrementScore();
 
+    void resetScore();
+
     void initDisplayRacket(double scale, double xMargin, double racketThickness);
 
     // Defaults

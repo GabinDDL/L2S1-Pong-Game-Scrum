@@ -72,8 +72,13 @@ public class Player extends PlayerModel implements InterfacePlayerGui {
     }
 
     public void setScore(Score score) {
-        super.setScore(score.getPoints());
+        super.setPoints(score.getPoints());
         playerGui.setScore(score);
+    }
+
+    public void setPoints(int n) {
+        super.setPoints(n);
+        playerGui.getScore().setPoints(n);
     }
 
     // Methods
@@ -92,8 +97,46 @@ public class Player extends PlayerModel implements InterfacePlayerGui {
 
     @Override
     public void incrementScore() {
-        super.incrementScore();
+        super.incrementPoints();
         playerGui.incrementScore();
     }
 
+    @Override
+    public void resetScore() {
+        super.resetPoints();
+        playerGui.resetScore();
+    }
+
+    /**
+     * Tests if this Player's amount of points is equal to
+     * other Player's amount of points
+     * 
+     * @param other
+     * @return true if the Player's amount of points
+     *         is equal to other Player's amount of points;
+     *         false otherwise
+     */
+    public boolean isDraw(Player other) {
+        // Criss-cross to check
+        // if the Model and the Score's
+        // integer value representing
+        // the amount of points is in sync
+
+        return this.playerGui.getScore().getPoints() == other.getPoints() &&
+                this.getPoints() == other.playerGui.getScore().getPoints();
+
+    }
+
+    /**
+     * Tests if this Player's amount of points is equal to n
+     * 
+     * @param n
+     * @return true if the Player's amount of points
+     *         is equal to n; false otherwise
+     */
+    public boolean pointsEqualTo(int n) {
+        return playerGui.getScore().getPoints() == n &&
+                this.getPoints() == n;
+
+    }
 }

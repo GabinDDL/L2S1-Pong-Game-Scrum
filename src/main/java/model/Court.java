@@ -12,6 +12,8 @@ public class Court implements InterfaceCourt {
 
     // instance parameters
     private final double width, height; // m
+    private final int pointsLimit;
+    private boolean needLead = false; // flag to check if we need a 2 points lead
 
     // Default racket parameters
     private final double initialRacketHeight = 100.0;
@@ -31,10 +33,12 @@ public class Court implements InterfaceCourt {
 
     // Constructor
 
-    public Court(Player playerA, Player playerB, double width, double height) {
+    public Court(Player playerA, Player playerB, double width, double height, int pointsLimit) {
 
         this.width = width;
         this.height = height;
+
+        this.pointsLimit = pointsLimit;
 
         var racketA = new Racket(new Vector2(0, 0), 0, initialRacketWidth, initialRacketHeight);
         playerA.setRacket(racketA);
@@ -49,11 +53,15 @@ public class Court implements InterfaceCourt {
         for (PlayerModel p : getPlayersModel())
             p.reset(height);
 
-        ball.reset(width, height);
+        serve();
 
         soundPerdu = new Sound("Sound Perdu.wav"); // à chaque point marqué
         soundBallRacket = new Sound("Bruitage ball racket.wav"); // impact avec une raquette
         soundBallMur = new Sound("Bruitage ball mur.wav"); // impact avec un mur
+    }
+
+    public Court(Player playerA, Player playerB, double width, double height) {
+        this(playerA, playerB, width, height, 0);
     }
 
     // Getters
@@ -102,13 +110,19 @@ public class Court implements InterfaceCourt {
                 break;
         }
 
-        if (isBallOutside(deltaT))
-            reset();
+        if (isBallOutside(deltaT)) {
+            if (gameWon()) {
+                needLead = false; // Lower Flag
+                reset();
+            } else {
+                serve();
+            }
+        }
 
     }
 
     /**
-     * @return true if a player lost
+     * @return true if a player lost the point
      */
     private boolean isBallOutside(double deltaT) {
 
@@ -132,9 +146,81 @@ public class Court implements InterfaceCourt {
     }
 
     /**
-     * It resets the ball position
+     * Resets the ball position
      */
-    public void reset() {
+    public void serve() {
         ball.reset(width, height);
     }
+
+    /**
+     * Resets the Court and its elements
+     */
+    public void reset() {
+        playerA.reset(height);
+        playerA.resetScore();
+
+        playerB.reset(height);
+        playerB.resetScore();
+
+        ball.reset(width, height);
+    }
+
+    /**
+     * Checks if the Court has a winner
+     * 
+     * @return true if there's a winner; otherwise false
+     */
+    public boolean gameWon() {
+
+        // Infinite game
+        if (pointsLimit <= 0)
+            return false;
+
+        // Please mind the division's rounding down behavior in Java
+        int upperLimit = (int) Math.ceil((double) 10 / (double) 7 * pointsLimit);
+
+        if (!needLead) {
+
+            // If there's a draw before the Match Point
+            if (playerA.isDraw(playerB) &&
+                    playerA.pointsEqualTo(pointsLimit - 1)) {
+                needLead = true; // Raise Flag
+                return false;
+            }
+
+            // If a Player gets to the first limit of amount of points
+            if (playerA.pointsEqualTo(pointsLimit) ||
+                    playerB.pointsEqualTo(pointsLimit))
+                return true;
+
+        } else {
+
+            // If a Player gets to the last limit of amount of points
+            if (playerA.pointsEqualTo(upperLimit) ||
+                    playerB.pointsEqualTo(upperLimit)) {
+                return true;
+            }
+
+            // If a Player gets a 2 points lead
+            if (Math.abs(playerA.getPoints() - playerB.getPoints()) >= 2)
+                return true;
+
+        }
+        return false;
+    }
+
+    /**
+     * Returns the winner of the game
+     * 
+     * @return the winner if there is a winner;
+     *         null otherwise
+     */
+    public Player getWinner() {
+        if (!gameWon())
+            return null;
+
+        return (playerA.getPoints() > playerB.getPoints()) ? playerA : playerB;
+
+    }
+
 }

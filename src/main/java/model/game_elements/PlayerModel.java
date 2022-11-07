@@ -12,13 +12,13 @@ public class PlayerModel implements InterfacePlayerModel {
 
     private RacketModel racket;
 
-    private int score;
+    private int points;
 
     // Constructors
 
-    // Player constructor if we want to associate the Player with his Score later
-    public PlayerModel(int score) {
-        this.score = score;
+    // Player constructor if we want to associate the Player with his points later
+    public PlayerModel(int points) {
+        this.points = points;
     }
 
     public PlayerModel() {
@@ -26,8 +26,8 @@ public class PlayerModel implements InterfacePlayerModel {
         racket = new RacketModel(new Vector2(0, 0), 0, 0, 0);
     }
 
-    public PlayerModel(RacketModel racket, int score) {
-        this(score);
+    public PlayerModel(RacketModel racket, int points) {
+        this(points);
         this.racket = racket;
     }
 
@@ -41,10 +41,10 @@ public class PlayerModel implements InterfacePlayerModel {
     }
 
     /**
-     * Returns the Player's Score
+     * Returns the Player's amount of points
      */
-    public int getScoreValue() {
-        return score;
+    public int getPoints() {
+        return points;
     }
 
     public double getMajorSpeed() {
@@ -69,8 +69,8 @@ public class PlayerModel implements InterfacePlayerModel {
         getRacket().setCoord(coord);
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     // Methods
@@ -99,8 +99,13 @@ public class PlayerModel implements InterfacePlayerModel {
     }
 
     @Override
-    public void incrementScore() {
-        score += 1;
+    public void incrementPoints() {
+        points += 1;
+    }
+
+    @Override
+    public void resetPoints() {
+        points = 0;
     }
 
 }

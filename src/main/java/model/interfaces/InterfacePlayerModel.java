@@ -14,6 +14,14 @@ public interface InterfacePlayerModel {
 
     void reset(double height);
 
-    void incrementScore();
+    /**
+     * Increments the amount of points by 1
+     */
+    void incrementPoints();
+
+    /**
+     * Resets the amount of points to 0
+     */
+    void resetPoints();
 
 }
