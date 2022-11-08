@@ -41,10 +41,16 @@ public interface InterfacePlayerGui extends UpdatableGui, ChangeableImage {
         getRacketController().setState(state);
     }
 
+    /**
+     * Updates the position and the speed of the racket on the screen
+     */
     default void updateDisplay(double scale, double[] args) {
         updateDisplay(scale);
     }
 
+    /**
+     * Updates the position and the speed of the racket on the screen
+     */
     default void updateDisplay(double scale) {
         getRacketGui().updateDisplay(scale, null);
     }

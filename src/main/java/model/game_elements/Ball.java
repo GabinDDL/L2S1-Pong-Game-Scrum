@@ -1,10 +1,10 @@
 package model.game_elements;
 
 import gui.game_elements.BallGui;
-import gui.interfaces.InterfaceBallGui;
 
 import model.Vector2;
-
+import model.interfaces.InterfaceBall;
+import model.interfaces.InterfaceBallModel.LastAction;
 import javafx.scene.shape.Shape;
 
 /**
@@ -12,19 +12,35 @@ import javafx.scene.shape.Shape;
  * the ball and the model of the ball.
  * 
  */
-public class Ball extends BallModel implements InterfaceBallGui {
+public class Ball implements InterfaceBall {
     private BallGui ballGui;
+    private BallModel ballModel;
 
     // Constructor
     public Ball(Vector2 coord, double InitialSpeed, double size) {
-        super(coord, InitialSpeed, size);
+        ballModel = new BallModel(coord, InitialSpeed, size);
         ballGui = new BallGui(coord, size);
     }
 
     // Getters
+
+    public double getSize() {
+        return ballModel.getSize();
+    }
+
     @Override
     public Shape getShape() {
         return ballGui.getShape();
+    }
+
+    @Override
+    public double getCoordX() {
+        return ballModel.getCoordX();
+    }
+
+    @Override
+    public double getCoordY() {
+        return ballModel.getCoordY();
     }
 
     // Setters
@@ -36,6 +52,20 @@ public class Ball extends BallModel implements InterfaceBallGui {
     @Override
     public void setCoords(Vector2 coords) {
         ballGui.setCoords(coords);
+    }
+
+    // Methods
+
+    // Overrides from InterfaceBall
+
+    @Override
+    public LastAction update(double deltaT, double height, PlayerModel[] players) {
+        return ballModel.update(deltaT, height, players);
+    }
+
+    @Override
+    public void reset(double width, double height) {
+        ballModel.reset(width, height);
     }
 
 }

@@ -83,7 +83,7 @@ public class Court implements InterfaceCourt {
     }
 
     public PlayerModel[] getPlayersModel() {
-        return new PlayerModel[] { playerA, playerB };
+        return new PlayerModel[] { playerA.getPlayerModel(), playerB.getPlayerModel() };
     }
 
     // Methods
@@ -156,10 +156,10 @@ public class Court implements InterfaceCourt {
      * Resets the Court and its elements
      */
     public void reset() {
-        playerA.reset(height);
+        playerA.resetRacket(height);
         playerA.resetScore();
 
-        playerB.reset(height);
+        playerB.resetRacket(height);
         playerB.resetScore();
 
         ball.reset(width, height);

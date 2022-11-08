@@ -75,6 +75,9 @@ public class PlayerModel implements InterfacePlayerModel {
 
     // Methods
 
+    /**
+     * @return Returns true if the player is on the left side of the screen.
+     */
     public boolean isPlayerLeft() {
         return getRacket().isRacketLeft();
     }
