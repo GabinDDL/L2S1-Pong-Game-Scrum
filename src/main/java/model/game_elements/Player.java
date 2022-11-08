@@ -3,10 +3,10 @@ package model.game_elements;
 import gui.game_elements.PlayerGui;
 import gui.game_elements.RacketGui;
 import gui.game_elements.Score;
-import gui.interfaces.InterfacePlayerGui;
 import gui.interfaces.UpdatableGui;
 
 import model.Vector2;
+import model.interfaces.InterfacePlayer;
 import model.interfaces.InterfaceRacketController.State;
 
 import javafx.scene.shape.Shape;
@@ -15,14 +15,15 @@ import javafx.scene.shape.Shape;
  * This class represents the player of the game. It includes the graphical part
  * of the player and the model of the player.
  */
-public class Player extends PlayerModel implements InterfacePlayerGui {
+public class Player implements InterfacePlayer {
 
     private PlayerGui playerGui;
+    private PlayerModel playerModel;
 
     // Constructors
 
     public Player(Racket racket, Score score) {
-        super((RacketModel) racket, score.getPoints());
+        playerModel = new PlayerModel(racket.getRacketModel(), score.getPoints());
         this.playerGui = new PlayerGui(racket.getRacketGui(), score);
     }
 
@@ -32,6 +33,7 @@ public class Player extends PlayerModel implements InterfacePlayerGui {
 
     public Player() {
         this.playerGui = new PlayerGui();
+        this.playerModel = new PlayerModel();
     }
 
     // Getters
@@ -51,8 +53,16 @@ public class Player extends PlayerModel implements InterfacePlayerGui {
         return playerGui.getScore();
     }
 
+    public int getPoints() {
+        return playerModel.getPoints();
+    }
+
     public State getState() {
         return playerGui.getState();
+    }
+
+    public PlayerModel getPlayerModel() {
+        return playerModel;
     }
 
     @Override
@@ -64,7 +74,7 @@ public class Player extends PlayerModel implements InterfacePlayerGui {
 
     public void setRacket(Racket racket) {
         playerGui.setRacketGui(new RacketGui(racket.getCoord(), racket.getRacketWidth(), racket.getRacketHeight()));
-        super.setRacketModel((RacketModel) racket);
+        playerModel.setRacketModel(racket.getRacketModel());
     }
 
     public void setState(State state) {
@@ -72,38 +82,43 @@ public class Player extends PlayerModel implements InterfacePlayerGui {
     }
 
     public void setScore(Score score) {
-        super.setPoints(score.getPoints());
+
+        playerModel.setPoints(score.getPoints());
         playerGui.setScore(score);
     }
 
     public void setPoints(int n) {
-        super.setPoints(n);
+        playerModel.setPoints(n);
         playerGui.getScore().setPoints(n);
     }
 
     // Methods
 
-    public void update(double deltaT, double height) {
-        super.update(deltaT, height, playerGui.getState());
-        playerGui.getRacketGui().setCoordY(getRacket().getCoordY());
-    }
+    // Overrides of InterfacePlayer
 
-    // Overrides of InterfacePlayerGui
+    @Override
+    public void update(double deltaT, double height) {
+        playerModel.update(deltaT, height, playerGui.getState());
+        playerGui.getRacketGui().setCoordY(playerModel.getRacket().getCoordY());
+    }
 
     @Override
     public void initDisplayRacket(double scale, double xMargin, double racketThickness) {
         playerGui.initDisplayRacket(scale, xMargin, racketThickness);
     }
 
+    /**
+     * Adds a point to the player's score, both on the graphical and the model part
+     */
     @Override
     public void incrementScore() {
-        super.incrementPoints();
+        playerModel.incrementPoints();
         playerGui.incrementScore();
     }
 
     @Override
     public void resetScore() {
-        super.resetPoints();
+        playerModel.resetPoints();
         playerGui.resetScore();
     }
 
@@ -138,5 +153,10 @@ public class Player extends PlayerModel implements InterfacePlayerGui {
         return playerGui.getScore().getPoints() == n &&
                 this.getPoints() == n;
 
+    }
+
+    @Override
+    public void resetRacket(double height) {
+        playerModel.reset(height);
     }
 }
