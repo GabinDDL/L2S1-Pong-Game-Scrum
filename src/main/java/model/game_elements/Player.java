@@ -79,6 +79,7 @@ public class Player implements InterfacePlayer {
 
     public void setState(State state) {
         playerGui.setState(state);
+        playerModel.setState(state);
     }
 
     public void setScore(Score score) {
