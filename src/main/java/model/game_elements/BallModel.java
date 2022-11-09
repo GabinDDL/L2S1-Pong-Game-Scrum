@@ -28,20 +28,21 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
      * @param player       the player that owns the racket
      */
     private void accelerationRacketBounce(Vector2 newDirection, PlayerModel player) {
-        int correctionValue = 3; // permet de diminuer l'acceleration / la deceleration lors du bounce
+        int correctionValueDecceleration = 12; // permet de diminuer l'acceleration / la deceleration lors du bounce
+        int correctionValueAcceleration = 8;
 
         boolean isUp = player.getState() == State.GOING_UP;
 
         if ((newDirection.getYdir() < 0 && isUp) || (newDirection.getYdir() > 0 && !isUp)) {
             newDirection.scalarMultiplication(
-                    1 + ((Math.abs(player.getSpeed()) / player.getMajorSpeed()) / correctionValue));
+                    1 + ((Math.abs(player.getSpeed()) / player.getMajorSpeed()) / correctionValueAcceleration));
             if (newDirection.getNorm() > getMajorSpeed()) {
                 newDirection.normalise();
                 newDirection.scalarMultiplication(getMajorSpeed());
             }
         } else {
             newDirection.scalarMultiplication(
-                    1 - ((Math.abs(player.getSpeed()) / player.getMajorSpeed()) / correctionValue));
+                    1 - ((Math.abs(player.getSpeed()) / player.getMajorSpeed()) / correctionValueDecceleration));
             if (newDirection.getNorm() < getInitialSpeed()) {
                 newDirection.normalise();
                 newDirection.scalarMultiplication(getInitialSpeed());
@@ -68,7 +69,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
                 } else {
                     newDirection.addAngle(Math.PI / 12);
                     if (newDirection.getXdir() >= 0) { // si la balle est dans la surface de jeu
-                        newDirection = speedDirection; 
+                        newDirection = speedDirection;
                     }
                 }
                 accelerationRacketBounce(newDirection, player);
