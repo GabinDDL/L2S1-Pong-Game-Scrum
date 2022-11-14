@@ -1,37 +1,59 @@
 package gui;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import static constants.Constants.DIR_FXML;
+
+import gui.game_elements.Score;
+
 import model.Court;
+import model.controllers.ControllerLabel;
+import model.game_elements.Bot;
+import model.interfaces.InterfaceHasDifficulty.Difficulty;
+import model.game_elements.Player;
+import model.interfaces.InterfaceRacketController.State;
 
-import model.Player;
-import model.interfaces.RacketController;
-import model.SceneDisplayController;
+import java.io.File;
+import java.io.IOException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class App extends Application {
 
     @Override // definit une fonction de la class héréditaire
-    public void start(Stage primaryStage) {
-        var root = new Pane(); // ecran
+    public void start(Stage primaryStage) throws MalformedURLException, IOException {
 
-        var gameScene = new Scene(root); // scene qui apparait dans l'écran
+        // Load .fxml
+        URL url = new File(DIR_FXML + "initialScoreDisplay.fxml").toURI().toURL();
+        FXMLLoader loader = new FXMLLoader(url);
+        BorderPane borderPaneRoot = loader.load(); // Ecran
+
+        Scene gameScene = new Scene(borderPaneRoot); // scene qui apparaît dans l'écran
 
         /**
-         * Class controling what's being displayed on the screen
+         * Class controlling what's being displayed on the screen
          */
         class SceneDisplayModifier implements SceneDisplayController {
-            
+
             // Scene that beings displaying
             SceneDisplay actualView = SceneDisplay.GAME;
-            
+
             @Override
-            public boolean isInGame() {return actualView == SceneDisplay.GAME;}
-            public void setScene(SceneDisplay sD) {actualView = sD;}
+            public boolean isInGame() {
+                return actualView == SceneDisplay.GAME;
+            }
+
+            public void setScene(SceneDisplay sD) {
+                actualView = sD;
+            }
+
             public void pauseUnpause() {
-                switch(actualView) {
+                switch (actualView) {
                     case GAME:
                         setScene(SceneDisplay.PAUSE);
                         break;
@@ -44,24 +66,38 @@ public class App extends Application {
             }
         }
 
-        var playerA = new Player();
-        var playerB = new Player();
+        // Associate Labels to Players
+        // Init player
+
+        ControllerLabel labels = loader.getController();
+
+        Score scoreA = new Score(labels.getLabelA());
+        Player playerA = new Player();
+        playerA.setScore(scoreA);
+
+        Score scoreB = new Score(labels.getLabelB());
+        // Player playerB = new Player();
+        Player playerB = new Bot(Difficulty.NORMAL);
+        // Replace NORMAL by EASY or HARD as you want and the first playerB in
+        // comments
+        playerB.setScore(scoreB);
+
         var sceneDisplayModifier = new SceneDisplayModifier();
 
         // We bind the pressing of the keys to the mouvement of the rackets
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case SHIFT:
-                    playerA.setState(RacketController.State.GOING_UP);
+                    playerA.setState(State.GOING_UP);
                     break;
                 case CONTROL:
-                    playerA.setState(RacketController.State.GOING_DOWN);
+                    playerA.setState(State.GOING_DOWN);
                     break;
                 case UP:
-                    playerB.setState(RacketController.State.GOING_UP);
+                    playerB.setState(State.GOING_UP);
                     break;
                 case DOWN:
-                    playerB.setState(RacketController.State.GOING_DOWN);
+                    playerB.setState(State.GOING_DOWN);
                     break;
                 case ESCAPE:
                     sceneDisplayModifier.pauseUnpause();
@@ -76,30 +112,37 @@ public class App extends Application {
             // touche existante dans le jeu
             switch (ev.getCode()) {
                 case SHIFT:
-                    if (playerA.getState() == RacketController.State.GOING_UP)
-                        playerA.setState(RacketController.State.IDLE);
+                    if (playerA.getState() == State.GOING_UP)
+                        playerA.setState(State.IDLE);
                     break;
                 case CONTROL:
-                    if (playerA.getState() == RacketController.State.GOING_DOWN)
-                        playerA.setState(RacketController.State.IDLE);
+                    if (playerA.getState() == State.GOING_DOWN)
+                        playerA.setState(State.IDLE);
                     break;
                 case UP:
-                    if (playerB.getState() == RacketController.State.GOING_UP)
-                        playerB.setState(RacketController.State.IDLE);
+                    if (playerB.getState() == State.GOING_UP)
+                        playerB.setState(State.IDLE);
                     break;
                 case DOWN:
-                    if (playerB.getState() == RacketController.State.GOING_DOWN)
-                        playerB.setState(RacketController.State.IDLE);
+                    if (playerB.getState() == State.GOING_DOWN)
+                        playerB.setState(State.IDLE);
                     break;
                 default:
                     break;
             }
-        }); 
-        
-        var court = new Court(playerA, playerB, 1000, 600);
-        var gameView = new GameView(court, root, 1.0, sceneDisplayModifier);
+        });
+
+        int pointsLimit = 7;
+
+        var court = new Court(playerA, playerB, 1000, 600, pointsLimit);
+
+        var gameView = new GameView(court, borderPaneRoot, 1.0, sceneDisplayModifier);
+
+        primaryStage.setTitle("Pong World");
         primaryStage.setScene(gameScene);
         primaryStage.show();
+
         gameView.animate();
     }
+
 }

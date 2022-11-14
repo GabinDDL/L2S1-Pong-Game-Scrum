@@ -1,11 +1,15 @@
 package model.interfaces;
 
-import model.Score;
+import gui.interfaces.UpdatableGui;
+
+import java.util.List;
 
 /**
  * InterfaceCourt
  */
 public interface InterfaceCourt {
+
+    // Getters
 
     /**
      * @return the Court's width
@@ -18,27 +22,15 @@ public interface InterfaceCourt {
     public double getHeight();
 
     /**
-     * @return the Court's Racket A
+     * @return list of all court's objects to update
      */
-    public double getRacketA();
+    public List<UpdatableGui> getListObjects();
 
-    /**
-     * @return the Court's Racket B
-     */
-    public double getRacketB();
-
-    /**
-     * @return the Court's Score A
-     */
-    public Score getScoreA();
-
-    /**
-     * @return the Court's Score B
-     */
-    public Score getScoreB();
+    // Methods
 
     /**
      * Updates the Court
+     * 
      * @param deltaT
      */
     public void update(double deltaT);
@@ -47,5 +39,4 @@ public interface InterfaceCourt {
      * Resets the Court
      */
     public void reset();
-    
 }
