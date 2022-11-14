@@ -6,6 +6,8 @@ import gui.game_elements.Score;
 
 import model.Court;
 import model.controllers.ControllerLabel;
+import model.game_elements.Bot;
+import model.interfaces.InterfaceHasDifficulty.Difficulty;
 import model.game_elements.Player;
 import model.interfaces.InterfaceRacketController.State;
 
@@ -74,7 +76,10 @@ public class App extends Application {
         playerA.setScore(scoreA);
 
         Score scoreB = new Score(labels.getLabelB());
-        Player playerB = new Player();
+        // Player playerB = new Player();
+        Player playerB = new Bot(Difficulty.NORMAL);
+        // Replace NORMAL by EASY or HARD as you want and the first playerB in
+        // comments
         playerB.setScore(scoreB);
 
         var sceneDisplayModifier = new SceneDisplayModifier();

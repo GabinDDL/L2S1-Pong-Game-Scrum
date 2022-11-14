@@ -89,6 +89,38 @@ public class Court implements InterfaceCourt {
     // Methods
 
     /**
+     * check if the ball is outside, increment score and check if there is win or a
+     * service
+     * 
+     * @param deltaT time passed
+     */
+    public void handleBallOutside(double deltaT) {
+        if (ball.isOutside(deltaT, width)) {
+            soundPerdu.play();
+
+            if (ball.getCoordX() < 0) {
+                playerB.incrementScore();
+            } else {
+                playerA.incrementScore();
+            }
+
+            if (playerA instanceof Bot botA) {
+                botA.resetPredict();
+            }
+            if (playerB instanceof Bot botB) {
+                botB.resetPredict();
+            }
+
+            if (gameWon()) {
+                needLead = false; // Lower Flag
+                reset();
+            } else {
+                serve();
+            }
+        }
+    }
+
+    /**
      * Updates the positions of the objects
      * If a player wins, it resets the objects
      * 
@@ -96,8 +128,16 @@ public class Court implements InterfaceCourt {
      */
 
     public void update(double deltaT) {
-        playerA.update(deltaT, height);
-        playerB.update(deltaT, height);
+        if (playerA instanceof Bot botA) {
+            botA.update(deltaT, height, width, ball.getBallModel());
+        } else {
+            playerA.update(deltaT, height);
+        }
+        if (playerB instanceof Bot botB) {
+            botB.update(deltaT, height, width, ball.getBallModel());
+        } else {
+            playerB.update(deltaT, height);
+        }
 
         switch (ball.update(deltaT, height, getPlayersModel())) {
             case RACKET_HIT:
@@ -110,39 +150,7 @@ public class Court implements InterfaceCourt {
                 break;
         }
 
-        if (isBallOutside(deltaT)) {
-            if (gameWon()) {
-                needLead = false; // Lower Flag
-                reset();
-            } else {
-                serve();
-            }
-        }
-
-    }
-
-    /**
-     * @return true if a player lost the point
-     */
-    private boolean isBallOutside(double deltaT) {
-
-        // Check if someone wins (if the ball exits the Court)
-
-        // si la balle va sortir à gauche
-        if (ball.getCoordX() < -70) {
-            // le joueur A perd : met à jour le score du joueur B
-            playerB.incrementScore();
-            soundPerdu.play();
-            return true;
-        }
-        // si la balle va sortir à droite
-        else if (ball.getCoordX() > width + 70) {
-            // le joueur B perd : met à jour le score du joueur A
-            playerA.incrementScore();
-            soundPerdu.play();
-            return true;
-        }
-        return false;
+        handleBallOutside(deltaT);
     }
 
     /**
@@ -157,9 +165,9 @@ public class Court implements InterfaceCourt {
      */
     public void reset() {
         playerA.resetRacket(height);
-        playerA.resetScore();
-
         playerB.resetRacket(height);
+
+        playerA.resetScore();
         playerB.resetScore();
 
         ball.reset(width, height);

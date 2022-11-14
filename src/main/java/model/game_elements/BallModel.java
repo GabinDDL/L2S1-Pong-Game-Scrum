@@ -17,7 +17,24 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         this.setMajorSpeed(800);
     }
 
+    // getters
+
+    public double getSpeedDirectionX() {
+        return speedDirection.getXdir();
+    }
+
+    public double getSpeedDirectionY() {
+        return speedDirection.getYdir();
+    }
+
     // méthodes
+
+    /**
+     * @return true if the ball is outside
+     */
+    public boolean isOutside(double deltaT, double width) {
+        return getCoordX() < -70 || getCoordX() > width + 70;
+    }
 
     /**
      * Produces an acceleration on the ball if it hits the racket while they are

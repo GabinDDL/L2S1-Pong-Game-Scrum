@@ -24,6 +24,10 @@ public class Ball implements InterfaceBall {
 
     // Getters
 
+    public BallModel getBallModel() {
+        return ballModel;
+    }
+
     public double getSize() {
         return ballModel.getSize();
     }
@@ -43,6 +47,14 @@ public class Ball implements InterfaceBall {
         return ballModel.getCoordY();
     }
 
+    public double getSpeedDirectionX() {
+        return ballModel.getSpeedDirectionX();
+    }
+
+    public double getSpeedDirectionY() {
+        return ballModel.getSpeedDirectionY();
+    }
+
     // Setters
     @Override
     public void setRadius(double radius) {
@@ -55,6 +67,13 @@ public class Ball implements InterfaceBall {
     }
 
     // Methods
+
+    /**
+     * @return true if the ball is outside
+     */
+    public boolean isOutside(double deltaT, double width) {
+        return ballModel.isOutside(deltaT, width);
+    }
 
     // Overrides from InterfaceBall
 

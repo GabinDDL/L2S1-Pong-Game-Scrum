@@ -17,8 +17,8 @@ import javafx.scene.shape.Shape;
  */
 public class Player implements InterfacePlayer {
 
-    private PlayerGui playerGui;
-    private PlayerModel playerModel;
+    protected PlayerGui playerGui;
+    protected PlayerModel playerModel;
 
     // Constructors
 
