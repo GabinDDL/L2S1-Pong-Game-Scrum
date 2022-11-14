@@ -68,7 +68,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
                     }
                 } else {
                     newDirection.addAngle(Math.PI / 12);
-                    if (newDirection.getXdir() >= 0) { // si la balle est dans la surface de jeu
+                    if (newDirection.getXdir() >= 0) { // if the ball is still on the court
                         newDirection = speedDirection;
                     }
                 }
