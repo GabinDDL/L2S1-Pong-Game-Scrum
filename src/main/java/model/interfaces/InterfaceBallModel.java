@@ -30,8 +30,6 @@ public interface InterfaceBallModel {
      * @param deltaT  the time between the current frame and the previous one.
      * @param height  height of the window.
      * @param players list of all players.
-     * 
-     * @return the last action performed by the ball.
      */
     LastAction update(double deltaT, double height, PlayerModel[] players);
 }

@@ -30,7 +30,7 @@ public class RacketGui implements InterfaceRacketGui {
     }
 
     public RacketGui() {
-        this(new Vector2(0, 0), 0, 0);
+        this.racketController = new RacketController();
     }
 
     // Getters
@@ -48,11 +48,6 @@ public class RacketGui implements InterfaceRacketGui {
     @Override
     public double getSize() {
         return racket.getHeight();
-    }
-
-    @Override
-    public double getWidth() {
-        return racket.getWidth();
     }
 
     @Override
@@ -80,24 +75,6 @@ public class RacketGui implements InterfaceRacketGui {
     public void setCoord(Vector2 coords) {
         racket.setX(coords.getXdir());
         racket.setY(coords.getYdir());
-    }
-
-    public void setRacketWidth(double width) {
-        racket.setWidth(width);
-    }
-
-    public void setRacketHeight(double height) {
-        racket.setHeight(height);
-    }
-
-    public void setRectangle(Vector2 coords, double racketWidth, double racketHeight) {
-        racket = new Rectangle(racketWidth, racketHeight);
-        racket.setX(coords.getXdir());
-        racket.setY(coords.getYdir());
-    }
-
-    public void setRectangle(Rectangle rectangle) {
-        this.racket = rectangle;
     }
 
 }

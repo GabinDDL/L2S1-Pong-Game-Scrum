@@ -1,8 +1,9 @@
 package gui.interfaces;
 
+import model.Vector2;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import model.Vector2;
 
 /**
  * This interface represents a ball GUI element.
@@ -21,7 +22,7 @@ public interface InterfaceBallGui extends UpdatableGui, ChangeableImage {
     // Setters
     void setRadius(double radius);
 
-    void setCoord(Vector2 coords);
+    void setCoords(Vector2 coords);
 
     /**
      * Initialise l'affichage de la balle dans GameView

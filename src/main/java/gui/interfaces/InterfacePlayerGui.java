@@ -23,13 +23,6 @@ public interface InterfacePlayerGui extends UpdatableGui, ChangeableImage {
 
     void resetScore();
 
-    /**
-     * Initialize the racket of the player
-     * 
-     * @param scale
-     * @param xMargin
-     * @param racketThickness
-     */
     void initDisplayRacket(double scale, double xMargin, double racketThickness);
 
     // Defaults
@@ -52,7 +45,7 @@ public interface InterfacePlayerGui extends UpdatableGui, ChangeableImage {
      * Updates the position and the speed of the racket on the screen
      */
     default void updateDisplay(double scale, double[] args) {
-        getRacketGui().updateDisplay(scale, args);
+        updateDisplay(scale);
     }
 
     /**

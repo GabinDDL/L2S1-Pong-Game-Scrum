@@ -1,13 +1,11 @@
 package model.game_elements;
 
-import model.Court;
 import model.Vector2;
 import model.interfaces.InterfacePlayerModel;
 import model.interfaces.InterfaceRacketController.State;
-import model.interfaces.InterfaceRacketModel.HitType;
 
 /**
- * This class represents the model of the player. It doesn't include the GUI of
+ * This class represents the model of the player. It doesn't include the gui of
  * the player
  */
 public class PlayerModel implements InterfacePlayerModel {
@@ -20,7 +18,6 @@ public class PlayerModel implements InterfacePlayerModel {
     // Player constructor if we want to associate the Player with his points later
     public PlayerModel(int points) {
         this.points = points;
-        racket = new RacketModel(new Vector2(0, 0), 0, 0, 0);
     }
 
     public PlayerModel() {
@@ -31,15 +28,6 @@ public class PlayerModel implements InterfacePlayerModel {
     public PlayerModel(RacketModel racket, int points) {
         this(points);
         this.racket = racket;
-    }
-
-    public PlayerModel(boolean isLeft, double width) {
-        this(0);
-        if (isLeft)
-            racket = new RacketModel(new Vector2(0, 0), 0, Court.INITIAL_RACKET_HEIGHT, Court.INITIAL_RACKET_WIDTH);
-        else
-            racket = new RacketModel(new Vector2(width, 0), 0, Court.INITIAL_RACKET_HEIGHT, Court.INITIAL_RACKET_WIDTH);
-
     }
 
     // Getters
@@ -66,22 +54,6 @@ public class PlayerModel implements InterfacePlayerModel {
         return getRacket().getState();
     }
 
-    public double getCoordX() {
-        return getRacket().getCoordX();
-    }
-
-    public double getCoordY() {
-        return getRacket().getCoordY();
-    }
-
-    public double getRacketWidth() {
-        return getRacket().getRacketWidth();
-    }
-
-    public double getRacketHeight() {
-        return getRacket().getRacketHeight();
-    }
-
     // Setters
 
     protected void setRacketModel(RacketModel racket) {
@@ -100,22 +72,6 @@ public class PlayerModel implements InterfacePlayerModel {
         this.points = points;
     }
 
-    public void setDecceleration(double d) {
-        racket.setDeceleration(d);
-    }
-
-    public void setAcceleration(double a) {
-        racket.setAcceleration(a);
-    }
-
-    public void setMajorSpeed(double mS) {
-        racket.setMajorSpeed(mS);
-    }
-
-    public void setInitialSpeed(double iS) {
-        racket.setInitialSpeed(iS);
-    }
-
     // Methods
 
     /**
@@ -125,37 +81,13 @@ public class PlayerModel implements InterfacePlayerModel {
         return getRacket().isRacketLeft();
     }
 
-    /**
-     * Tests if this Player's amount of points is equal to
-     * other Player's amount of points
-     * 
-     * @param other
-     * @return true if the Player's amount of points
-     *         is equal to other Player's amount of points;
-     *         false otherwise
-     */
-    public boolean isDraw(PlayerModel other) {
-        return points == other.points;
-    }
-
-    /**
-     * Tests if this Player's amount of points is equal to n
-     * 
-     * @param n
-     * @return true if the Player's amount of points
-     *         is equal to n; false otherwise
-     */
-    public boolean pointsEqualTo(int n) {
-        return points == n;
-    }
-
     // Overrides
 
     // From InterfacePlayerModel
 
     @Override
-    public HitType hitBall(Vector2 ballPosition, Vector2 nextPosition, double ballRadius, Vector2 speedDirectionBall) {
-        return getRacket().hitBall(ballPosition, nextPosition, ballRadius, speedDirectionBall);
+    public boolean hitBall(Vector2 ballPosition, Vector2 nextPosition, double ballRadius) {
+        return getRacket().hitBall(ballPosition, nextPosition, ballRadius);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package model.interfaces;
 
 /**
- * Interface for the racket controller object.
+ * Interface for the the racket controller object.
  */
 public interface InterfaceRacketController {
 

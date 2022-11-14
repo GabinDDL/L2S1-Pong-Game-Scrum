@@ -53,10 +53,6 @@ public class PlayerGui implements InterfacePlayerGui {
         return racket.getRacketController();
     }
 
-    public Vector2 getCoord() {
-        return new Vector2(racket.getCoordX(), racket.getCoordY());
-    }
-
     // Setters
 
     public void setRacketGui(RacketGui racket) {
@@ -65,22 +61,6 @@ public class PlayerGui implements InterfacePlayerGui {
 
     public void setScore(Score score) {
         this.score = score;
-    }
-
-    public void setPoints(int points) {
-        score.setPoints(points);
-    }
-
-    public void setCoord(Vector2 coords) {
-        racket.setCoord(coords);
-    }
-
-    public void setRacketWidth(double width) {
-        racket.setRacketWidth(width);
-    }
-
-    public void setRacketHeight(double height) {
-        racket.setRacketHeight(height);
     }
 
     // Methods
@@ -92,9 +72,6 @@ public class PlayerGui implements InterfacePlayerGui {
         racket.initDisplay(scale, xMargin, racketThickness);
     }
 
-    /**
-     * Implements the score by 1 
-     */
     @Override
     public void incrementScore() {
         score.incrementScore();
