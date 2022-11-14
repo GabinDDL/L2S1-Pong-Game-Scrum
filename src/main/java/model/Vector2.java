@@ -1,31 +1,50 @@
 package model;
 
+/**
+ * Class that represents a 2D vector.
+ * It has some built-in applications to compute
+ * basic vector operations and some distance/velocity
+ * specific features.
+ */
 public class Vector2 {
+
+    private double xDir, yDir;
+    private double angleMax = Math.PI / 4;
+
+    // Constructors
+    public Vector2(double Xdir, double Ydir) {
+        this.xDir = Xdir;
+        this.yDir = Ydir;
+    }
+
+    public Vector2(Vector2 vector) {
+        this(vector.xDir, vector.yDir);
+    }
+
+    // Getters
+
+    // Direction
+
+    public double getXdir() {
+        return this.xDir;
+    }
+
+    public double getYdir() {
+        return this.yDir;
+    }
+
+    // Norm
+
     /**
-     * Class that represents a 2D vector.
-     * It has some built-in applications to compute 
-     * basic vector operations and some distance/velocity
-     * specific features.
+     * @return the norm of the vector.
      */
-
-    private double Xdir,Ydir; 
-
-    public Vector2(double Xdir, double Ydir){
-        this.Xdir = Xdir;
-        this.Ydir = Ydir;
+    public double getNorm() {
+        return Math.sqrt(this.xDir * this.xDir + this.yDir * this.yDir);
     }
 
-    public Vector2(Vector2 vector){
-        this(vector.Xdir, vector.Ydir);
-    }
+    // Setters
 
-    public double getXdir (){
-        return this.Xdir;
-    }
-
-    public double getYdir (){
-        return this.Ydir;
-    }
+    // Direction
 
     /**
      * This function sets the direction of the ball to the given values.
@@ -33,30 +52,46 @@ public class Vector2 {
      * @param i the x direction of the ball
      * @param j The y-coordinate of the direction vector
      */
-    public void setDirection(double i, double j){
-        this.Xdir = i;
-        this.Ydir = j;
+    public void setDirection(double i, double j) {
+        this.xDir = i;
+        this.yDir = j;
     }
 
     /**
-     * This function sets the direction of the vector to the direction of the vector passed in.
+     * This function sets the direction of the vector to the direction of the vector
+     * passed in.
      * 
      * @param vector The vector to set the direction to.
      */
-    public void setDirection(Vector2 vector){
-        this.Xdir = vector.Xdir;
-        this.Ydir = vector.Ydir;
+    public void setDirection(Vector2 vector) {
+        this.xDir = vector.xDir;
+        this.yDir = vector.yDir;
     }
 
+    // Norm
+
     /**
-     * This function adds the X and Y components of the vector passed in to the X and Y components of
-     * the vector that called the function.
+     * This function sets the norm of the vector to the given value.
+     * 
+     * @param norm The norm to set the vector to.
+     */
+
+    public void setNorm(double n) {
+        this.normalise();
+        this.scalarMultiplication(n);
+    }
+
+    // Methods
+
+    /**
+     * This function adds the X and Y components of the vector passed in to the X
+     * and Y components of the vector that called the function.
      * 
      * @param vector The vector to add to this vector.
      */
-    public void add(Vector2 vector){
-        this.Xdir += vector.Xdir;
-        this.Ydir += vector.Ydir;
+    public void add(Vector2 vector) {
+        this.xDir += vector.xDir;
+        this.yDir += vector.yDir;
     }
 
     /**
@@ -65,70 +100,68 @@ public class Vector2 {
      * @param i the x-direction of the vector
      * @param j The y-coordinate of the vector
      */
-    public void add(double i, double j){
-        this.Xdir += i;
-        this.Ydir += j;
+    public void add(double i, double j) {
+        this.xDir += i;
+        this.yDir += j;
     }
 
     /**
-     * Vecotor scalar multiplication
+     * Vector scalar multiplication.
      * 
-     * @param x scalar 
+     * @param x scalar
      */
-    public void scalarMultiplication(double x){
-        this.Xdir *= x;
-        this.Ydir *= x;
-    }
-    /**
-     * @return the norm of the vector
-     */
-    public double norm(){
-        return Math.sqrt(this.Xdir*this.Xdir + this.Ydir*this.Ydir);
+    public void scalarMultiplication(double x) {
+        this.xDir *= x;
+        this.yDir *= x;
     }
 
     /**
-     * Nomalises a vector
+     * Normalises a vector.
      */
-    public void normalise(){
-        this.scalarMultiplication(1/this.norm());
+    public void normalise() {
+        this.scalarMultiplication(1 / this.getNorm());
     }
 
-
     /**
-     * It adds an angle to the direction of the vector, but only allows the vector to point
+     * It adds an angle to the direction of the vector, but only allows the vector
+     * to point
      * in certain angles, in order to avoid sharp vertical motions.
      * 
      * @param angle the angle to add to the current direction
      */
-    public void addAngle(double angle){
-        double n = this.norm();
-        angle += Math.atan2(this.Ydir,this.Xdir);
-        angle = angle >= 2*Math.PI ? angle - 2*Math.PI : angle;
+    public void addAngle(double angle) {
+        double n = this.getNorm();
+        angle += Math.atan2(this.yDir, this.xDir); // angle added + original angle (between -PI and PI)
+        angle = angle >= 2 * Math.PI ? angle - 2 * Math.PI : angle;
 
-        if (angle > Math.PI/3 && angle <= Math.PI/2) angle = Math.PI/3;
-        else if (angle > Math.PI/2 && angle < 2* Math.PI/3) angle = 2*Math.PI/3;
-        else if (angle > 4*Math.PI/3 && angle <= 3* Math.PI/2) angle = 4*Math.PI/3;
-        else if (angle > 3*Math.PI/2 && angle <= 5* Math.PI/3) angle = 5*Math.PI/3;
+        if (angle <= Math.PI / 2 && angle > Math.PI / 2 - angleMax)
+            angle = Math.PI / 2 - angleMax;
+        else if (angle > Math.PI / 2 && angle < Math.PI / 2 + angleMax)
+            angle = Math.PI / 2 + angleMax;
+        else if (angle >= -Math.PI / 2 && angle < -Math.PI / 2 + angleMax)
+            angle = -Math.PI / 2 + angleMax;
+        else if (angle < -Math.PI / 2 && angle > -Math.PI / 2 - angleMax)
+            angle = -Math.PI / 2 - angleMax;
 
-        this.Xdir = n * Math.cos(angle);
-        this.Ydir = n * Math.sin(angle);
-
+        this.xDir = n * Math.cos(angle);
+        this.yDir = n * Math.sin(angle);
     }
 
     /**
-     * This method updates a position vector given 
+     * This method updates a position vector given
      * the velocity vector and the time passed
      * 
      * @param velocity Velocity vector
-     * @param deltaT Time passed
+     * @param deltaT   Time passed
      */
-    public void updateDistanceVector(Vector2 velocity, double deltaT){
-        this.Xdir += velocity.Xdir * deltaT;
-        this.Ydir += velocity.Ydir * deltaT;
+    public void updateDistanceVector(Vector2 velocity, double deltaT) {
+        this.xDir += velocity.xDir * deltaT;
+        this.yDir += velocity.yDir * deltaT;
     }
 
-    public String toString(){
-        return "(" + this.Xdir + "," + this.Ydir + ")";
+    @Override
+    public String toString() {
+        return "(" + this.xDir + "," + this.yDir + ")";
     }
 
 }
