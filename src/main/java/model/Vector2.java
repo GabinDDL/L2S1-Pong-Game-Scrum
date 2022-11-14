@@ -131,21 +131,20 @@ public class Vector2 {
      */
     public void addAngle(double angle) {
         double n = this.getNorm();
-        angle += Math.atan2(this.yDir, this.xDir);
+        angle += Math.atan2(this.yDir, this.xDir); // angle added + original angle (between -PI and PI)
         angle = angle >= 2 * Math.PI ? angle - 2 * Math.PI : angle;
 
         if (angle <= Math.PI / 2 && angle > Math.PI / 2 - angleMax)
-            angle = angleMax;
+            angle = Math.PI / 2 - angleMax;
         else if (angle > Math.PI / 2 && angle < Math.PI / 2 + angleMax)
             angle = Math.PI / 2 + angleMax;
-        else if (angle <= 3 * Math.PI / 2 && angle > 3 * Math.PI / 2 - angleMax)
-            angle = 3 * Math.PI / 2 - angleMax;
-        else if (angle > 3 * Math.PI / 2 && angle < 3 * Math.PI / 2 + angleMax)
-            angle = 3 * Math.PI / 2 + angleMax;
+        else if (angle >= - Math.PI / 2 && angle < - Math.PI / 2 + angleMax)
+            angle = - Math.PI / 2 + angleMax;
+        else if (angle < - Math.PI / 2 && angle > - Math.PI / 2 - angleMax)
+            angle = - Math.PI / 2 - angleMax;
 
         this.xDir = n * Math.cos(angle);
         this.yDir = n * Math.sin(angle);
-
     }
 
     /**
