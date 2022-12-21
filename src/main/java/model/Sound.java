@@ -1,6 +1,6 @@
 package model;
 
-import static constants.Constants.*;
+import static constants.Constants.DIR_AUDIO;
 
 import java.io.File;
 

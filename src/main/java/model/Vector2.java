@@ -8,13 +8,15 @@ package model;
  */
 public class Vector2 {
 
-    private double xDir, yDir;
-    private double angleMax = Math.PI / 4;
+    private double xDir;
+    private double yDir;
+
+    private static double angleMax = Math.PI / 4;
 
     // Constructors
-    public Vector2(double Xdir, double Ydir) {
-        this.xDir = Xdir;
-        this.yDir = Ydir;
+    public Vector2(double xDir, double yDir) {
+        this.xDir = xDir;
+        this.yDir = yDir;
     }
 
     public Vector2(Vector2 vector) {
@@ -95,7 +97,7 @@ public class Vector2 {
     }
 
     /**
-     * This function adds the values of i and j to the Xdir and Ydir variables.
+     * This function adds the values of i and j to the xDir and yDir variables.
      * 
      * @param i the x-direction of the vector
      * @param j The y-coordinate of the vector
@@ -123,13 +125,25 @@ public class Vector2 {
     }
 
     /**
-     * It adds an angle to the direction of the vector, but only allows the vector
-     * to point
-     * in certain angles, in order to avoid sharp vertical motions.
+     * It adds an angle to the direction of the vector.
      * 
      * @param angle the angle to add to the current direction
      */
     public void addAngle(double angle) {
+        double n = this.getNorm();
+        angle += Math.atan2(this.yDir, this.xDir);
+
+        this.xDir = n * Math.cos(angle);
+        this.yDir = n * Math.sin(angle);
+    }
+
+    /**
+     * It adds an angle to the direction of the vector, but only allows the vector
+     * to point in certain angles, in order to avoid sharp vertical motions.
+     * 
+     * @param angle the angle to add to the current direction
+     */
+    public void addAngleRestricted(double angle) {
         double n = this.getNorm();
         angle += Math.atan2(this.yDir, this.xDir); // angle added + original angle (between -PI and PI)
         angle = angle >= 2 * Math.PI ? angle - 2 * Math.PI : angle;
@@ -138,10 +152,10 @@ public class Vector2 {
             angle = Math.PI / 2 - angleMax;
         else if (angle > Math.PI / 2 && angle < Math.PI / 2 + angleMax)
             angle = Math.PI / 2 + angleMax;
-        else if (angle >= - Math.PI / 2 && angle < - Math.PI / 2 + angleMax)
-            angle = - Math.PI / 2 + angleMax;
-        else if (angle < - Math.PI / 2 && angle > - Math.PI / 2 - angleMax)
-            angle = - Math.PI / 2 - angleMax;
+        else if (angle >= -Math.PI / 2 && angle < -Math.PI / 2 + angleMax)
+            angle = -Math.PI / 2 + angleMax;
+        else if (angle < -Math.PI / 2 && angle > -Math.PI / 2 - angleMax)
+            angle = -Math.PI / 2 - angleMax;
 
         this.xDir = n * Math.cos(angle);
         this.yDir = n * Math.sin(angle);
@@ -157,6 +171,26 @@ public class Vector2 {
     public void updateDistanceVector(Vector2 velocity, double deltaT) {
         this.xDir += velocity.xDir * deltaT;
         this.yDir += velocity.yDir * deltaT;
+    }
+
+    /**
+     * This methods computes the distance between two points.
+     * 
+     * @param point The point to compute the distance to.
+     * @return The distance between the two points.
+     */
+    public double distance(Vector2 point) {
+        double x = this.getXdir() - point.getXdir();
+        double y = this.getYdir() - point.getYdir();
+        return Math.sqrt(x * x + y * y);
+    }
+
+    /**
+     * This method rounds the coordinates of the vector to the nearest integer.
+     */
+    public void roundCoords() {
+        this.xDir = Math.round(this.xDir);
+        this.yDir = Math.round(this.yDir);
     }
 
     @Override
