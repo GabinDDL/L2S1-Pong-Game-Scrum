@@ -1,6 +1,6 @@
 package gui;
 
-import static constants.Constants.*;
+import static constants.Constants.DIR_IMAGES;
 
 import gui.interfaces.UpdatableGui;
 

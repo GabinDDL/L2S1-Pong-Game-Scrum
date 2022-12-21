@@ -3,6 +3,7 @@ package model.game_elements;
 import model.Vector2;
 import model.interfaces.InterfaceBallModel;
 import model.interfaces.InterfaceRacketController.State;
+import model.interfaces.InterfaceRacketModel.HitType;
 
 /**
  * This class represents the model of the ball of the game.
@@ -11,9 +12,9 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
     private Vector2 speedDirection;
 
     // constructeur
-    public BallModel(Vector2 coord, double InitialSpeed, double size) {
+    public BallModel(Vector2 coord, double initialSpeed, double size) {
         super(coord, size); // speed = 200, size = 10.0 (radius)
-        setInitialSpeed(InitialSpeed);
+        setInitialSpeed(initialSpeed);
         this.setMajorSpeed(800);
     }
 
@@ -79,12 +80,12 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         switch (player.getState()) {
             case GOING_UP:
                 if (player.isPlayerLeft()) {
-                    newDirection.addAngle(23 * Math.PI / 12);
+                    newDirection.addAngleRestricted(23 * Math.PI / 12);
                     if (newDirection.getXdir() <= 0) {
                         newDirection = speedDirection;
                     }
                 } else {
-                    newDirection.addAngle(Math.PI / 12);
+                    newDirection.addAngleRestricted(Math.PI / 12);
                     if (newDirection.getXdir() >= 0) { // if the ball is still on the court
                         newDirection = speedDirection;
                     }
@@ -93,12 +94,12 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
                 break;
             case GOING_DOWN:
                 if (player.isPlayerLeft()) {
-                    newDirection.addAngle(Math.PI / 12);
+                    newDirection.addAngleRestricted(Math.PI / 12);
                     if (newDirection.getXdir() <= 0) {
                         newDirection = speedDirection;
                     }
                 } else {
-                    newDirection.addAngle(23 * Math.PI / 12);
+                    newDirection.addAngleRestricted(23 * Math.PI / 12);
                     if (newDirection.getXdir() >= 0) {
                         newDirection = speedDirection;
                     }
@@ -130,11 +131,19 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         // Check players
 
         for (PlayerModel p : players) {
-            if (p.hitBall(getCoord(), nextPosition, getSize())) {
-                computeRacketBounce(nextPosition, deltaT, p);
+            HitType touche = p.hitBall(getCoord(), nextPosition, getSize(), speedDirection);
+            if (touche == HitType.BALL_HIT_HORIZONTAL) {
+                speedDirection.setDirection(speedDirection.getXdir(), -speedDirection.getYdir());
                 lastAction = LastAction.RACKET_HIT;
             }
-
+            if (touche == HitType.BALL_HIT_VERTICAL) {
+                speedDirection.setDirection(-speedDirection.getXdir(), speedDirection.getYdir());
+                lastAction = LastAction.RACKET_HIT;
+            }
+            if (touche == HitType.BALL_HIT_HORIZONTAL_AND_VERTICAL) {
+                speedDirection.setDirection(-speedDirection.getXdir(), -speedDirection.getYdir());
+                lastAction = LastAction.RACKET_HIT;
+            }
         }
 
         setCoord(nextPosition);

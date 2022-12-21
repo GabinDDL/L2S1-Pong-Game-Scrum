@@ -3,6 +3,7 @@ package model.game_elements;
 import model.Vector2;
 import model.interfaces.InterfacePlayerModel;
 import model.interfaces.InterfaceRacketController.State;
+import model.interfaces.InterfaceRacketModel.HitType;
 
 /**
  * This class represents the model of the player. It doesn't include the gui of
@@ -87,8 +88,8 @@ public class PlayerModel implements InterfacePlayerModel {
     // From InterfacePlayerModel
 
     @Override
-    public boolean hitBall(Vector2 ballPosition, Vector2 nextPosition, double ballRadius) {
-        return getRacket().hitBall(ballPosition, nextPosition, ballRadius);
+    public HitType hitBall(Vector2 ballPosition, Vector2 nextPosition, double ballRadius, Vector2 speedDirectionBall) {
+        return getRacket().hitBall(ballPosition, nextPosition, ballRadius, speedDirectionBall);
     }
 
     @Override
