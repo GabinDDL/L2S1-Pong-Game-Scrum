@@ -74,6 +74,22 @@ public class PlayerModel implements InterfacePlayerModel {
         this.points = points;
     }
 
+    public void setDecceleration(double d) {
+        racket.setDeceleration(d);
+    }
+
+    public void setAcceleration(double a) {
+        racket.setAcceleration(a);
+    }
+
+    public void setMajorSpeed(double mS) {
+        racket.setMajorSpeed(mS);
+    }
+
+    public void setInitialSpeed(double iS) {
+        racket.setInitialSpeed(iS);
+    }
+
     // Methods
 
     /**

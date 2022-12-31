@@ -1,4 +1,4 @@
-package model;
+package gui;
 
 import static constants.Constants.DIR_AUDIO;
 

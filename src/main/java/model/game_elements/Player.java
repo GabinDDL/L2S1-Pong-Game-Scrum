@@ -151,9 +151,19 @@ public class Player implements InterfacePlayer {
      *         is equal to n; false otherwise
      */
     public boolean pointsEqualTo(int n) {
-        return playerGui.getScore().getPoints() == n &&
-                this.getPoints() == n;
+        return this.getPoints() == n;
 
+    }
+
+    /**
+     * Checks if the Player's amount of points is bigger than n
+     * 
+     * @param n
+     * @return true if the Player's amount of points
+     *         is bigger than n; false otherwise
+     */
+    public boolean pointsBiggerThan(int n) {
+        return this.getPoints() > n;
     }
 
     @Override

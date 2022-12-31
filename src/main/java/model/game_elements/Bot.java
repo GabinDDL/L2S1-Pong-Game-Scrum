@@ -1,5 +1,7 @@
 package model.game_elements;
 
+import java.util.ArrayList;
+
 import gui.game_elements.PlayerGui;
 import gui.game_elements.Score;
 
@@ -56,8 +58,8 @@ public class Bot extends Player implements InterfaceHasDifficulty {
         }
     }
 
-    public void update(double deltaT, double height, double width, BallModel ballModel) {
-        ((BotModel) playerModel).update(deltaT, height, width, ballModel, difficulty);
+    public void update(double deltaT, double height, double width, ArrayList<Ball> ballList) {
+        ((BotModel) playerModel).update(deltaT, height, width, ballList, difficulty);
         playerGui.getRacketGui().setCoordY(playerModel.getRacket().getCoordY());
     }
 }

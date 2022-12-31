@@ -12,10 +12,10 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
     private Vector2 speedDirection;
 
     // constructeur
-    public BallModel(Vector2 coord, double initialSpeed, double size) {
+    public BallModel(Vector2 coord, double initialSpeed, double initialMajorSpeed, double size) {
         super(coord, size); // speed = 200, size = 10.0 (radius)
         setInitialSpeed(initialSpeed);
-        this.setMajorSpeed(800);
+        this.setMajorSpeed(initialMajorSpeed);
     }
 
     // getters
@@ -33,7 +33,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
     /**
      * @return true if the ball is outside
      */
-    public boolean isOutside(double deltaT, double width) {
+    public boolean isOutside(double width) {
         return getCoordX() < -70 || getCoordX() > width + 70;
     }
 
@@ -46,7 +46,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
      * @param player       the player that owns the racket
      */
     private void accelerationRacketBounce(Vector2 newDirection, PlayerModel player) {
-        int correctionValueDecceleration = 12; // permet de diminuer l'acceleration / la deceleration lors du bounce
+        int correctionValueDeceleration = 12; // permet de diminuer l'acceleration / la deceleration lors du bounce
         int correctionValueAcceleration = 8;
 
         boolean isUp = player.getState() == State.GOING_UP;
@@ -60,7 +60,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
             }
         } else {
             newDirection.scalarMultiplication(
-                    1 - ((Math.abs(player.getSpeed()) / player.getMajorSpeed()) / correctionValueDecceleration));
+                    1 - ((Math.abs(player.getSpeed()) / player.getMajorSpeed()) / correctionValueDeceleration));
             if (newDirection.getNorm() < getInitialSpeed()) {
                 newDirection.normalise();
                 newDirection.scalarMultiplication(getInitialSpeed());

@@ -98,7 +98,7 @@ public class RacketModel extends SolidObject implements InterfaceRacketModel {
             case GOING_UP:
                 if (getSpeed() > 0) // opposite direction
                     setSpeed(getSpeed() * getDeceleration()); // deceleration
-                if (Math.abs(getSpeed()) < getMajorSpeed()) // acceleration
+                if (Math.abs(getSpeed() - deltaT * getAcceleration()) <= getMajorSpeed()) // acceleration
                     setSpeed(getSpeed() - deltaT * getAcceleration());
                 setCoordY(reactionWithLimits(height, getCoordY() + getSpeed() * deltaT));
                 break;
@@ -114,7 +114,7 @@ public class RacketModel extends SolidObject implements InterfaceRacketModel {
             case GOING_DOWN:
                 if (getSpeed() < 0) // opposite direction
                     setSpeed(getSpeed() * getDeceleration()); // deceleration
-                if (Math.abs(getSpeed()) < getMajorSpeed()) // acceleration
+                if (Math.abs(getSpeed() + deltaT * getAcceleration()) <= getMajorSpeed()) // acceleration
                     setSpeed(getSpeed() + deltaT * getAcceleration());
                 setCoordY(reactionWithLimits(height, getCoordY() + getSpeed() * deltaT));
                 break;
