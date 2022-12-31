@@ -17,8 +17,8 @@ public class Ball implements InterfaceBall {
     private BallModel ballModel;
 
     // Constructor
-    public Ball(Vector2 coord, double InitialSpeed, double size) {
-        ballModel = new BallModel(coord, InitialSpeed, size);
+    public Ball(Vector2 coord, double initialSpeed, double initialMajorSpeed, double size) {
+        ballModel = new BallModel(coord, initialSpeed, initialMajorSpeed, size);
         ballGui = new BallGui(coord, size);
     }
 
@@ -71,8 +71,8 @@ public class Ball implements InterfaceBall {
     /**
      * @return true if the ball is outside
      */
-    public boolean isOutside(double deltaT, double width) {
-        return ballModel.isOutside(deltaT, width);
+    public boolean isOutside(double width) {
+        return ballModel.isOutside(width);
     }
 
     // Overrides from InterfaceBall

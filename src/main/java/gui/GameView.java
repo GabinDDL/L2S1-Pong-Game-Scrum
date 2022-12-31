@@ -5,7 +5,6 @@ import static constants.Constants.DIR_IMAGES;
 import gui.interfaces.UpdatableGui;
 
 import model.Court;
-import model.Sound;
 import model.game_elements.Ball;
 import model.game_elements.Player;
 
@@ -67,6 +66,15 @@ public class GameView {
                 gameRoot.getChildren().add(((Player) object).getShape());
             }
         }
+    }
+    // Getters
+
+    public BorderPane getGameRoot() {
+        return gameRoot;
+    }
+
+    public double getxMargin() {
+        return xMargin;
     }
 
     // Setters

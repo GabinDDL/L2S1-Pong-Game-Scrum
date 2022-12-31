@@ -93,12 +93,14 @@ public class App extends Application {
                 case CONTROL:
                     playerA.setState(State.GOING_DOWN);
                     break;
-                case UP:
-                    playerB.setState(State.GOING_UP);
-                    break;
-                case DOWN:
-                    playerB.setState(State.GOING_DOWN);
-                    break;
+                /*
+                 * case UP:
+                 * playerB.setState(State.GOING_UP);
+                 * break;
+                 * case DOWN:
+                 * playerB.setState(State.GOING_DOWN);
+                 * break;
+                 */
                 case ESCAPE:
                     sceneDisplayModifier.pauseUnpause();
                     break;
@@ -134,9 +136,11 @@ public class App extends Application {
 
         int pointsLimit = 7;
 
-        var court = new Court(playerA, playerB, 1000, 600, pointsLimit);
+        var court = new Court(playerA, playerB, 1000, 600, pointsLimit, 1.0, true);
 
         var gameView = new GameView(court, borderPaneRoot, 1.0, sceneDisplayModifier);
+        court.setGameRoot(gameView.getGameRoot());
+        court.setxMargin(gameView.getxMargin());
 
         primaryStage.setTitle("Pong World");
         primaryStage.setScene(gameScene);
