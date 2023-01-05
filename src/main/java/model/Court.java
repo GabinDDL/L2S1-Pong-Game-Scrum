@@ -265,7 +265,6 @@ public class Court implements InterfaceCourt {
      */
 
     public void update(double deltaT) {
-
         if (playerA instanceof Bot) {
             ((Bot) playerA).update(deltaT, height, width, ballList);
         } else {

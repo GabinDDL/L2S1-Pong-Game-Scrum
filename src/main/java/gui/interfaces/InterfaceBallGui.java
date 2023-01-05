@@ -1,9 +1,8 @@
 package gui.interfaces;
 
-import model.Vector2;
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import model.Vector2;
 
 /**
  * This interface represents a ball GUI element.
@@ -33,7 +32,7 @@ public interface InterfaceBallGui extends UpdatableGui, ChangeableImage {
     default void initDisplay(double scale, double xMargin) {
         getCircle().setCenterX(getCoordX() * scale + xMargin);
         getCircle().setCenterY(getCoordY() * scale);
-        ChangeableImage.super.changeColor(Color.PINK);
+        ChangeableImage.super.changeColor(Color.web("46268cff"));
     }
 
     /**

@@ -1,14 +1,13 @@
 package gui;
 
-import static constants.Constants.DIR_AUDIO;
-
-import java.io.File;
-
-import java.net.URL;
+import java.io.InputStream;
+import java.io.BufferedInputStream;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.AudioInputStream;
+
+import model.MediaHandler;
 
 public class Sound {
 	private Clip clip; // clip qui va être joué
@@ -19,8 +18,9 @@ public class Sound {
 	public Sound(String name) {
 		try {
 			first = true;
-			URL url = new File(DIR_AUDIO + name).toURI().toURL();
-			AudioInputStream audio = AudioSystem.getAudioInputStream(url);
+			InputStream audioSrc = MediaHandler.getAudioInputStream(name);
+			InputStream bufferedIn = new BufferedInputStream(audioSrc);
+			AudioInputStream audio = AudioSystem.getAudioInputStream(bufferedIn);
 			this.clip = AudioSystem.getClip();
 			this.clip.open(audio);
 		} catch (Exception e) {
