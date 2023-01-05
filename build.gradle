@@ -2,14 +2,15 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 configurations {
   testCompile
 }
 
-group 'fr.u-paris.informatique.cproj'
-version '1.0-SNAPSHOT'
+group 'pong-world'
+version 'TestInstaller-Linux'
 
 repositories {
     mavenCentral()
@@ -19,9 +20,15 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '5.9.0'
 }
 
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(17))
+  }
+}
+
 javafx {
     version = "17"
     modules = [ 'javafx.controls' , 'javafx.fxml' ]
 }
 
-mainClassName = 'gui.App'
+mainClassName = 'gui.Main'

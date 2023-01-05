@@ -1,21 +1,17 @@
 package gui;
 
-import static constants.Constants.DIR_FXML;
-
-import gui.game_elements.Score;
-
-import model.Court;
-import model.controllers.ControllerLabel;
-import model.game_elements.Bot;
-import model.interfaces.InterfaceHasDifficulty.Difficulty;
-import model.game_elements.Player;
-import model.interfaces.InterfaceRacketController.State;
-
-import java.io.File;
 import java.io.IOException;
-
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import gui.game_elements.Score;
+import model.Court;
+import model.MediaHandler;
+import model.controllers.ControllerFXML;
+import model.game_elements.Bot;
+import model.game_elements.Player;
+import model.interfaces.InterfaceHasDifficulty.Difficulty;
+import model.interfaces.InterfaceRacketController.State;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -29,11 +25,11 @@ public class App extends Application {
     public void start(Stage primaryStage) throws MalformedURLException, IOException {
 
         // Load .fxml
-        URL url = new File(DIR_FXML + "initialScoreDisplay.fxml").toURI().toURL();
-        FXMLLoader loader = new FXMLLoader(url);
-        BorderPane borderPaneRoot = loader.load(); // Ecran
+        URL fxmlURL = MediaHandler.getFXMLURL("init.fxml");
+        FXMLLoader loader = new FXMLLoader(fxmlURL);
+        BorderPane rootPane = loader.load(); // Ecran
 
-        Scene gameScene = new Scene(borderPaneRoot); // scene qui apparaît dans l'écran
+        Scene gameScene = new Scene(rootPane); // scene qui apparaît dans l'écran
 
         /**
          * Class controlling what's being displayed on the screen
@@ -69,7 +65,7 @@ public class App extends Application {
         // Associate Labels to Players
         // Init player
 
-        ControllerLabel labels = loader.getController();
+        ControllerFXML labels = loader.getController();
 
         Score scoreA = new Score(labels.getLabelA());
         Player playerA = new Player();
@@ -138,7 +134,7 @@ public class App extends Application {
 
         var court = new Court(playerA, playerB, 1000, 600, pointsLimit, 1.0, true);
 
-        var gameView = new GameView(court, borderPaneRoot, 1.0, sceneDisplayModifier);
+        var gameView = new GameView(court, rootPane, 1.0, sceneDisplayModifier);
         court.setGameRoot(gameView.getGameRoot());
         court.setxMargin(gameView.getxMargin());
 
@@ -149,4 +145,7 @@ public class App extends Application {
         gameView.animate();
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

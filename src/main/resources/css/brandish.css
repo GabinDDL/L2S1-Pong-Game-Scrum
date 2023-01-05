@@ -1,0 +1,11 @@
+@font-face {
+  font-family: "Brandish";
+  src: url("../font/Brandish.ttf");
+}
+
+/* properties suited for JavaFX CSS */
+.label {
+  -fx-font-family: "Brandish";
+  -fx-font-size: 100;
+  -fx-text-fill: #f8f0fcff;
+}

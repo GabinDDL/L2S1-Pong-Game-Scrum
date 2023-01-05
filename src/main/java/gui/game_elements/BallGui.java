@@ -2,10 +2,9 @@ package gui.game_elements;
 
 import gui.interfaces.InterfaceBallGui;
 
-import model.Vector2;
-
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+import model.Vector2;
 
 /**
  * This class represents a ball in the GUI.

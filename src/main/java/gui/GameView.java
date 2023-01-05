@@ -1,17 +1,20 @@
 package gui;
 
-import static constants.Constants.DIR_IMAGES;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 
 import gui.interfaces.UpdatableGui;
-
+import javafx.animation.AnimationTimer;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BorderPane;
 import model.Court;
+import model.MediaHandler;
 import model.game_elements.Ball;
 import model.game_elements.Player;
 
-import java.net.MalformedURLException;
-
-import javafx.animation.AnimationTimer;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BackgroundRepeat;
 
 public class GameView {
     // class parameters
@@ -94,8 +97,17 @@ public class GameView {
      * @param imageTitle
      */
     public void changeImageBackground(String imageTitle) {
-        gameRoot.setStyle("-fx-background-image: url('file:" + DIR_IMAGES + imageTitle +
-                "'); -fx-background-position: center center; -fx-background-repeat:no-repeat; -fx-background-size:100% 100%;");
+        // gameRoot.setStyle("-fx-background-image: url('file:" + DIR_IMAGES +
+        // imageTitle +
+        // "'); -fx-background-position: center center; -fx-background-repeat:no-repeat;
+        // -fx-background-size:100% 100%;");
+        InputStream in = MediaHandler.getImageInputStream(imageTitle);
+        Image img = new Image(in);
+        BackgroundImage bgImage = new BackgroundImage(img,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                null, null);
+        Background bg = new Background(bgImage);
+        gameRoot.setBackground(bg);
     }
 
     /**
