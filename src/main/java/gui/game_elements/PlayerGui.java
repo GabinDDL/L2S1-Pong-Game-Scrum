@@ -72,6 +72,9 @@ public class PlayerGui implements InterfacePlayerGui {
         racket.initDisplay(scale, xMargin, racketThickness);
     }
 
+    /**
+     * Implements the score by 1 
+     */
     @Override
     public void incrementScore() {
         score.incrementScore();

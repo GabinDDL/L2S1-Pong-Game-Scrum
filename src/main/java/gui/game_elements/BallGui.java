@@ -10,7 +10,6 @@ import model.Vector2;
  * This class represents a ball in the GUI.
  * It has no knowledge of the game logic.
  * It is only used to display the ball.
- * 
  */
 public class BallGui implements InterfaceBallGui {
 

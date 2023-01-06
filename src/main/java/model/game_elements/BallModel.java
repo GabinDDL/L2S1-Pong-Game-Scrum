@@ -18,7 +18,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         this.setMajorSpeed(initialMajorSpeed);
     }
 
-    // getters
+    // Getters
 
     public double getSpeedDirectionX() {
         return speedDirection.getXdir();
@@ -28,7 +28,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         return speedDirection.getYdir();
     }
 
-    // méthodes
+    // Methods
 
     /**
      * @return true if the ball is outside
@@ -40,7 +40,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
     /**
      * Produces an acceleration on the ball if it hits the racket while they are
      * moving in the same vertical direction. If they are moving in opposite
-     * vertical direction a deceleration is produced instead
+     * vertical direction, a deceleration is produced instead
      * 
      * @param newDirection the new direction of the ball
      * @param player       the player that owns the racket
@@ -117,19 +117,19 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
     @Override
     public LastAction update(double deltaT, double height, PlayerModel[] players) {
         LastAction lastAction = LastAction.NONE;
-        // first, compute possible next position if nothing stands in the way
+        // first, computes possible next position if nothing stands in the way
         Vector2 nextPosition = new Vector2(getCoord());
         nextPosition.updateDistanceVector(speedDirection, deltaT);
 
-        // Check if the ball hits the wall
+        // Checks if the ball hits the wall
         if (nextPosition.getYdir() < 0 || nextPosition.getYdir() > height) {
 
             speedDirection.setDirection(speedDirection.getXdir(), -speedDirection.getYdir());
             nextPosition.updateDistanceVector(speedDirection, deltaT);
             lastAction = LastAction.WALL_HIT;
         }
-        // Check players
 
+        // Checks players
         for (PlayerModel p : players) {
             HitType touche = p.hitBall(getCoord(), nextPosition, getSize(), speedDirection);
             if (touche == HitType.BALL_HIT_HORIZONTAL) {
@@ -147,7 +147,6 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         }
 
         setCoord(nextPosition);
-
         return lastAction;
     }
 
@@ -163,8 +162,8 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
     public void reset(double width, double height) {
         super.setCoord(new Vector2(width / 2, Math.random() * (2 * height / 3) + height / 6));
 
-        // Generation a random direction vector of norm this.ballAbsoluteSpeed
-        double angle = 2 * Math.random() - 1; // Angle entre -1 et 1 rad pour éviter les départs lents
+        // Generates a random direction vector of norm this.ballAbsoluteSpeed
+        double angle = 2 * Math.random() - 1; // Angle between -1 and 1 rad to avoid slow starts
         if (Math.random() > 0.5)
             angle += Math.PI; // Random side selector
 

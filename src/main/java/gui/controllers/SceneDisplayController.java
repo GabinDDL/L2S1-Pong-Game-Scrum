@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 
 /**
  * Creates a type which can hold up to 4 different states :
@@ -11,11 +11,22 @@ package gui;
 public interface SceneDisplayController {
 
     enum SceneDisplay {
-        MENU, GAME, SETTINGS, PAUSE
+        GAME, PAUSE
     };
 
+    /**
+     * Returns true if the game is running, false if the game is paused
+     */
     public boolean isInGame();
 
+    /**
+     * Returns true if the game is on pause, false if not
+     */
+    public boolean isOnPause();
+
+    /**
+     * Alterns between GAME and PAUSE
+     */
     public void pauseUnpause();
 
     public void setScene(SceneDisplay sD);

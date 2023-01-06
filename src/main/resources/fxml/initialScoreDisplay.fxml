@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<!-- This BorderPane `gameContainer` is the element containing a part of elements contained in game view
+   It displays scores and background
+ -->
+
+<Pane id="gameContainer" fx:id="game" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" stylesheets="@../css/background.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ControllerLabel">
+   <children>
+
+      <!-- Hbox containg both of the score -->
+      <HBox fx:id="hboxAB" alignment="CENTER" layoutY="10.0" prefHeight="170.0" prefWidth="1100.0">
+         <children>
+
+            <!-- Left player's score -->
+            <HBox fx:id="hboxA" alignment="CENTER" layoutX="163.0" layoutY="10.0" prefHeight="100.0" prefWidth="600.0">
+               <children>
+                  <Label fx:id="labelA" alignment="CENTER" stylesheets="@../css/brandish.css" text="0" textAlignment="CENTER" />
+               </children>
+            </HBox>
+
+            <!-- Right player's score -->
+            <HBox fx:id="hboxB" alignment="CENTER" layoutX="163.0" layoutY="10.0" prefHeight="100.0" prefWidth="600.0">
+               <children>
+                  <Label fx:id="labelB" alignment="CENTER" stylesheets="@../css/brandish.css" text="0" textAlignment="CENTER" />
+               </children>
+            </HBox>
+
+         </children>
+
+         <padding>
+            <Insets top="30.0" />
+         </padding>
+      </HBox>
+   </children>
+</Pane>

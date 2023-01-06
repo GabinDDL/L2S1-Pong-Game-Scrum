@@ -3,7 +3,7 @@ package model.interfaces;
 import javafx.scene.control.Label;
 
 /**
- * Interface for the the score object.
+ * Interface for the score object.
  */
 public interface InterfaceScore {
 

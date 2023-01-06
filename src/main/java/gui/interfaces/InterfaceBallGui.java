@@ -32,7 +32,7 @@ public interface InterfaceBallGui extends UpdatableGui, ChangeableImage {
     default void initDisplay(double scale, double xMargin) {
         getCircle().setCenterX(getCoordX() * scale + xMargin);
         getCircle().setCenterY(getCoordY() * scale);
-        ChangeableImage.super.changeColor(Color.web("46268cff"));
+        ChangeableImage.super.changeColor(Color.PINK);
     }
 
     /**

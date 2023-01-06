@@ -89,5 +89,4 @@ public class Racket implements InterfaceRacket {
     public void reset(double height) {
         racketModel.reset(height);
     }
-
 }

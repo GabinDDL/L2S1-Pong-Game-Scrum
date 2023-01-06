@@ -5,7 +5,7 @@ import model.interfaces.InterfaceRacketController.State;
 import model.interfaces.InterfaceRacketModel.HitType;
 
 /**
- * Interface for the the player model object.
+ * Interface for the player model object.
  */
 public interface InterfacePlayerModel {
 

@@ -1,4 +1,4 @@
-package model.controllers;
+package gui.controllers;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -37,9 +37,6 @@ public class ControllerFXML implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // applyFont(labelA);
-        // applyFont(labelB);
-        // applyBackgroundImage(rootPane, "terrain.png");
     }
 
     /**

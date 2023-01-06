@@ -19,7 +19,7 @@ public abstract class SolidObject implements InterfaceSolidObject {
     private double acceleration;
     private double deceleration;
 
-    // constructeurs
+    // Constructors
 
     SolidObject(Vector2 coord, double speed, double size) {
         this.coord = coord;

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<!-- This BorderPane `homeContainer` is the element containing all of the elements contained on the first page, the home page
+   It displays the Title, the Button to access Options page, the Button to access our website page and the main button to access the game
+ --> 
+<BorderPane fx:id="homeContainer" id="background" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/background.css" fx:controller="gui.controllers.HomeController"> 
+   
+   <!-- On the top on the homeContainer, we can find two buttons giving access to Options and website page-->
+   <top>
+         <AnchorPane BorderPane.alignment="CENTER">
+            <children>
+                  <!---
+                  <Rectangle fx:id="projectPage" arcHeight="5.0" arcWidth="5.0" fill="RED" height="50.0" onMouseClicked="#openProjectPage" stroke="BLACK" strokeType="INSIDE" width="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" /> 
+                  -->
+
+                  <ImageView fx:id="projectPage" fitHeight="50" fitWidth="50" onMouseClicked="#openProjectPage" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+                     <image>
+                        <!-- Title Image's URL -->
+                        <Image url="@../image/projectPageLogo.png" />
+                     </image>
+                  </ImageView>
+                  
+                  <ImageView fx:id="optionsScene" fitHeight="50.0" onMouseClicked="#loadOptions" fitWidth="50.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                     <image>
+                        <Image url="@../image/rightShortArrow.png" />
+                     </image>
+                  </ImageView>
+            </children>
+         </AnchorPane>
+   </top>
+   
+   <!-- In the center, we encounter a Vbox (Vertical container) carrying the Title and the main Button -->
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+
+            <!-- Title -->
+            <ImageView fitHeight="339.0" fitWidth="658.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <!-- Title Image's URL -->
+                  <Image url="@../image/Title.png" />
+               </image>
+            </ImageView>
+
+            <!-- Play Button -->
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#loadClassicPongMenuSpace" prefHeight="112.0" prefWidth="291.0" text="PLAY" textAlignment="CENTER">
+               <font>
+                  <Font name="Franklin Gothic Demi" size="50.0" />
+               </font>
+            </Button>
+
+         </children>
+      </VBox>
+   </center>
+
+   <!-- Music Button -->
+   <bottom>
+         <BorderPane prefHeight="73.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
+            <right>
+               <ImageView fx:id="music" fitHeight="99.0" fitWidth="99.0" pickOnBounds="true" onMouseClicked="#changeStateSound" preserveRatio="true" BorderPane.alignment="CENTER">
+                  <image>
+                     <Image url="@../image/music.png" />
+                  </image>
+               </ImageView>
+            </right>
+         </BorderPane>
+      </bottom>
+
+</BorderPane>
