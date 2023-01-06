@@ -12,8 +12,11 @@ import javafx.stage.Stage;
 import model.MediaHandler;
 
 /**
- * {@code App} represents the primary and main element of our application. 
- * <p> App is graphically a Window that will be the parent of all the elements of our game. </p>
+ * {@code App} represents the primary and main element of our application.
+ * <p>
+ * App is graphically a Window that will be the parent of all the elements of
+ * our game.
+ * </p>
  */
 public class App extends Application {
 
@@ -43,7 +46,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        
+
         // root is the pane containing all the game
         // Transitions, addition of objects, etc are made in it
         Pane root = new Pane();

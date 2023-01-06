@@ -42,7 +42,7 @@ public class BallGui implements InterfaceBallGui {
         ball.setRadius(radius);
     }
 
-    public void setCoords(Vector2 coords) {
+    public void setCoord(Vector2 coords) {
         ball.setCenterX(coords.getXdir());
         ball.setCenterY(coords.getYdir());
     }

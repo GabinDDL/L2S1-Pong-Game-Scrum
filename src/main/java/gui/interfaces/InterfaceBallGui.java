@@ -21,7 +21,7 @@ public interface InterfaceBallGui extends UpdatableGui, ChangeableImage {
     // Setters
     void setRadius(double radius);
 
-    void setCoords(Vector2 coords);
+    void setCoord(Vector2 coords);
 
     /**
      * Initialise l'affichage de la balle dans GameView

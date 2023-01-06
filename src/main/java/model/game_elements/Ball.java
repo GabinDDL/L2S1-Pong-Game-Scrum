@@ -61,8 +61,8 @@ public class Ball implements InterfaceBall {
     }
 
     @Override
-    public void setCoords(Vector2 coords) {
-        ballGui.setCoords(coords);
+    public void setCoord(Vector2 coords) {
+        ballGui.setCoord(coords);
     }
 
     // Methods

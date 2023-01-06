@@ -33,16 +33,16 @@ public class Court implements InterfaceCourt {
     private final int pointsLimit = App.getScoreLimit();
 
     // Default racket parameters
-    private static final double INITIAL_RACKET_HEIGHT = 100.0;
-    private static final double INITIAL_RACKET_WIDTH = 10.0;
-    private static final double INITIAL_RACKET_ACCELERATION = 600;
-    private static final double INITIAL_RACKET_MAJOR_SPEED = 600;
-    private static final double INITIAL_RACKET_DECELERATION = 0.90;
+    public static final double INITIAL_RACKET_HEIGHT = 100.0;
+    public static final double INITIAL_RACKET_WIDTH = 10.0;
+    public static final double INITIAL_RACKET_ACCELERATION = 600;
+    public static final double INITIAL_RACKET_MAJOR_SPEED = 600;
+    public static final double INITIAL_RACKET_DECELERATION = 0.90;
 
     // Default ball parameters
-    private static final double INITIAL_BALL_SPEED = 400.0;
-    private static final double INITIAL_BALL_RADIUS = 10.0;
-    private static final double INITIAL_MAJOR_SPEED = 850.0;
+    public static final double INITIAL_BALL_SPEED = 400.0;
+    public static final double INITIAL_BALL_RADIUS = 10.0;
+    public static final double INITIAL_MAJOR_SPEED = 850.0;
 
     // Instance state
     private final Player playerA, playerB;
@@ -146,7 +146,8 @@ public class Court implements InterfaceCourt {
     }
 
     /**
-     * @return every object of the court (that needs to be updated) in a List : players, balls, etc.
+     * @return every object of the court (that needs to be updated) in a List :
+     *         players, balls, etc.
      */
     public List<UpdatableGui> getListObjects() {
         List<UpdatableGui> list = new ArrayList<UpdatableGui>();
@@ -218,7 +219,8 @@ public class Court implements InterfaceCourt {
     // Methods
 
     /**
-     * Checks if the ball is outside, increments score and checks if there is win or a
+     * Checks if the ball is outside, increments score and checks if there is win or
+     * a
      * service
      * 
      * @param deltaT time passed
@@ -231,7 +233,8 @@ public class Court implements InterfaceCourt {
         for (int i = 0; i < ballList.size(); i++) {
             if (ballList.get(i).isOutside(width)) {
 
-                if (canSoundsBePlayed()) soundLosing.play();
+                if (canSoundsBePlayed())
+                    soundLosing.play();
 
                 if (ballList.get(i).getCoordX() < 0) {
                     if (aleaGame != null && aleaGame.getTypeAlea() == TypeAlea.doublePoint) {
@@ -282,7 +285,6 @@ public class Court implements InterfaceCourt {
      * 
      * @param deltaT time passed
      */
-
     public void update(double deltaT) {
         if (playerA instanceof Bot) {
             ((Bot) playerA).update(deltaT, height, width, ballList);
@@ -299,10 +301,12 @@ public class Court implements InterfaceCourt {
         for (Ball ball : ballList) {
             switch (ball.update(deltaT, height, getPlayersModel())) {
                 case RACKET_HIT:
-                if (canSoundsBePlayed()) soundBallRacket.play();
+                    if (canSoundsBePlayed())
+                        soundBallRacket.play();
                     break;
                 case WALL_HIT:
-                if (canSoundsBePlayed()) soundBallMur.play();
+                    if (canSoundsBePlayed())
+                        soundBallMur.play();
                     break;
                 case NONE:
                     break;

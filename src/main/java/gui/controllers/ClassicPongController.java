@@ -37,11 +37,11 @@ import model.MediaHandler;
 import model.game_elements.Player;
 import model.interfaces.InterfaceRacketController.State;
 
-/** 
+/**
  * Class which allows to play the main gameplay
-*/
+ */
 public class ClassicPongController implements Initializable {
-    
+
     // Elements created and described in classicPongMenu.fxml
     @FXML
     BorderPane classicPongMenuContainer;
@@ -66,7 +66,8 @@ public class ClassicPongController implements Initializable {
     private boolean inReset = false;
 
     /**
-     * Class controling what's, and more importantly when, being displayed on the screen
+     * Class controling what's, and more importantly when, being displayed on the
+     * screen
      */
     private static class SceneDisplayModifier implements SceneDisplayController {
 
@@ -110,16 +111,15 @@ public class ClassicPongController implements Initializable {
         buttons.setVisible(display);
         buttons.setDisable(!display);
     }
-    
+
     @Override
-	public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {
 
         quitButton = new Button("MENU");
 
         restartButton = new Button("RESTART") {
             @Override
-            protected double computeMaxWidth(double height)
-            {
+            protected double computeMaxWidth(double height) {
                 return this.prefWidth(height);
             }
         };
@@ -130,17 +130,15 @@ public class ClassicPongController implements Initializable {
         quitButton.setPrefSize(150, 50);
         quitButton.setFont(new Font("Brandish", 20.0));
 
-
         buttons = new BorderPane(null, null, restartButton, null, quitButton);
         buttons.setPadding(new Insets(300, 300, 0, 300));
         buttons.setMinWidth(1100.0);
 
         restartButton.addEventHandler(ActionEvent.ACTION, (ActionEvent e) -> {
-            
-            
+
             court.reset();
             gameView.updateDisplays();
-            
+
             displayPauseButtons(false);
 
             launchTimer(gameplay, court, gameView, 3, new EndFunction() {
@@ -161,41 +159,55 @@ public class ClassicPongController implements Initializable {
     }
 
     /**
-     *  Loads the animation translating to the HomePage's Pane (above)
+     * Loads the animation translating to the HomePage's Pane (above)
      * 
      * @param event
      * @throws IOException
      */
     @FXML
     public void loadHomePage(MouseEvent event) throws IOException {
-        
+
         TransitionClass.transition(false, false, "home.fxml", Interpolator.EASE_IN, classicPongMenuContainer, null);
     }
 
     public void loadMenu(KeyEvent event) throws IOException {
-        
+
         gameView.stopMusicAndSounds();
 
-        TransitionClass.transition(false, false, "classicPongMenu.fxml", Interpolator.EASE_IN, (Parent) gameplay, new EndFunction() {
-            public void end() {
-                sceneDisplayModifier.pauseUnpause();
-                inReset = true;
-            }
-        });
+        TransitionClass.transition(false, false, "classicPongMenu.fxml", Interpolator.EASE_IN, (Parent) gameplay,
+                new EndFunction() {
+                    public void end() {
+                        sceneDisplayModifier.pauseUnpause();
+                        inReset = true;
+                    }
+                });
     }
 
     /**
-     *  Loads the animation translating to the BotPage's Pane (above)
+     * Loads the animation translating to the BotPage's Pane (above)
      * 
      * @param event
      * @throws IOException
      */
     @FXML
     public void loadBotPage(MouseEvent event) throws IOException {
-        
-        TransitionClass.transition(true, true, "botPongMenu.fxml", Interpolator.EASE_IN, classicPongMenuContainer, null);
+
+        TransitionClass.transition(true, true, "botPongMenu.fxml", Interpolator.EASE_IN, classicPongMenuContainer,
+                null);
     }
 
+    /**
+     * Loads the animation translating to the BotPage's Pane (above)
+     * 
+     * @param event
+     * @throws IOException
+     */
+    @FXML
+    public void loadServerPage(MouseEvent event) throws IOException {
+
+        TransitionClass.transition(true, false, "server.fxml", Interpolator.EASE_IN, classicPongMenuContainer,
+                null);
+    }
 
     /**
      * Launches the gameplay. Starts with an animation.
@@ -205,13 +217,13 @@ public class ClassicPongController implements Initializable {
      */
     @FXML
     public void playGame(MouseEvent event) throws IOException {
-        
+
         // Refers to gameScene initialized in App.java
         Scene gameScene = classicPongMenuContainer.getScene();
 
         // Getting .fxml file's URL to load the Score display style.
         URL fxmlUrl = MediaHandler.getFXMLURL("init.fxml");
-        FXMLLoader loader =  new FXMLLoader(fxmlUrl);
+        FXMLLoader loader = new FXMLLoader(fxmlUrl);
         gameplay = loader.load();
 
         // Adding StyleClass, useful in `background.css`
@@ -220,7 +232,6 @@ public class ClassicPongController implements Initializable {
         gameplay.getChildren().addAll(buttons);
         buttons.setDisable(true);
         buttons.setVisible(false);
-        
         // Associate Labels to Players
         // Initialize player
         ControllerFXML labels = loader.getController();
@@ -238,7 +249,8 @@ public class ClassicPongController implements Initializable {
             // System.out.println("Y" + e.getY());
         });
 
-        // We bind the pressing of the keys to the movement of the rackets and the desire to put the gameplay in pause
+        // We bind the pressing of the keys to the movement of the rackets and the
+        // desire to put the gameplay in pause
         gameScene.setOnKeyPressed((KeyEvent ev) -> {
             switch (ev.getCode()) {
                 case SHIFT:
@@ -256,7 +268,7 @@ public class ClassicPongController implements Initializable {
                 case ESCAPE:
                     if (!inReset) {
                         sceneDisplayModifier.pauseUnpause();
-                        
+
                         if (sceneDisplayModifier.isInGame()) {
                             displayPauseButtons(false);
                         } else {
@@ -304,27 +316,30 @@ public class ClassicPongController implements Initializable {
 
         court = new Court(playerA, playerB, 1000, 600, 1.0, App.aleas);
         court.setGameRoot(gameplay);
-    
+
         this.gameView = new GameView(court, gameplay, 1.0, sceneDisplayModifier);
         court.setxMargin(gameView.getxMargin());
-        
-        // Starts the transition to the gameplay, starts a decount of 3 at the end of the animation.
-        TransitionClass.classicGameTransition(false, true, Interpolator.EASE_IN, classicPongMenuContainer, gameplay, new EndFunction() {
-            public void end() {
-                launchTimer(gameplay, court, gameView, 3, new EndFunction() {
+
+        // Starts the transition to the gameplay, starts a decount of 3 at the end of
+        // the animation.
+        TransitionClass.classicGameTransition(false, true, Interpolator.EASE_IN, classicPongMenuContainer, gameplay,
+                new EndFunction() {
                     public void end() {
-                        gameView.animate();
+                        launchTimer(gameplay, court, gameView, 3, new EndFunction() {
+                            public void end() {
+                                gameView.animate();
+                            }
+                        });
                     }
                 });
-            }
-        });
 
         court.update(0);
     }
 
     /**
      * Add a counter of 'duration' in the center of court
-     * When finished, if the counter has reached 0, the gameplay is launched, else the function is once again called with duration - 1
+     * When finished, if the counter has reached 0, the gameplay is launched, else
+     * the function is once again called with duration - 1
      */
     private void launchTimer(Pane gameplay, Court court, GameView gameView, int duration, EndFunction endfunc) {
 
@@ -334,7 +349,8 @@ public class ClassicPongController implements Initializable {
         Text timer = new Text("" + duration);
         timer.setFill(Color.GOLDENROD);
 
-        // Defines a new StackPane containing the timer just created, sets its height, width and alignment
+        // Defines a new StackPane containing the timer just created, sets its height,
+        // width and alignment
         StackPane compteur = new StackPane(timer);
 
         compteur.setLayoutX((court.getWidth() * gameView.getScale()) / 2 + gameView.getMarginX());
@@ -343,29 +359,29 @@ public class ClassicPongController implements Initializable {
         // Adds the counter to the pane
         gameplay.getChildren().addAll(compteur);
 
-        // Creates a new ScaleTransition that will increase the scale size of the timer's text
+        // Creates a new ScaleTransition that will increase the scale size of the
+        // timer's text
         ScaleTransition st = new ScaleTransition(Duration.seconds(1), timer);
-        
+
         st.setByX(10f);
         st.setByY(10f);
         timer.setFont(Font.font(timer.getFont().getFamily(), 15));
-        
-        // At the end of the animation, if the timer > 1, the timer is launched again with duration minus one
+
+        // At the end of the animation, if the timer > 1, the timer is launched again
+        // with duration minus one
         // Else the gameplay is animated
         st.setOnFinished(e -> {
             gameplay.getChildren().remove(compteur);
             inReset = false;
 
             if (duration > 1) {
-                launchTimer(gameplay, court, gameView, duration-1, endfunc);
+                launchTimer(gameplay, court, gameView, duration - 1, endfunc);
             } else {
                 endfunc.end();
             }
         });
-        
+
         // Launches the animation
         st.play();
     }
 }
-
-

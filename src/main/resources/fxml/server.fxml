@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane fx:id="serverPongMenuContainer" id="background" stylesheets="@../css/background.css"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ServerPongController">
+   <right>
+      <ImageView fx:id="rightArrow" fitHeight="75.0" fitWidth="40.0" onMouseClicked="#loadClassicPage" BorderPane.alignment="CENTER">
+         <image>
+            <Image url="@../image/rightArrow.png" />
+         </image>
+         <BorderPane.margin>
+            <Insets right="20.0" bottom = "300" />
+         </BorderPane.margin>
+      </ImageView>
+   </right>
+   <center>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="201.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Ip address: " prefWidth="150.0" style="-fx-text-fill: white;"/>
+            <TextField fx:id="serverIpTextField" prefWidth="200.0" style="-fx-text-fill: white; -fx-background-color: #553189; -fx-border-color: white; -fx-border-width: 2;" />
+            <Button mnemonicParsing="false" text="Join Server" onMouseClicked="#playGame" prefWidth="200.0" />
+            <Button mnemonicParsing="false" text="Host Server" onMouseClicked="#startServer" prefWidth="200.0" />
+         </children>
+      </HBox>
+   </center>
+   <top>
+      <Text strokeType="OUTSIDE" fill="WHITE" strokeWidth="0.0" text="Online" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="40.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets top="50.0" />
+         </BorderPane.margin>
+      </Text>
+   </top>
+</BorderPane>
