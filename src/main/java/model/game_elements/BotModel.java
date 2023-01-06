@@ -139,7 +139,7 @@ public class BotModel extends PlayerModel {
                     double distanceTemp = Math.abs(ballPredicted.getSpeedDirectionX()) * timeTemp;
 
                     y = 0;
-                    if (isPlayerLeft) {
+                    if (this.isPlayerLeft()) {
                         x = x - distanceTemp;
                     } else {
                         x = x + distanceTemp;
@@ -160,7 +160,7 @@ public class BotModel extends PlayerModel {
                     double distanceTemp = Math.abs(ballPredicted.getSpeedDirectionX()) * timeTemp;
 
                     y = height;
-                    if (isPlayerLeft) {
+                    if (this.isPlayerLeft()) {
                         x = x - distanceTemp;
                     } else {
                         x = x + distanceTemp;

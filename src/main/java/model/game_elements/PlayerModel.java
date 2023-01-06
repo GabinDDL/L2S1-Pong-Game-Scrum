@@ -20,6 +20,7 @@ public class PlayerModel implements InterfacePlayerModel {
     // Player constructor if we want to associate the Player with his points later
     public PlayerModel(int points) {
         this.points = points;
+        racket = new RacketModel(new Vector2(0, 0), 0, 0, 0);
     }
 
     public PlayerModel() {

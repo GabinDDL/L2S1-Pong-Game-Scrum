@@ -65,6 +65,10 @@ public class Ball implements InterfaceBall {
         ballGui.setCoord(coords);
     }
 
+    public void setSpeedDirection(Vector2 speedDirection) {
+        ballModel.setSpeedDirection(speedDirection);
+    }
+
     // Methods
 
     /**

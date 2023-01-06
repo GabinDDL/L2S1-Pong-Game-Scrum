@@ -16,6 +16,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         super(coord, size); // speed = 200, size = 10.0 (radius)
         setInitialSpeed(initialSpeed);
         this.setMajorSpeed(initialMajorSpeed);
+        speedDirection = new Vector2(0, 0);
     }
 
     // Getters
@@ -28,7 +29,17 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         return speedDirection.getYdir();
     }
 
-    // Methods
+    public double getSpeedAngle() {
+        return speedDirection.getAngle();
+    }
+
+    // Setter
+
+    public void setSpeedDirection(Vector2 speedDirection) {
+        this.speedDirection = speedDirection;
+    }
+
+    // méthodes
 
     /**
      * @return true if the ball is outside
@@ -80,7 +91,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
         switch (player.getState()) {
             case GOING_UP:
                 if (player.isPlayerLeft()) {
-                    newDirection.addAngleRestricted(23 * Math.PI / 12);
+                    newDirection.addAngleRestricted(-Math.PI / 12);
                     if (newDirection.getXdir() <= 0) {
                         newDirection = speedDirection;
                     }
@@ -99,7 +110,7 @@ public class BallModel extends SolidObject implements InterfaceBallModel {
                         newDirection = speedDirection;
                     }
                 } else {
-                    newDirection.addAngleRestricted(23 * Math.PI / 12);
+                    newDirection.addAngleRestricted(-Math.PI / 12);
                     if (newDirection.getXdir() >= 0) {
                         newDirection = speedDirection;
                     }
