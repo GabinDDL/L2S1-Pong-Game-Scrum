@@ -10,15 +10,14 @@ import javafx.scene.shape.Shape;
 /**
  * This class represents the ball of the game. It includes the graphical part of
  * the ball and the model of the ball.
- * 
  */
 public class Ball implements InterfaceBall {
     private BallGui ballGui;
     private BallModel ballModel;
 
     // Constructor
-    public Ball(Vector2 coord, double InitialSpeed, double size) {
-        ballModel = new BallModel(coord, InitialSpeed, size);
+    public Ball(Vector2 coord, double initialSpeed, double initialMajorSpeed, double size) {
+        ballModel = new BallModel(coord, initialSpeed, initialMajorSpeed, size);
         ballGui = new BallGui(coord, size);
     }
 
@@ -62,8 +61,12 @@ public class Ball implements InterfaceBall {
     }
 
     @Override
-    public void setCoords(Vector2 coords) {
-        ballGui.setCoords(coords);
+    public void setCoord(Vector2 coords) {
+        ballGui.setCoord(coords);
+    }
+
+    public void setSpeedDirection(Vector2 speedDirection) {
+        ballModel.setSpeedDirection(speedDirection);
     }
 
     // Methods
@@ -71,8 +74,8 @@ public class Ball implements InterfaceBall {
     /**
      * @return true if the ball is outside
      */
-    public boolean isOutside(double deltaT, double width) {
-        return ballModel.isOutside(deltaT, width);
+    public boolean isOutside(double width) {
+        return ballModel.isOutside(width);
     }
 
     // Overrides from InterfaceBall

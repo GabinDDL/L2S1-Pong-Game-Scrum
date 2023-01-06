@@ -4,6 +4,9 @@ import model.Vector2;
 import model.interfaces.InterfaceSolidObject;
 import model.interfaces.InterfaceRacketController.State;
 
+/**
+ * Abstract class representing an object with a hitbox in the game.
+ */
 public abstract class SolidObject implements InterfaceSolidObject {
     private Vector2 coord;
 
@@ -16,7 +19,7 @@ public abstract class SolidObject implements InterfaceSolidObject {
     private double acceleration;
     private double deceleration;
 
-    // constructeurs
+    // Constructors
 
     SolidObject(Vector2 coord, double speed, double size) {
         this.coord = coord;
@@ -84,12 +87,12 @@ public abstract class SolidObject implements InterfaceSolidObject {
         coord = c;
     }
 
-    public void setCoordX(double Xdir) {
-        coord.setDirection(Xdir, coord.getYdir());
+    public void setCoordX(double xDir) {
+        coord.setDirection(xDir, coord.getYdir());
     }
 
-    public void setCoordY(double Ydir) {
-        coord.setDirection(coord.getXdir(), Ydir);
+    public void setCoordY(double yDir) {
+        coord.setDirection(coord.getXdir(), yDir);
     }
 
     // Size

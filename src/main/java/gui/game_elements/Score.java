@@ -1,10 +1,8 @@
 package gui.game_elements;
 
-import model.interfaces.InterfaceScore;
-
 import javafx.scene.control.Label;
 
-public class Score implements InterfaceScore {
+public class Score {
 
     private int points;
     private final Label label;
@@ -44,13 +42,17 @@ public class Score implements InterfaceScore {
 
     // Methods
 
-    @Override
+    /**
+     * Adds one to the score and updates the label of the score
+     */
     public void incrementScore() {
         points++;
         label.setText(String.valueOf(points));
     }
 
-    @Override
+    /**
+     * Resets the points at 0 and updates the label
+     */
     public void resetScore() {
         points = 0;
         label.setText("0");

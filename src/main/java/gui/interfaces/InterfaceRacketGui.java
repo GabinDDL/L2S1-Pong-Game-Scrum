@@ -2,7 +2,6 @@ package gui.interfaces;
 
 import model.Vector2;
 import model.interfaces.InterfaceRacketController.State;
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -17,6 +16,8 @@ public interface InterfaceRacketGui extends UpdatableGui, ChangeableImage {
     public double getCoordY();
 
     public double getSize();
+
+    public double getWidth();
 
     State getState();
 
@@ -68,9 +69,26 @@ public interface InterfaceRacketGui extends UpdatableGui, ChangeableImage {
      * 
      * @param double scale
      */
+    default void updateDisplay(double scale, double xMargin) {
+        getRectangle().setY(getCoordY() * scale);
+
+        if (getCoordX() == 0)
+            getRectangle().setX(xMargin - getWidth());
+        else
+            getRectangle().setX(getCoordX() * scale + xMargin);
+    }
+
+    /**
+     * Updates the display of the racket
+     * 
+     * @param double scale
+     */
     @Override
     default void updateDisplay(double scale, double[] args) {
-        getRectangle().setY(getCoordY() * scale);
+        if (args != null && args.length == 1)
+            updateDisplay(scale, args[0]);
+        else
+            getRectangle().setY(getCoordY() * scale);
 
     }
 
