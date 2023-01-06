@@ -12,11 +12,11 @@ Avoir une machine virtuelle Java version 17
 # Exemples
 
 ## Exemple avec Windows
-
-- Extraire `INSTALL\PongWorld-Windows.zip`
-- Exécuter `INSTALL\PongWorld-Windows\bin\pong.bat`
+- Télécharger `INSTALL\PongWorld-Windows.zip`
+- Extraire `<Votre dossier où vous avez téléchargé le .zip>\PongWorld-Windows.zip`
+- Exécuter `<Votre dossier où vous avez téléchargé le .zip>\PongWorld-Windows\bin\pong.bat`
 
 ## Exemple avec Linux
-
-- Extraire `INSTALL/PongWorld-Linux.zip`
-- Exécuter `INSTALL/PongWorld-Linux/bin/pong`
+- Télécharger `INSTALL/PongWorld-Linux.zip`
+- Extraire `<Votre dossier où vous avez téléchargé le .zip>/PongWorld-Linux.zip`
+- Exécuter `<Votre dossier où vous avez téléchargé le .zip>/PongWorld-Linux/bin/pong`
