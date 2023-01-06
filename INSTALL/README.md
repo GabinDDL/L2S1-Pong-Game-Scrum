@@ -13,10 +13,10 @@ Avoir une machine virtuelle Java version 17
 
 ## Exemple avec Windows
 
-- Extraire `INSTALL\pong-shadow-TestInstaller_Windows.zip`
-- Exécuter `INSTALL\pong-shadow-TestInstaller_Windows\bin\pong.bat`
+- Extraire `INSTALL\PongWorld-Windows.zip`
+- Exécuter `INSTALL\PongWorld-Windows\bin\pong.bat`
 
 ## Exemple avec Linux
 
-- Extraire `INSTALL/pong-shadow-TestInstaller_Linux.zip`
-- Exécuter `INSTALL/pong-shadow-TestInstaller_Linux/bin/pong`
+- Extraire `INSTALL/PongWorld-Linux.zip`
+- Exécuter `INSTALL/PongWorld-Linux/bin/pong`
