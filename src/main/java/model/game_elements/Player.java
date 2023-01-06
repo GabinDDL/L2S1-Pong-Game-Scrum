@@ -117,6 +117,9 @@ public class Player implements InterfacePlayer {
         playerGui.incrementScore();
     }
 
+    /**
+     * Resets the player's score on the graphical and model part
+     */
     @Override
     public void resetScore() {
         playerModel.resetPoints();

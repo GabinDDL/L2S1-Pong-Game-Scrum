@@ -77,10 +77,8 @@ public class BotModel extends PlayerModel {
             else if (this.getState() != State.IDLE) {
                 this.setState(State.IDLE);
             }
-
         } else {
             // the bot goes to the middle of the screen
-
             if (getRacket().getCoordY() > height / 2.) {
                 this.setState(State.GOING_UP);
             } else if (getRacket().getCoordY() < height / 2.) {
@@ -106,7 +104,7 @@ public class BotModel extends PlayerModel {
     }
 
     /**
-     * Update the next predictedBallPosition if the bot needs it
+     * Updates the next predictedBallPosition if the bot needs it
      * 
      * @param height
      * @param ballPredicted
@@ -177,7 +175,7 @@ public class BotModel extends PlayerModel {
     }
 
     /**
-     * Update the state of the ball with the next position of the ball
+     * Updates the state of the ball with the next position of the ball
      * 
      * @param height
      * @param listBall
@@ -206,12 +204,12 @@ public class BotModel extends PlayerModel {
     }
 
     /**
-     * Set the new State with the difficulty
+     * Sets the new State with the difficulty
      * <ul>
-     * <li>EASY : Follow the ball</li>
-     * <li>NORMAL : Follow the ball then predict the position when the midfield is
+     * <li>EASY : Follows the ball</li>
+     * <li>NORMAL : Follows the ball then predicts the position when the midfield is
      * reached</li>
-     * <li>HARD : Predict the position of the ball</li>
+     * <li>HARD : Predicts the position of the ball</li>
      * </ul>
      * 
      * @param height

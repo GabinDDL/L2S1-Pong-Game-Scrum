@@ -6,7 +6,7 @@ import model.interfaces.InterfaceRacketModel;
 import model.interfaces.InterfaceRacketController.State;
 
 /**
- * This class represents the model of the racket. It doesn't include the gui of
+ * This class represents the model of the racket. It doesn't include the GUI of
  * the racket.
  */
 public class RacketModel extends SolidObject implements InterfaceRacketModel {
@@ -16,7 +16,7 @@ public class RacketModel extends SolidObject implements InterfaceRacketModel {
     private boolean ballJustTouchLeftRacket;
     private boolean ballJustTouchRightRacket;
 
-    // constructeur
+    // Constructor
     public RacketModel(Vector2 coord, double speed, double size, double racketWidth) {
         super(coord, speed, size);
         this.racketWidth = racketWidth;

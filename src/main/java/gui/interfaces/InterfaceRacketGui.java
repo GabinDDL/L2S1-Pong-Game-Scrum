@@ -2,7 +2,7 @@ package gui.interfaces;
 
 import model.Vector2;
 import model.interfaces.InterfaceRacketController.State;
-
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -50,7 +50,7 @@ public interface InterfaceRacketGui extends UpdatableGui, ChangeableImage {
         getRectangle().setHeight(getSize() * scale);
         getRectangle().setWidth(thickness);
 
-        // ChangeableImage.super.changeColor(Color.RED);
+        ChangeableImage.super.changeColor(Color.RED);
 
         if (getCoordX() == 0)
             getRectangle().setX(xMargin - thickness);

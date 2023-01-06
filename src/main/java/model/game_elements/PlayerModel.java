@@ -6,13 +6,12 @@ import model.interfaces.InterfaceRacketController.State;
 import model.interfaces.InterfaceRacketModel.HitType;
 
 /**
- * This class represents the model of the player. It doesn't include the gui of
+ * This class represents the model of the player. It doesn't include the GUI of
  * the player
  */
 public class PlayerModel implements InterfacePlayerModel {
 
     private RacketModel racket;
-
     private int points;
 
     // Constructors
@@ -127,5 +126,4 @@ public class PlayerModel implements InterfacePlayerModel {
     public void resetPoints() {
         points = 0;
     }
-
 }

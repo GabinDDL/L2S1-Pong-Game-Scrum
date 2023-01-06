@@ -5,10 +5,19 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../css/background.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="model.controllers.ControllerFXML">
+<!-- This BorderPane `gameContainer` is the element containing a part of elements contained in game view
+   It displays scores and background
+ -->
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../css/background.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.ControllerFXML">
+   
    <top>
+
+      <!-- Hbox containg both of the score -->
       <HBox fx:id="hboxAB" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+   
          <children>
+
+            <!-- Left player's score -->
             <HBox fx:id="hboxA" alignment="CENTER_RIGHT" layoutX="163.0" layoutY="10.0" prefHeight="100.0" prefWidth="600.0" stylesheets="@../css/brandish.css">
                <children>
                   <Label fx:id="labelA" alignment="CENTER" contentDisplay="CENTER" text="0" />
@@ -17,6 +26,8 @@
                   <Insets right="80.0" />
                </padding>
             </HBox>
+            
+            <!-- Right player's score -->
             <HBox fx:id="hboxB" alignment="CENTER_LEFT" layoutX="163.0" layoutY="10.0" prefHeight="100.0" prefWidth="600.0" stylesheets="@../css/brandish.css">
                <children>
                   <Label fx:id="labelB" alignment="CENTER" contentDisplay="CENTER" text="0" />
@@ -25,13 +36,18 @@
                   <Insets left="80.0" />
                </padding>
             </HBox>
+
          </children>
+         
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
+         
          <padding>
             <Insets top="30.0" />
          </padding>
+
       </HBox>
    </top>
+
 </BorderPane>

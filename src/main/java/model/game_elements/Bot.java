@@ -13,7 +13,6 @@ public class Bot extends Player implements InterfaceHasDifficulty {
     private Difficulty difficulty;
 
     // Constructors
-
     public Bot(Racket racket, Score score, Difficulty difficulty) {
         playerModel = new BotModel(racket.getRacketModel(), score.getPoints());
         this.playerGui = new PlayerGui(racket.getRacketGui(), score);
@@ -38,14 +37,13 @@ public class Bot extends Player implements InterfaceHasDifficulty {
     }
 
     // Methods
-
     @Override
     public void resetRacket(double height) {
         ((BotModel) playerModel).reset(height);
     }
 
     /**
-     * Reset hasPrivate and the state of the bot
+     * Reset hasPredictionPosition to false
      */
     public void resetPredict() {
         switch (difficulty) {

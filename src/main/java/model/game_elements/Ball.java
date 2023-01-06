@@ -10,7 +10,6 @@ import javafx.scene.shape.Shape;
 /**
  * This class represents the ball of the game. It includes the graphical part of
  * the ball and the model of the ball.
- * 
  */
 public class Ball implements InterfaceBall {
     private BallGui ballGui;

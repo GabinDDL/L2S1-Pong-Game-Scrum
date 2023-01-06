@@ -10,11 +10,10 @@ import javax.sound.sampled.AudioInputStream;
 import model.MediaHandler;
 
 public class Sound {
-	private Clip clip; // clip qui va être joué
-	private boolean first; // First repond à la question : Est ce la première fois que le morceau est joué
-							// ?
+	private Clip clip; // clip to be played
+	private boolean first; // First answers the question : Is it the first time the Clip is played ?
 
-	// constructeurs
+	// Constructors
 	public Sound(String name) {
 		try {
 			first = true;
@@ -28,7 +27,9 @@ public class Sound {
 		}
 	}
 
-	// Joue le son
+	/**
+	 * Plays the sound
+	 */
 	public void play() {
 		if (first) {
 			this.clip.loop(0);
@@ -38,12 +39,16 @@ public class Sound {
 		}
 	}
 
-	// Stop le son
+	/**
+	 * Stops the sound
+	 */
 	public void stop() {
 		this.clip.stop();
 	}
 
-	// Joue un son en boucle
+	/**
+	 * Play the sound in loop
+	 */
 	public void loop() {
 		this.clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}

@@ -1,11 +1,16 @@
 package model;
 
+import gui.interfaces.UpdatableGui;
+
+import gui.App;
+
+import model.interfaces.InterfaceCourt;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import gui.Sound;
-import gui.interfaces.UpdatableGui;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import model.game_elements.Alea;
 import model.game_elements.Ball;
@@ -14,17 +19,18 @@ import model.game_elements.Player;
 import model.game_elements.PlayerModel;
 import model.game_elements.Racket;
 import model.interfaces.InterfaceAlea.TypeAlea;
-import model.interfaces.InterfaceCourt;
 
 public class Court implements InterfaceCourt {
 
-    private BorderPane gameRoot;
+    private Pane gameRoot;
     private double xMargin;
     private double scale;
 
     // instance parameters
     private final double width, height; // m
-    private final int pointsLimit;
+
+    // Score limit. When reached, the game starts over.
+    private final int pointsLimit = App.getScoreLimit();
 
     // Default racket parameters
     private static final double INITIAL_RACKET_HEIGHT = 100.0;
@@ -38,25 +44,34 @@ public class Court implements InterfaceCourt {
     private static final double INITIAL_BALL_RADIUS = 10.0;
     private static final double INITIAL_MAJOR_SPEED = 850.0;
 
-    // instance state
+    // Instance state
     private final Player playerA, playerB;
     private ArrayList<Ball> ballList; // list of all balls of the game
     private Alea aleaGame;
 
-    private Sound soundPerdu;
-    private Sound soundBallRacket;
-    private Sound soundBallMur;
+    private Sound soundLosing = new Sound("Sound Perdu.wav"); // everytime a player scores
+    private Sound soundBallRacket = new Sound("Bruitage ball racket.wav"); // everytime a ball hits a racket
+    private Sound soundBallMur = new Sound("Bruitage ball mur.wav"); // everytime a ball hits a wall
+
+    private boolean isSoundsActive = true;
+
+    // Methods to stop sounds to be produced when court isn't displayed anymore
+    public void stopSounds() {
+        isSoundsActive = false;
+    }
+
+    public boolean canSoundsBePlayed() {
+        return isSoundsActive && App.soundsButton;
+    }
 
     // Constructor
 
-    public Court(Player playerA, Player playerB, double width, double height, int pointsLimit, double scale,
+    public Court(Player playerA, Player playerB, double width, double height, double scale,
             boolean alea) {
         this.scale = scale;
 
         this.width = width;
         this.height = height;
-
-        this.pointsLimit = pointsLimit;
 
         var racketA = new Racket(new Vector2(0, 0), 0, INITIAL_RACKET_WIDTH, INITIAL_RACKET_HEIGHT);
         playerA.setRacket(racketA);
@@ -75,7 +90,7 @@ public class Court implements InterfaceCourt {
 
         serve(0);
 
-        soundPerdu = new Sound("Sound Perdu.wav"); // à chaque point marqué
+        soundLosing = new Sound("Sound Perdu.wav"); // à chaque point marqué
         soundBallRacket = new Sound("Bruitage ball racket.wav"); // impact avec une raquette
         soundBallMur = new Sound("Bruitage ball mur.wav"); // impact avec un mur
 
@@ -84,8 +99,8 @@ public class Court implements InterfaceCourt {
         }
     }
 
-    public Court(Player playerA, Player playerB, double width, double height, double scale, boolean alea) {
-        this(playerA, playerB, width, height, 0, scale, alea);
+    Court(Court c) {
+        this(c.playerA, c.playerB, c.width, c.height, c.scale, c.aleaGame != null);
     }
 
     // Getters
@@ -130,6 +145,9 @@ public class Court implements InterfaceCourt {
         return xMargin;
     }
 
+    /**
+     * @return every object of the court (that needs to be updated) in a List : players, balls, etc.
+     */
     public List<UpdatableGui> getListObjects() {
         List<UpdatableGui> list = new ArrayList<UpdatableGui>();
         list.add(playerA);
@@ -150,7 +168,7 @@ public class Court implements InterfaceCourt {
 
     // Setters
 
-    public void setGameRoot(BorderPane gameRoot) {
+    public void setGameRoot(Pane gameRoot) {
         this.gameRoot = gameRoot;
     }
 
@@ -200,7 +218,7 @@ public class Court implements InterfaceCourt {
     // Methods
 
     /**
-     * check if the ball is outside, increment score and check if there is win or a
+     * Checks if the ball is outside, increments score and checks if there is win or a
      * service
      * 
      * @param deltaT time passed
@@ -212,7 +230,8 @@ public class Court implements InterfaceCourt {
 
         for (int i = 0; i < ballList.size(); i++) {
             if (ballList.get(i).isOutside(width)) {
-                soundPerdu.play();
+
+                if (canSoundsBePlayed()) soundLosing.play();
 
                 if (ballList.get(i).getCoordX() < 0) {
                     if (aleaGame != null && aleaGame.getTypeAlea() == TypeAlea.doublePoint) {
@@ -276,13 +295,14 @@ public class Court implements InterfaceCourt {
             playerB.update(deltaT, height);
         }
 
+        // Sounds from impact with balls
         for (Ball ball : ballList) {
             switch (ball.update(deltaT, height, getPlayersModel())) {
                 case RACKET_HIT:
-                    soundBallRacket.play();
+                if (canSoundsBePlayed()) soundBallRacket.play();
                     break;
                 case WALL_HIT:
-                    soundBallMur.play();
+                if (canSoundsBePlayed()) soundBallMur.play();
                     break;
                 case NONE:
                     break;
@@ -339,7 +359,7 @@ public class Court implements InterfaceCourt {
             return false;
 
         // Please mind the division's rounding down behavior in Java
-        int upperLimit = (int) Math.ceil((double) 10 / (double) 7 * pointsLimit);
+        int upperLimit = App.whichScore ? (int) Math.ceil((double) 10 / (double) 7 * pointsLimit) : App.getScoreLimit();
 
         // NOTE: We don't use pointsEqualTo because we have a power-up
         // that can make the amounts of points go over the limit
@@ -362,7 +382,7 @@ public class Court implements InterfaceCourt {
     /**
      * Returns the winner of the game
      * 
-     * @return the winner if there is a winner;
+     * @return the winner if there is one;
      *         null otherwise
      */
     public Player getWinner() {
