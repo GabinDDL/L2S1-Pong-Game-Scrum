@@ -10,7 +10,7 @@ configurations {
 }
 
 group 'pong-world'
-version 'TestInstaller-Linux'
+version 'TestInstaller-Windows'
 
 repositories {
     mavenCentral()
