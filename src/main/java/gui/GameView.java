@@ -19,7 +19,7 @@ import model.game_elements.Ball;
 import model.game_elements.Player;
 
 public class GameView {
-    
+
     // class parameters
     private final Court court;
     private final Pane gameRoot; // main node of the game
@@ -33,10 +33,14 @@ public class GameView {
 
     // Constructor
     /**
-     * @param court "model" of this view (the court of the game and everything on it)
-     * @param game  the root node in the JavaFX scene in which the game will be displayed
-     * @param scale the scale between values in the model and the pixels corresponding in the view 
-     * @throws MalformedURLException the url of the path towards the file is corrupted 
+     * @param court "model" of this view (the court of the game and everything on
+     *              it)
+     * @param game  the root node in the JavaFX scene in which the game will be
+     *              displayed
+     * @param scale the scale between values in the model and the pixels
+     *              corresponding in the view
+     * @throws MalformedURLException the url of the path towards the file is
+     *                               corrupted
      */
 
     public void launchMusic() {
@@ -72,11 +76,11 @@ public class GameView {
         }
 
         for (Object object : court.getListObjects()) {
-            if (object instanceof Ball) {
+            if (object instanceof Ball)
                 gameRoot.getChildren().add(((Ball) object).getCircle());
-            } else if (object instanceof Player) {
+            else if (object instanceof Player)
                 gameRoot.getChildren().add(((Player) object).getShape());
-            }
+
         }
     }
     // Getters
@@ -107,7 +111,6 @@ public class GameView {
         return scale;
     }
 
-
     // Methods
 
     /**
@@ -134,11 +137,10 @@ public class GameView {
      */
     public void updateDisplays() {
         for (UpdatableGui object : court.getListObjects()) {
-            if (object instanceof Player) {
+            if (object instanceof Player)
                 ((Player) object).updateDisplay(scale);
-            } else if (object instanceof Ball) {
+            else if (object instanceof Ball)
                 ((Ball) object).updateDisplay(scale, xMargin, ((Ball) object).getSize());
-            }
         }
     }
 
@@ -154,7 +156,8 @@ public class GameView {
                     return;
                 }
 
-                // If the game is not set on pause, then displays elements that need to be displayed and stops calculating next positions
+                // If the game is not set on pause, then displays elements that need to be
+                // displayed and stops calculating next positions
                 if (sceneDisplayModifier.isInGame()) {
                     court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                     updateDisplays();

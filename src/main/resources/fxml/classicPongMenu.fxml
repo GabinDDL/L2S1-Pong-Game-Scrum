@@ -23,7 +23,7 @@
    
    <!-- On the left side we find the left arrow which leads to the previous gameplay -->
    <left>
-      <ImageView fx:id="leftArrow" fitHeight="75.0" fitWidth="40.0" BorderPane.alignment="CENTER">
+      <ImageView fx:id="leftArrow" fitHeight="75.0" fitWidth="40.0" onMouseClicked="#loadServerPage" BorderPane.alignment="CENTER">
          <image>
             <Image url="@../image/leftArrow.png" />
          </image>

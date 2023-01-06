@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+
+<BorderPane fx:id="hostPongMenuContainer" id="background" stylesheets="@../css/background.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.HostPongController">
+   <top>
+      <Text strokeType="OUTSIDE" fill="WHITE" strokeWidth="0.0" text="Hosting game" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="40.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets top="50.0" />
+         </BorderPane.margin>
+      </Text>
+   </top>
+   <center>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="201.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" text="Display Ip Address" onMouseClicked="#displayIp" prefWidth="150.0" />
+            <Label fx:id="serverIp" prefWidth="150.0"  prefHeight= "27" style="-fx-text-fill: white;" />
+            <Button mnemonicParsing="false" text="Stop hosting" onMouseClicked="#loadServerPage" prefWidth="150.0" />
+         </children>
+      </HBox>
+   </center>
+</BorderPane>

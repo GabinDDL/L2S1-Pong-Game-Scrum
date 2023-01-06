@@ -57,6 +57,7 @@ public class Player implements InterfacePlayer {
         return playerModel.getPoints();
     }
 
+    @Override
     public State getState() {
         return playerGui.getState();
     }
@@ -70,6 +71,14 @@ public class Player implements InterfacePlayer {
         return playerGui.getRacketController();
     }
 
+    public double getRacketWidth() {
+        return playerModel.getRacketWidth();
+    }
+
+    public double getRacketHeight() {
+        return playerModel.getRacketHeight();
+    }
+
     // Setters
 
     public void setRacket(Racket racket) {
@@ -77,6 +86,7 @@ public class Player implements InterfacePlayer {
         playerModel.setRacketModel(racket.getRacketModel());
     }
 
+    @Override
     public void setState(State state) {
         playerGui.setState(state);
         playerModel.setState(state);
