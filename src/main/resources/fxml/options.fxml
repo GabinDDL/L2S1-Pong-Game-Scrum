@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<!-- This BorderPane `optionsContainer` is the element containing all of the elements contained on the options page
+   It displays the title of this page and the Button to get back to home screen
+ -->
+
+<BorderPane fx:id="optionsContainer" id="background" stylesheets="@../css/background.css" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.OptionsController">
+   
+   <!-- On the top on the optionsContainer, we can find the button giving access to the HomePage-->
+   <top>
+      <AnchorPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="homeBack" fitHeight="50.0" onMouseClicked="#loadHomePage" fitWidth="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+               <image>
+                  <Image url="@../image/leftShortArrow.png" />
+               </image>
+            </ImageView>
+            
+            <HBox alignment="CENTER" layoutX="419.0" layoutY="12.0" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" fill="WHITE" strokeWidth="0.0" text="OPTIONS" textAlignment="CENTER">
+                     <font>
+                        <Font size="47.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </top>
+
+   <!-- In the center, five VBox are going to hold activation buttons of game's options -->
+   <center>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="488.0" prefWidth="366.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="275.0">
+                     <children>
+                        <ImageView fx:id="col1Row1" fitHeight="73.0" fitWidth="143.0" onMouseClicked="#changeStateC1R1" pickOnBounds="true" preserveRatio="true" userData="1">
+                           <image>
+                              <Image url="@../image/128x61_RS.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="10.0" top="15.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sounds">
+                           <HBox.margin>
+                              <Insets left="20.0" top="30.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+
+                  <HBox prefHeight="100.0" prefWidth="275.0">
+                     <children>
+                        <ImageView fx:id="col1Row2" fitHeight="73.0" fitWidth="143.0" onMouseClicked="#changeStateC1R2" pickOnBounds="true" preserveRatio="true" userData="2">
+                           <image>
+                              <Image url="@../image/128x61_RS.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="10.0" top="15.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Aléas">
+                           <HBox.margin>
+                              <Insets left="20.0" top="30.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="275.0">
+                     <children>
+                        <ImageView fx:id="col1Row3" fitHeight="73.0" fitWidth="143.0" onMouseClicked="#changeStateC1R3" pickOnBounds="true" preserveRatio="true" userData="3">
+                           <image>
+                              <Image url="@../image/128x61_RS.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="10.0" top="15.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Random Score">
+                           <HBox.margin>
+                              <Insets left="20.0" top="30.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="275.0">
+                     <children>
+                        <ImageView fx:id="col1Row4" fitHeight="73.0" fitWidth="143.0" onMouseClicked="#changeStateC1R4" pickOnBounds="true" preserveRatio="true" userData="4">
+                           <image>
+                              <Image url="@../image/128x61_RS.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="10.0" top="15.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Partie Infinie">
+                           <HBox.margin>
+                              <Insets left="20.0" top="30.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children></VBox>
+            <VBox prefHeight="488.0" prefWidth="367.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="275.0">
+                     <children>
+                        <Spinner fx:id="scoreLimit" editable="true" prefHeight="40.0" prefWidth="149.0">
+                           <HBox.margin>
+                              <Insets left="20.0" top="30.0" />
+                           </HBox.margin>
+                        </Spinner>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Score">
+                           <HBox.margin>
+                              <Insets left="20.0" top="30.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+               </children></VBox>
+            <VBox prefHeight="488.0" prefWidth="366.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" />
+               </children></VBox>
+         </children>
+      </HBox>
+   </center>
+   
+</BorderPane>

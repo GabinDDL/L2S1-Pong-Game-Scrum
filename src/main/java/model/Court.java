@@ -2,66 +2,105 @@ package model;
 
 import gui.interfaces.UpdatableGui;
 
-import model.game_elements.*;
+import gui.App;
+
 import model.interfaces.InterfaceCourt;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import gui.Sound;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import model.game_elements.Alea;
+import model.game_elements.Ball;
+import model.game_elements.Bot;
+import model.game_elements.Player;
+import model.game_elements.PlayerModel;
+import model.game_elements.Racket;
+import model.interfaces.InterfaceAlea.TypeAlea;
+
 public class Court implements InterfaceCourt {
+
+    private Pane gameRoot;
+    private double xMargin;
+    private double scale;
 
     // instance parameters
     private final double width, height; // m
-    private final int pointsLimit;
-    private boolean needLead = false; // flag to check if we need a 2 points lead
+
+    // Score limit. When reached, the game starts over.
+    private final int pointsLimit = App.getScoreLimit();
 
     // Default racket parameters
-    private final double initialRacketHeight = 100.0;
-    private final double initialRacketWidth = 10.0;
+    public static final double INITIAL_RACKET_HEIGHT = 100.0;
+    public static final double INITIAL_RACKET_WIDTH = 10.0;
+    public static final double INITIAL_RACKET_ACCELERATION = 600;
+    public static final double INITIAL_RACKET_MAJOR_SPEED = 600;
+    public static final double INITIAL_RACKET_DECELERATION = 0.90;
 
     // Default ball parameters
-    private final double initialBallSpeed = 300.0;
-    private final double initialBallRadius = 10.0;
+    public static final double INITIAL_BALL_SPEED = 400.0;
+    public static final double INITIAL_BALL_RADIUS = 10.0;
+    public static final double INITIAL_MAJOR_SPEED = 850.0;
 
-    // instance state
+    // Instance state
     private final Player playerA, playerB;
-    private Ball ball;
+    private ArrayList<Ball> ballList; // list of all balls of the game
+    private Alea aleaGame;
 
-    private Sound soundPerdu;
-    private Sound soundBallRacket;
-    private Sound soundBallMur;
+    private Sound soundLosing = new Sound("Sound Perdu.wav"); // everytime a player scores
+    private Sound soundBallRacket = new Sound("Bruitage ball racket.wav"); // everytime a ball hits a racket
+    private Sound soundBallMur = new Sound("Bruitage ball mur.wav"); // everytime a ball hits a wall
+
+    private boolean isSoundsActive = true;
+
+    // Methods to stop sounds to be produced when court isn't displayed anymore
+    public void stopSounds() {
+        isSoundsActive = false;
+    }
+
+    public boolean canSoundsBePlayed() {
+        return isSoundsActive && App.soundsButton;
+    }
 
     // Constructor
 
-    public Court(Player playerA, Player playerB, double width, double height, int pointsLimit) {
+    public Court(Player playerA, Player playerB, double width, double height, double scale,
+            boolean alea) {
+        this.scale = scale;
 
         this.width = width;
         this.height = height;
 
-        this.pointsLimit = pointsLimit;
-
-        var racketA = new Racket(new Vector2(0, 0), 0, initialRacketWidth, initialRacketHeight);
+        var racketA = new Racket(new Vector2(0, 0), 0, INITIAL_RACKET_WIDTH, INITIAL_RACKET_HEIGHT);
         playerA.setRacket(racketA);
         this.playerA = playerA;
 
-        var racketB = new Racket(new Vector2(width, 0), 0, initialRacketWidth, initialRacketHeight);
+        var racketB = new Racket(new Vector2(width, 0), 0, INITIAL_RACKET_WIDTH, INITIAL_RACKET_HEIGHT);
         playerB.setRacket(racketB);
         this.playerB = playerB;
 
-        ball = new Ball(new Vector2(0, 0), initialBallSpeed, initialBallRadius);
+        ballList = new ArrayList<>();
+        Ball ball = new Ball(new Vector2(0, 0), INITIAL_BALL_SPEED, INITIAL_MAJOR_SPEED, INITIAL_BALL_RADIUS);
+        ballList.add(ball);
 
         for (PlayerModel p : getPlayersModel())
             p.reset(height);
 
-        serve();
+        serve(0);
 
-        soundPerdu = new Sound("Sound Perdu.wav"); // à chaque point marqué
+        soundLosing = new Sound("Sound Perdu.wav"); // à chaque point marqué
         soundBallRacket = new Sound("Bruitage ball racket.wav"); // impact avec une raquette
         soundBallMur = new Sound("Bruitage ball mur.wav"); // impact avec un mur
+
+        if (alea) {
+            aleaGame = new Alea();
+        }
     }
 
-    public Court(Player playerA, Player playerB, double width, double height) {
-        this(playerA, playerB, width, height, 0);
+    Court(Court c) {
+        this(c.playerA, c.playerB, c.width, c.height, c.scale, c.aleaGame != null);
     }
 
     // Getters
@@ -74,11 +113,49 @@ public class Court implements InterfaceCourt {
         return height;
     }
 
+    public double getInitialRacketAcceleration() {
+        return INITIAL_RACKET_ACCELERATION;
+    }
+
+    public double getInitialRacketDeceleration() {
+        return INITIAL_RACKET_DECELERATION;
+    }
+
+    public double getInitialRacketMajorSpeed() {
+        return INITIAL_RACKET_MAJOR_SPEED;
+    }
+
+    public double getInitialBallRadius() {
+        return INITIAL_BALL_RADIUS;
+    }
+
+    public double getInitialBallSpeed() {
+        return INITIAL_BALL_SPEED;
+    }
+
+    public double getInitialMajorSpeed() {
+        return INITIAL_MAJOR_SPEED;
+    }
+
+    public double getScale() {
+        return scale;
+    }
+
+    public double getxMargin() {
+        return xMargin;
+    }
+
+    /**
+     * @return every object of the court (that needs to be updated) in a List :
+     *         players, balls, etc.
+     */
     public List<UpdatableGui> getListObjects() {
         List<UpdatableGui> list = new ArrayList<UpdatableGui>();
         list.add(playerA);
         list.add(playerB);
-        list.add(ball);
+        for (Ball ball : ballList) {
+            list.add(ball);
+        }
         return list;
     }
 
@@ -86,37 +163,119 @@ public class Court implements InterfaceCourt {
         return new PlayerModel[] { playerA.getPlayerModel(), playerB.getPlayerModel() };
     }
 
+    public int getCountBall() {
+        return ballList.size();
+    }
+
+    // Setters
+
+    public void setGameRoot(Pane gameRoot) {
+        this.gameRoot = gameRoot;
+    }
+
+    public void setxMargin(double xMargin) {
+        this.xMargin = xMargin;
+    }
+
+    /**
+     * add a ball in ballList and in the gameRoot
+     * 
+     * @param o
+     */
+    public void addBall(Ball ball) {
+        ballList.add(ball);
+        gameRoot.getChildren().add(ball.getCircle());
+        serve(ballList.size() - 1);
+    }
+
+    /**
+     * remove a ball in ballList and in the gameRoot
+     * 
+     * @param o
+     */
+    public void removeBall(Ball ball) {
+        ballList.remove(ball);
+        gameRoot.getChildren().remove(ball.getCircle());
+    }
+
+    /**
+     * add a text in the gameRoot
+     * 
+     * @param text
+     */
+    public void addText(Text text) {
+        gameRoot.getChildren().add(text);
+    }
+
+    /**
+     * remove a text in the gameRoot
+     * 
+     * @param o
+     */
+    public void removeText(Text text) {
+        gameRoot.getChildren().remove(text);
+    }
+
     // Methods
 
     /**
-     * check if the ball is outside, increment score and check if there is win or a
+     * Checks if the ball is outside, increments score and checks if there is win or
+     * a
      * service
      * 
      * @param deltaT time passed
      */
     public void handleBallOutside(double deltaT) {
-        if (ball.isOutside(deltaT, width)) {
-            soundPerdu.play();
+        // flag to check if the ball is outside and if it's the only ball present in the
+        // game
+        boolean isOutsideAndAlone = false;
 
-            if (ball.getCoordX() < 0) {
-                playerB.incrementScore();
-            } else {
-                playerA.incrementScore();
-            }
+        for (int i = 0; i < ballList.size(); i++) {
+            if (ballList.get(i).isOutside(width)) {
 
-            if (playerA instanceof Bot botA) {
-                botA.resetPredict();
-            }
-            if (playerB instanceof Bot botB) {
-                botB.resetPredict();
-            }
+                if (canSoundsBePlayed())
+                    soundLosing.play();
 
-            if (gameWon()) {
-                needLead = false; // Lower Flag
-                reset();
-            } else {
-                serve();
+                if (ballList.get(i).getCoordX() < 0) {
+                    if (aleaGame != null && aleaGame.getTypeAlea() == TypeAlea.doublePoint) {
+                        aleaGame.reset(this, playerB);
+                    }
+                    playerB.incrementScore();
+
+                } else {
+
+                    if (aleaGame != null && aleaGame.getTypeAlea() == TypeAlea.doublePoint) {
+                        aleaGame.reset(this, playerA);
+                    }
+                    playerA.incrementScore();
+                }
+
+                if (playerA instanceof Bot) {
+                    ((Bot) playerA).resetPredict();
+                }
+                if (playerB instanceof Bot) {
+                    ((Bot) playerB).resetPredict();
+                }
+
+                if (gameWon()) {
+                    reset();
+                } else {
+                    if (aleaGame != null && aleaGame.getTypeAlea() == TypeAlea.newBall && aleaGame.isResetAble()) {
+                        // Remove ball if there is more than 1 ball in the list and this is an alea
+                        aleaGame.reset(this, ballList.get(i));
+                        i--;
+                    } else {
+                        isOutsideAndAlone = true;
+                        serve(i);
+                    }
+                }
             }
+        }
+        if (isOutsideAndAlone && aleaGame != null) {
+            if (aleaGame.isResetAble()) {
+                aleaGame.reset(this);
+            }
+            aleaGame.newAlea(this);
         }
     }
 
@@ -126,38 +285,42 @@ public class Court implements InterfaceCourt {
      * 
      * @param deltaT time passed
      */
-
     public void update(double deltaT) {
-        if (playerA instanceof Bot botA) {
-            botA.update(deltaT, height, width, ball.getBallModel());
+        if (playerA instanceof Bot) {
+            ((Bot) playerA).update(deltaT, height, width, ballList);
         } else {
             playerA.update(deltaT, height);
         }
-        if (playerB instanceof Bot botB) {
-            botB.update(deltaT, height, width, ball.getBallModel());
+        if (playerB instanceof Bot) {
+            ((Bot) playerB).update(deltaT, height, width, ballList);
         } else {
             playerB.update(deltaT, height);
         }
 
-        switch (ball.update(deltaT, height, getPlayersModel())) {
-            case RACKET_HIT:
-                soundBallRacket.play();
-                break;
-            case WALL_HIT:
-                soundBallMur.play();
-                break;
-            case NONE:
-                break;
+        // Sounds from impact with balls
+        for (Ball ball : ballList) {
+            switch (ball.update(deltaT, height, getPlayersModel())) {
+                case RACKET_HIT:
+                    if (canSoundsBePlayed())
+                        soundBallRacket.play();
+                    break;
+                case WALL_HIT:
+                    if (canSoundsBePlayed())
+                        soundBallMur.play();
+                    break;
+                case NONE:
+                    break;
+            }
         }
-
         handleBallOutside(deltaT);
     }
 
     /**
      * Resets the ball position
      */
-    public void serve() {
-        ball.reset(width, height);
+    public void serve(int i) {
+        if (i < ballList.size() && i >= 0)
+            ballList.get(i).reset(width, height);
     }
 
     /**
@@ -170,13 +333,28 @@ public class Court implements InterfaceCourt {
         playerA.resetScore();
         playerB.resetScore();
 
-        ball.reset(width, height);
+        for (int i = 1; i < ballList.size(); i++) {
+            if (aleaGame != null && aleaGame.getTypeAlea() == TypeAlea.newBall && aleaGame.isResetAble()) {
+                // Remove ball if there is more than 1 ball in the list and this is an alea
+                aleaGame.reset(this, ballList.get(i));
+                // Remove all the ball except of the first
+                i--;
+            }
+        }
+        for (Ball ball : ballList) {
+            ball.reset(width, height);
+        }
+
+        if (aleaGame != null && aleaGame.isResetAble()) {
+            aleaGame.reset(this);
+        }
     }
 
     /**
      * Checks if the Court has a winner
      * 
-     * @return true if there's a winner; otherwise false
+     * @return true if there's a winner;
+     *         otherwise false
      */
     public boolean gameWon() {
 
@@ -185,34 +363,22 @@ public class Court implements InterfaceCourt {
             return false;
 
         // Please mind the division's rounding down behavior in Java
-        int upperLimit = (int) Math.ceil((double) 10 / (double) 7 * pointsLimit);
+        int upperLimit = App.whichScore ? (int) Math.ceil((double) 10 / (double) 7 * pointsLimit) : App.getScoreLimit();
 
-        if (!needLead) {
+        // NOTE: We don't use pointsEqualTo because we have a power-up
+        // that can make the amounts of points go over the limit
 
-            // If there's a draw before the Match Point
-            if (playerA.isDraw(playerB) &&
-                    playerA.pointsEqualTo(pointsLimit - 1)) {
-                needLead = true; // Raise Flag
-                return false;
-            }
+        // If a Player gets to or gets past the last limit of amount of points
+        if (playerA.pointsBiggerThan(upperLimit - 1) ||
+                playerB.pointsBiggerThan(upperLimit - 1)) {
+            return true;
+        }
 
-            // If a Player gets to the first limit of amount of points
-            if (playerA.pointsEqualTo(pointsLimit) ||
-                    playerB.pointsEqualTo(pointsLimit))
-                return true;
-
-        } else {
-
-            // If a Player gets to the last limit of amount of points
-            if (playerA.pointsEqualTo(upperLimit) ||
-                    playerB.pointsEqualTo(upperLimit)) {
-                return true;
-            }
-
-            // If a Player gets a 2 points lead
+        // If a Player gets a lead of 2 points or more
+        if (playerA.pointsBiggerThan(pointsLimit - 1) ||
+                playerB.pointsBiggerThan(pointsLimit - 1)) {
             if (Math.abs(playerA.getPoints() - playerB.getPoints()) >= 2)
                 return true;
-
         }
         return false;
     }
@@ -220,7 +386,7 @@ public class Court implements InterfaceCourt {
     /**
      * Returns the winner of the game
      * 
-     * @return the winner if there is a winner;
+     * @return the winner if there is one;
      *         null otherwise
      */
     public Player getWinner() {

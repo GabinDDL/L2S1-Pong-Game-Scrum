@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
+
+<!-- This BorderPane `botPongGameContainer` is the element containing all of the elements contained in the game's menu
+   It displays the title of this page, the Button to get back to home screen, one arrow on each side to get from this gameplay to others,
+      informations concerning the game, and scheme which, when clicked on, gets to game
+ -->
+
+<BorderPane id="background" fx:id="botPongMenuContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" stylesheets="@../css/background.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.BotPongController">
+      
+   <!-- On the left side we find the left arrow which leads to the previous gameplay -->
+   <left>
+      <ImageView fx:id="leftArrow" fitHeight="75.0" fitWidth="40.0" onMouseClicked="#loadClassicPage" BorderPane.alignment="CENTER">
+         <image>
+            <Image url="@../image/leftArrow.png" />
+         </image>
+         <BorderPane.margin>
+            <Insets left="20.0" />
+         </BorderPane.margin>
+      </ImageView>
+   </left>
+   
+   <!-- On the right side we find the right arrow which leads to the next gameplay -->
+   <right>
+      <ImageView fx:id="rightArrow" fitHeight="75.0" fitWidth="40.0" BorderPane.alignment="CENTER">
+         <image>
+            <Image url="@../image/rightArrow.png" />
+         </image>
+         <BorderPane.margin>
+            <Insets right="20.0" />
+         </BorderPane.margin>
+      </ImageView>
+   </right>
+   
+   <!-- On the top of the screen, there is the button allowing to go back to home screen -->
+   <top>
+      <AnchorPane maxHeight="-Infinity" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <ImageView fitHeight="40.0" onMouseClicked="#loadHomePage" fitWidth="80.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+               <image>
+                  <Image url="@../image/backArrow.png" />
+               </image>
+            </ImageView>
+            <HBox alignment="CENTER" layoutX="450.0" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text fx:id="title" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Play With Bots !">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </top>
+   
+   <!-- On the bottom we find informations concerning the gameplay of this page-->
+   <bottom>
+      <AnchorPane fx:id="informations" maxHeight="-Infinity" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="250.0" layoutY="0.0" >
+               <image>
+                  <Image url="@../image/onePlayer.png" />
+               </image>
+            </ImageView>
+
+            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="525.0" layoutY="0.0" >
+               <image>
+                  <Image url="@../image/aleas.png" />
+               </image>
+            </ImageView>
+
+            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="800.0" layoutY="0.0" >
+               <image>
+                  <Image url="@../image/bot.png" />
+               </image>
+            </ImageView>
+
+         </children>
+      </AnchorPane>
+   </bottom>
+
+    <!-- And on the center, the game's scheme which launch the game-->
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <ImageView fitHeight="219.0" fitWidth="419.0" onMouseClicked="#playGame" pickOnBounds="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../image/terrain.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+               <effect>
+                  <DropShadow>
+            </DropShadow>
+               </effect>
+               <BorderPane.margin>
+                  <Insets top="50.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </center>
+         <left>
+            <ChoiceBox fx:id="playerLeft" value="JOUEUR" prefWidth="150.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets left="100.0" />
+               </BorderPane.margin>
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="JOUEUR"/>
+                        <String fx:value="EASY"/>
+                        <String fx:value="NORMAL"/>
+                        <String fx:value="HARD"/>
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
+         </left>
+         <right>
+            <ChoiceBox fx:id="playerRight" value="NORMAL" prefWidth="150.0" BorderPane.alignment="CENTER_RIGHT">
+               <BorderPane.margin>
+                  <Insets right="100.0" />
+               </BorderPane.margin>
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="EASY"/>
+                        <String fx:value="NORMAL"/>
+                        <String fx:value="HARD"/>
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
+         </right>
+      </BorderPane>
+   </center>
+
+</BorderPane>

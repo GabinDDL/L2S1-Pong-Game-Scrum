@@ -3,7 +3,7 @@ package model.game_elements;
 import model.interfaces.InterfaceRacketController;
 
 /**
- * This class represents the racket controller of the game. It takes care of the
+ * This class represents the racket controller of the game. It handles the
  * racket's movement.
  */
 public class RacketController implements InterfaceRacketController {

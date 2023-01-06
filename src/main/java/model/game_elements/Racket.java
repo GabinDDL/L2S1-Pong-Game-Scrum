@@ -13,9 +13,9 @@ public class Racket implements InterfaceRacket {
     private RacketModel racketModel;
 
     // Constructor
-    public Racket(Vector2 coord, double speed, double racketWidth, double size) {
-        racketModel = new RacketModel(coord, speed, size, racketWidth);
-        racketGui = new RacketGui(coord, racketWidth, size);
+    public Racket(Vector2 coord, double speed, double racketWidth, double racketHeight) {
+        racketModel = new RacketModel(coord, speed, racketHeight, racketWidth);
+        racketGui = new RacketGui(coord, racketWidth, racketHeight);
     }
 
     // Getters
@@ -64,6 +64,11 @@ public class Racket implements InterfaceRacket {
         return racketModel.getRacketHeight();
     }
 
+    @Override
+    public double getWidth() {
+        return getRacketWidth();
+    }
+
     // Setters
 
     @Override
@@ -89,5 +94,4 @@ public class Racket implements InterfaceRacket {
     public void reset(double height) {
         racketModel.reset(height);
     }
-
 }
