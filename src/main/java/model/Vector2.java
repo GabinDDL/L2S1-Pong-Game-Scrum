@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * Class that represents a 2D vector.
  * It has some built-in applications to compute
@@ -8,9 +10,7 @@ package model;
  */
 public class Vector2 {
 
-    private double xDir;
-    private double yDir;
-
+    private double xDir, yDir;
     private static double angleMax = Math.PI / 4;
 
     // Constructors
@@ -42,6 +42,22 @@ public class Vector2 {
      */
     public double getNorm() {
         return Math.sqrt(this.xDir * this.xDir + this.yDir * this.yDir);
+    }
+
+    // Angle
+
+    /**
+     * @return the angle of the vector.
+     */
+    public double getAngle() {
+        return Math.atan2(this.yDir, this.xDir);
+    }
+
+    /**
+     * @return the maximum angle
+     */
+    public static double getAngleMax() {
+        return angleMax;
     }
 
     // Setters
@@ -138,22 +154,36 @@ public class Vector2 {
     }
 
     /**
-     * It adds an angle to the direction of the vector, but only allows the vector
-     * to point in certain angles, in order to avoid sharp vertical motions.
+     * Adds an angle to the direction of the vector,
+     * but only allows the vector to point in certain angles,
+     * in order to avoid sharp vertical motions.
      * 
      * @param angle the angle to add to the current direction
      */
     public void addAngleRestricted(double angle) {
         double n = this.getNorm();
         angle += Math.atan2(this.yDir, this.xDir); // angle added + original angle (between -PI and PI)
-        angle = angle >= 2 * Math.PI ? angle - 2 * Math.PI : angle;
+        angle = angle % (2 * Math.PI); // adjust angle between -2PI and 2PI
 
+        // adjust angle between -PI and PI
+        if (angle > Math.PI) {
+            angle -= 2 * Math.PI;
+        } else if (angle < -Math.PI) {
+            angle += 2 * Math.PI;
+        }
+
+        // Trigonometric circle
+
+        // In Top-Right Quadrant
         if (angle <= Math.PI / 2 && angle > Math.PI / 2 - angleMax)
             angle = Math.PI / 2 - angleMax;
+        // In Top-Left Quadrant
         else if (angle > Math.PI / 2 && angle < Math.PI / 2 + angleMax)
             angle = Math.PI / 2 + angleMax;
+        // In Bottom-Right Quadrant
         else if (angle >= -Math.PI / 2 && angle < -Math.PI / 2 + angleMax)
             angle = -Math.PI / 2 + angleMax;
+        // In Bottom-Left Quadrant
         else if (angle < -Math.PI / 2 && angle > -Math.PI / 2 - angleMax)
             angle = -Math.PI / 2 - angleMax;
 
@@ -196,6 +226,30 @@ public class Vector2 {
     @Override
     public String toString() {
         return "(" + this.xDir + "," + this.yDir + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Vector2))
+            return false;
+
+        Vector2 v = (Vector2) obj;
+
+        return eq(xDir, v.getXdir()) && eq(yDir, v.getYdir());
+
+    }
+
+    private boolean eq(double a, double b) {
+        return Math.abs(a - b) < 1E-9;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(xDir, yDir);
     }
 
 }
