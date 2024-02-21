@@ -57,6 +57,7 @@ public class Player implements InterfacePlayer {
         return playerModel.getPoints();
     }
 
+    @Override
     public State getState() {
         return playerGui.getState();
     }
@@ -70,6 +71,14 @@ public class Player implements InterfacePlayer {
         return playerGui.getRacketController();
     }
 
+    public double getRacketWidth() {
+        return playerModel.getRacketWidth();
+    }
+
+    public double getRacketHeight() {
+        return playerModel.getRacketHeight();
+    }
+
     // Setters
 
     public void setRacket(Racket racket) {
@@ -77,6 +86,7 @@ public class Player implements InterfacePlayer {
         playerModel.setRacketModel(racket.getRacketModel());
     }
 
+    @Override
     public void setState(State state) {
         playerGui.setState(state);
         playerModel.setState(state);
@@ -117,6 +127,9 @@ public class Player implements InterfacePlayer {
         playerGui.incrementScore();
     }
 
+    /**
+     * Resets the player's score on the graphical and model part
+     */
     @Override
     public void resetScore() {
         playerModel.resetPoints();
@@ -151,9 +164,19 @@ public class Player implements InterfacePlayer {
      *         is equal to n; false otherwise
      */
     public boolean pointsEqualTo(int n) {
-        return playerGui.getScore().getPoints() == n &&
-                this.getPoints() == n;
+        return this.getPoints() == n;
 
+    }
+
+    /**
+     * Checks if the Player's amount of points is bigger than n
+     * 
+     * @param n
+     * @return true if the Player's amount of points
+     *         is bigger than n; false otherwise
+     */
+    public boolean pointsBiggerThan(int n) {
+        return this.getPoints() > n;
     }
 
     @Override

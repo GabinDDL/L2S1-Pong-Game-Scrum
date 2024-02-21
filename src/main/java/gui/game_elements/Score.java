@@ -44,12 +44,18 @@ public class Score implements InterfaceScore {
 
     // Methods
 
+    /**
+     * Adds one to the score and updates the label of the score
+     */
     @Override
     public void incrementScore() {
         points++;
         label.setText(String.valueOf(points));
     }
 
+    /**
+     * Resets the points at 0 and updates the label
+     */
     @Override
     public void resetScore() {
         points = 0;

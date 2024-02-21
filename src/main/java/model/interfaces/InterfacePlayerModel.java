@@ -2,9 +2,10 @@ package model.interfaces;
 
 import model.Vector2;
 import model.interfaces.InterfaceRacketController.State;
+import model.interfaces.InterfaceRacketModel.HitType;
 
 /**
- * Interface for the the player model object.
+ * Interface for the player model object.
  */
 public interface InterfacePlayerModel {
 
@@ -15,7 +16,7 @@ public interface InterfacePlayerModel {
      * @param Vector2 nextPosition
      * @param double  ballRadius
      */
-    boolean hitBall(Vector2 ballPosition, Vector2 nextPosition, double ballRadius);
+    HitType hitBall(Vector2 ballPosition, Vector2 nextPosition, double ballRadius, Vector2 vitesseball);
 
     /**
      * Updates the position and the speed of the racket

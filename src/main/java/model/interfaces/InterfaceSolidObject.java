@@ -39,9 +39,9 @@ public interface InterfaceSolidObject {
     // Coordinates
     void setCoord(Vector2 c);
 
-    void setCoordX(double Xdir);
+    void setCoordX(double xDir);
 
-    void setCoordY(double Ydir);
+    void setCoordY(double yDir);
 
     // Size
 

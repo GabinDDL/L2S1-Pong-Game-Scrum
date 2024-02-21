@@ -1,26 +1,12 @@
 package gui;
 
-import static constants.Constants.DIR_FXML;
-
-import gui.game_elements.Score;
-
-import model.Court;
-import model.controllers.ControllerLabel;
-import model.game_elements.Bot;
-import model.interfaces.InterfaceHasDifficulty.Difficulty;
-import model.game_elements.Player;
-import model.interfaces.InterfaceRacketController.State;
-
-import java.io.File;
 import java.io.IOException;
-
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import model.MediaHandler;
@@ -34,124 +20,56 @@ import model.MediaHandler;
  */
 public class App extends Application {
 
-    @Override // definit une fonction de la class héréditaire
-    public void start(Stage primaryStage) throws MalformedURLException, IOException {
+    private static String linkProjectPage = "https://pongworld.teleporthq.app/";
 
-        // Load .fxml
-        URL url = new File(DIR_FXML + "initialScoreDisplay.fxml").toURI().toURL();
-        FXMLLoader loader = new FXMLLoader(url);
-        BorderPane borderPaneRoot = loader.load(); // Ecran
+    private static int scoreLimit = 7;
 
-        Scene gameScene = new Scene(borderPaneRoot); // scene qui apparaît dans l'écran
+    // Buttons 1 to 4 are the options (switchs in this case) that can be enable.
+    public static boolean soundsButton = true;
+    public static boolean aleas = false;
+    public static boolean whichScore = true;
+    public static boolean infiniteGame = false;
 
-        /**
-         * Class controlling what's being displayed on the screen
-         */
-        class SceneDisplayModifier implements SceneDisplayController {
+    // Load first .fxml file's URL to load the 'BorderPane' of HomePage
+    URL fxmlURL = MediaHandler.getFXMLURL("home.fxml");
+    FXMLLoader loader = new FXMLLoader(fxmlURL);
 
-            // Scene that beings displaying
-            SceneDisplay actualView = SceneDisplay.GAME;
+    public static boolean musicState = true;
 
-            @Override
-            public boolean isInGame() {
-                return actualView == SceneDisplay.GAME;
-            }
+    public static int getScoreLimit() {
+        return scoreLimit;
+    }
 
-            public void setScene(SceneDisplay sD) {
-                actualView = sD;
-            }
+    public static void setScoreLimit(int newScore) {
+        scoreLimit = newScore;
+    }
 
-            public void pauseUnpause() {
-                switch (actualView) {
-                    case GAME:
-                        setScene(SceneDisplay.PAUSE);
-                        break;
-                    case PAUSE:
-                        setScene(SceneDisplay.GAME);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+    @Override
+    public void start(Stage primaryStage) throws IOException {
 
-        // Associate Labels to Players
-        // Init player
+        // root is the pane containing all the game
+        // Transitions, addition of objects, etc are made in it
+        Pane root = new Pane();
+        root.setId("ABSOLUTE_ROOT");
 
-        ControllerLabel labels = loader.getController();
+        // We place the 'BorderPane' of the HomePage as the first child in the root
+        root.getChildren().add(loader.load());
 
-        Score scoreA = new Score(labels.getLabelA());
-        Player playerA = new Player();
-        playerA.setScore(scoreA);
+        // gameScene is the scene appearing on the screen
+        Scene gameScene = new Scene(root); // scene qui apparaît dans l'écran
 
-        Score scoreB = new Score(labels.getLabelB());
-        // Player playerB = new Player();
-        Player playerB = new Bot(Difficulty.NORMAL);
-        // Replace NORMAL by EASY or HARD as you want and the first playerB in
-        // comments
-        playerB.setScore(scoreB);
-
-        var sceneDisplayModifier = new SceneDisplayModifier();
-
-        // We bind the pressing of the keys to the mouvement of the rackets
-        gameScene.setOnKeyPressed(ev -> {
-            switch (ev.getCode()) {
-                case SHIFT:
-                    playerA.setState(State.GOING_UP);
-                    break;
-                case CONTROL:
-                    playerA.setState(State.GOING_DOWN);
-                    break;
-                case UP:
-                    playerB.setState(State.GOING_UP);
-                    break;
-                case DOWN:
-                    playerB.setState(State.GOING_DOWN);
-                    break;
-                case ESCAPE:
-                    sceneDisplayModifier.pauseUnpause();
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        // We bind the release of the keys to the IDLE state
-        gameScene.setOnKeyReleased(ev -> {
-            // touche existante dans le jeu
-            switch (ev.getCode()) {
-                case SHIFT:
-                    if (playerA.getState() == State.GOING_UP)
-                        playerA.setState(State.IDLE);
-                    break;
-                case CONTROL:
-                    if (playerA.getState() == State.GOING_DOWN)
-                        playerA.setState(State.IDLE);
-                    break;
-                case UP:
-                    if (playerB.getState() == State.GOING_UP)
-                        playerB.setState(State.IDLE);
-                    break;
-                case DOWN:
-                    if (playerB.getState() == State.GOING_DOWN)
-                        playerB.setState(State.IDLE);
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        int pointsLimit = 7;
-
-        var court = new Court(playerA, playerB, 1000, 600, pointsLimit);
-
-        var gameView = new GameView(court, borderPaneRoot, 1.0, sceneDisplayModifier);
-
+        // Defines options of the Window
+        primaryStage.setResizable(false);
         primaryStage.setTitle("Pong World");
         primaryStage.setScene(gameScene);
         primaryStage.show();
-
-        gameView.animate();
     }
 
+    public void openProjectPage() {
+        getHostServices().showDocument(linkProjectPage);
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
